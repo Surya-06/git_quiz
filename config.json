@@ -1,0 +1,8 @@
+{
+    "admin" : {
+        "username" : "admin123",
+        "password" : "password1234"
+    },
+    "questionCount" : 2 ,
+    "duration" : 3
+}
