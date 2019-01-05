@@ -1,0 +1,19 @@
+{
+  "name": "git_quiz",
+  "version": "1.0.0",
+  "description": "Quiz app for GIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Surya-06/git_quiz.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Surya-06/git_quiz/issues"
+  },
+  "homepage": "https://github.com/Surya-06/git_quiz#readme"
+}
