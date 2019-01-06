@@ -8,6 +8,9 @@
                 <% if( questions[i].type == 'mcq' ) { %>
                     <%- include('partials/mcq.ejs',{q:questions[i]}) %>
                 <% } %>
+                <% if( questions[i].type == 'fill' ) { %>
+                    <%- include('partials/fill.ejs',{q:questions[i]}) %>
+                <% } %>
             <% } %>
         </form>
     </body>

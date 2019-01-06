@@ -1,7 +1,7 @@
 <p> <%= q.question_text %></p>
 <fieldset id="<%= q.qid %>">
-    <input type="radio" value='a' name="<%= q.id %>"> <%= q.option1 %>
-    <input type="radio" value='b' name="<%= q.id %>"> <%= q.option2 %>
-    <input type="radio" value='c' name="<%= q.id %>"> <%= q.option3 %>
-    <input type="radio" value='d' name="<%= q.id %>"> <%= q.option4 %>
+    <input type="radio" value="<%= q.options[0] %>" name="<%= q.id %>"> <%= q.options[0] %>
+    <input type="radio" value="<%= q.options[1] %>" name="<%= q.id %>"> <%= q.options[1] %>
+    <input type="radio" value="<%= q.options[2] %>" name="<%= q.id %>"> <%= q.options[2] %>
+    <input type="radio" value="<%= q.options[3] %>" name="<%= q.id %>"> <%= q.options[3] %>
 </fieldset>
