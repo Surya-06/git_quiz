@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <title> QUIZ PAGE </title>
+    </head>
+    <body>
+        <form>
+            <%for (var i=0 ; i<questions.length ; i++ ) { %>
+                <% if( questions[i].type == 'mcq' ) { %>
+                    <%- include('partials/mcq.ejs',{q:questions[i]}) %>
+                <% } %>
+            <% } %>
+        </form>
+    </body>
+</html>
