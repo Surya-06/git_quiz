@@ -14,7 +14,7 @@ app.set ( 'view engine' , 'ejs' );
 app.use(express.json());
 app.use(express.urlencoded());
 app.use ( session({
-    secret : "secret-key"
+    secret : ( new Date().getTime() + config.sessionKeyValue ).toString()
 }));
 
 app.post ( '/login' , ( req,res) => {
@@ -68,8 +68,12 @@ app.get ( '/' , (req,res) => {
         res.redirect ( '/login' );
     }
     else if ( studentMap.has ( req.session.username ) ){
-        studentMap.get(req.session.username).score = 0 ;
-        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : 0' } );
+        var current_student = studentMap.get(req.session.username).score ;
+        if ( current_student.score == undefined )   {
+            console.log ( 'Making score 0 since previous attempt unsuccessful' );
+            current_student.score = 0;
+        }
+        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : ' + current_student.score } );
     }
     else {
         // user authenticated 
@@ -91,12 +95,6 @@ function eval ( answers ) {
     console.log ( 'Answers received are : ' );
     console.log ( answers );
     for ( var i in answers ){
-
-        // TEST 
-        console.log ( i , " " , mappedQB.has(i) );
-        console.log ( typeof(i) );
-        // TEST 
-
         if ( answers[i] == mappedQB.get(i).answer )
             score += config.pointsPerQuestion ;
         else {
