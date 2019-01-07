@@ -8,6 +8,9 @@ const express = require('express'),
 
 const COUNT = config.questionCount ;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+const io = require('./QuizIO');
+const codeExec = require('./codeIO');
+app.set('view engine', 'ejs');
 
 var studentMap = new Map() , mappedQB = new Map();
 var questionBank ;
@@ -62,6 +65,7 @@ app.post ( '/quiz' , (req,res) => {
 app.post('/admin' , urlencodedParser , function (req,res) {
     // console.log(req.body);
     io.addQuestions(req.body);
+    res.redirect('/admin');
 });
 
 app.get('/admin' , function (req,res) {
@@ -152,3 +156,9 @@ function initServer(){
 }
 
 initServer();
+app.post('/code',urlencodedParser,function(req,res){
+    var result = codeExec.exec(req.body);
+});
+
+app.listen(3000);
+console.log('on 3000');

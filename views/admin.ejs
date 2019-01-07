@@ -5,19 +5,33 @@
         Admin Page
     </title>
     <%- include ('partials/style.ejs') %>
-    
 </head>
 
-<body>
+<body class="lime lighten-5">
     <div class="container">
         <div class="row">
             <div class="col s12">
                 <h1>Add Questions</h1>
             </div>
+
+            <div class="col s12">
+                <h4>
+                    Guidelines
+                </h4>
+            </div>
+            <div class="col s12 flow-text">
+
+
+                <p> Multiple :</p>
+                <p> -Enter the text of correct answer not the option like a,b,c,d.</p>
+                <p> Matching :</p>
+                <p> -Enter the answer in ',' delimiter list; 2 means 2nd in right;</p>
+
+            </div>
         </div>
 
         <div class="row">
-            <div class="col s8">
+            <div class="col s12">
 
                 <div class="divider"></div>
                 <div>
@@ -29,44 +43,46 @@
                     <input type="text" value="multi" name="type" hidden>
 
 
-                    <div class="input-field col s12"><label >Question 1</label>
-                        <input type="text" name="question">
+                    <div class="input-field col s12">
+                        <label for="mq_id">Question 1</label>
+                        <input type="text" name="question" id="mq_id">
                     </div>
 
 
                     <div class="input-field col s12">
-                        <label >option1</label>
-                        <input type="text" name="option1">
+                        <input type="text" id="mop1_id" name="options">
+                        <label for="mop1_id">option1</label>
 
                     </div>
 
                     <div class="input-field col s12">
-                        <label >option2</label>
-                        <input type="text" name="option2">
+                        <input type="text" id="mop2_id" name="options">
+                        <label for="mop2_id">option2</label>
                     </div>
 
 
                     <div class="input-field col s12">
-                        <label >option3</label>
-                        <input type="text" name="option3">
+                        <input id="mop3_id" type="text" name="options">
+                        <label for="mop3_id">option3</label>
                     </div>
 
 
                     <div class="input-field col s12">
-                        <label >option4</label>
-                        <input type="text" name="option4">
+                        <input id="mop4_id" type="text" name="options">
+                        <label for="mop4_id">option4</label>
                     </div>
 
 
                     <div class="input-field col s12">
 
-                        <label >answer</label>
-                        <input type="text" name="answer">
+                        <label for="mans_id">answer</label>
+                        <input type="text" id="mans_id" name="answer">
 
                     </div>
                     <div class="input-field col s12">
 
-                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+                        <button class="waves-effect waves-light btn-large" onclick="M.toast({html: 'Question added'})"
+                            type="submit">Submit</button>
 
                     </div>
 
@@ -83,41 +99,20 @@
                     <input type="text" value="fill" name="type" hidden>
 
 
-                    <div class="input-field col s12"><label >Question 1</label>
-                        <input type="text" name="question">
+                    <div class="input-field col s12"><label for="fq_id">Question 1</label>
+                        <input type="text" id="fq_id" name="question">
                     </div>
 
 
-                    <div class="input-field col s12">
-                        <label >option1</label>
-                        <input type="text" name="option1">
-                    </div>
-
-
-                    <div class="input-field col s12">
-                        <label >option2</label>
-                        <input type="text" name="option2">
-                    </div>
-
-                    <div class="input-field col s12">
-                        <label >option3</label>
-                        <input type="text" name="option3">
-                    </div>
-
-
-                    <div class="input-field col s12">
-                        <label >option4</label>
-                        <input type="text" name="option4">
-                    </div>
 
 
                     <div class="input-field col s12">
 
-                        <label >answer</label>
-                        <input type="text" name="answer">
+                        <label for="fans_id">answer</label>
+                        <input type="text" id="fans_id" name="answer">
                     </div>
 
-                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+                    <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
 
 
 
@@ -133,67 +128,67 @@
 
 
                     <div class="input-field col s12">
-                        <label >Question 1</label>
-                        <input type="text" name="question">
+                        <label for="maq_id">Question 1</label>
+                        <input type="text" id="maq_id" name="question">
                     </div>
 
 
 
                     <div class="input-field col s12">
-                        <label >Left1</label>
-                        <input type="text" name="left">
+                        <label for="ml1_id">Left1</label>
+                        <input id="ml1_id" type="text" name="left">
                     </div>
 
 
 
                     <div class="input-field col s12">
 
-                        <label >Left2</label>
-                        <input type="text" name="left">
+                        <label for="ml2_id">Left2</label>
+                        <input id="ml2_id" type="text" name="left">
                     </div>
 
 
-                    <div class="input-field col s12"> <label >Left3</label>
-                        <input type="text" name="left">
+                    <div class="input-field col s12"> <label for="ml3_id">Left3</label>
+                        <input id="ml3_id" type="text" name="left">
                     </div>
 
 
-                    <div class="input-field col s12"> <label >Left4</label>
-                        <input type="text" name="left">
+                    <div class="input-field col s12"> <label for="ml4_id">Left4</label>
+                        <input id="ml4_id" type="text" name="left">
                     </div>
 
 
 
                     <div class="input-field col s12">
-                        <label >Right1</label>
-                        <input type="text" name="right">
+                        <label for="mr1_id">Right1</label>
+                        <input id="mr1_id" type="text" name="right">
                     </div>
 
 
                     <div class="input-field col s12">
-                        <label >Right2</label>
-                        <input type="text" name="right"></div>
+                        <label for="mr2_id">Right2</label>
+                        <input id="mr2_id" type="text" name="right"></div>
 
 
                     <div class="input-field col s12">
-                        <label >Right3</label>
-                        <input type="text" name="right">
+                        <label for="mr3_id">Right3</label>
+                        <input id="mr3_id" type="text" name="right">
                     </div>
 
 
                     <div class="input-field col s12">
-                        <label >Right4</label>
-                        <input type="text" name="right">
+                        <label for="mr4_id">Right4</label>
+                        <input id="mr4_id" type="text" name="right">
                     </div>
 
 
                     <div class="input-field col s12">
 
-                        <label >Answer</label>
-                        <input type="text" name="answer" placeholder="Ex : 2,1,0,4">
+                        <label for="ma_ans_id">Answer</label>
+                        <input id="ma_ans_id" type="text" name="answer" placeholder="Ex : 2,1,0,4">
                     </div>
 
-                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+                    <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
 
 
 
