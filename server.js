@@ -1,13 +1,13 @@
 const express = require('express'),
     app = express(),
-    session = require('express-session');
-
-var config = require('./config.json');
+    session = require('express-session'),
+    model = require('./model.js'),
+    config = require('./config.json');
 
 const COUNT = config.questionCount ;
 
-var students_attempted = [] ;
-var students_completed = new Map();
+var studentMap = new Map() , mappedQB = new Map();
+
 var questionBank ;
 
 app.set ( 'view engine' , 'ejs' );
@@ -33,17 +33,25 @@ app.get ( '/quiz' , (req,res) => {
     console.log ( 'Returning quiz page to : ' , req.session.username );
     var questions = getQuestions( COUNT ); 
     console.log ( 'Starting quiz with questions : ' , questions.length );
-    res.render('quiz.ejs' , {questions : questions} );
+    let current_student = studentMap.get(req.session.username);
+    // If this happens, something might be wrong ( TEST )
+    if ( current_student == undefined ) 
+        res.redirect ( '/login' );
+    current_student.testStartTime = new Date().getTime();
+    // Since duration is in minutes , calculating the end time by adding the required amount 
+    current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000 ;
+    res.render('quiz.ejs' , {questions : questions , endTime : current_student.testEndTime } );
 });
 
 app.post ( '/quiz' , (req,res) => {
-    if ( students_completed.has ( req.session.username ) ){
+    console.log ( 'Received answers' );
+    if ( studentMap.get ( req.session.username ).score != undefined ){
         res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : 0' } );
     }
     else {
-        var answers = req.body , username = req.session.username ,
-         score = eval ( answers );
-        students_completed.set ( username , score );
+        var answers = req.body , score = eval ( answers );
+        console.log ( answers );
+        studentMap.get(req.session.username).score = score ;
         res.render ( 'error.ejs' , { context : 'Test complete' , msg : 'Answers saved successfully , score = ' + score } );
     }
 });
@@ -58,8 +66,8 @@ app.get ( '/' , (req,res) => {
         // if username does not exist in the cookies
         res.redirect ( '/login' );
     }
-    else if ( students_attempted.indexOf ( req.session.username ) != -1 ){
-        students_completed.set ( req.session.username , 0 );
+    else if ( studentMap.has ( req.session.username ) ){
+        studentMap.get(req.session.username).score = 0 ;
         res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : 0' } );
     }
     else {
@@ -70,18 +78,32 @@ app.get ( '/' , (req,res) => {
         }
         else {
             // registering student details 
-            students_attempted.push ( req.session.username );
+            studentMap.set ( req.session.username , new model.student(req.session.username) );
             // req.session.destroy() after logout
             res.redirect ( '/quiz' );
         }
     }
 });
 
-console.log ( 'Server at port : 3000' );
-app.listen ( 3000 );
-
 function eval ( answers ) {
-    // TODO IMPLEMENT EVAL 
+    let score = 0 ;
+    console.log ( 'Answers received are : ' );
+    console.log ( answers );
+    for ( var i in answers ){
+
+        // TEST 
+        console.log ( i , " " , mappedQB.has(i) );
+        console.log ( typeof(i) );
+        // TEST 
+
+        if ( answers[i] == mappedQB.get(i).answer )
+            score += config.pointsPerQuestion ;
+        else {
+            if ( config.negativeMarking )
+                score -= config.pointsPerQuestion ;
+        }
+    }
+    return score;
 }
 
 function getQuestions(count){
@@ -89,34 +111,37 @@ function getQuestions(count){
     console.log ( dupQuestions.length );
     for ( var i=0 ; i<count ; i++ ){
         var randomIndex = Math.floor(Math.random()*dupQuestions.length);
-        console.log ( 'random index : ' , randomIndex );
-        console.log ( 'question : ' , dupQuestions[randomIndex] );
         questions.push ( dupQuestions[randomIndex] );
         dupQuestions.splice ( randomIndex , 1 );
     }
-    console.log ( 'No. of questions : ' , questions.length );
     return questions ;
 }
 
 function initServer(){
     console.log ( 'Initializing server : --- ' );
+
+    console.log ( 'Server at port : 3000' );
+    app.listen ( 3000 );
+
     // var questions = db.getQuestions();
     // Sample questions 
     questionBank = [
         {
-            qid : 1 , 
+            id : 1 , 
             type : 'mcq' , 
-            question_text : 'this is the question' , 
+            question : 'this is the question' , 
             options : [ 'a' , 'b' , 'c' , 'd' ],
             answer : 'a' 
         },
         {
-            qid : 2 ,
+            id : 2 ,
             type : 'fill' ,
-            question_text : 'this is another question' ,
+            question : 'this is another question' ,
             answer : 20  
         }
     ] ; // GET QUESTIONS FROM JSON FILE 
+    for ( var i =0 ; i < questionBank.length ; i++ )
+        mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
 
 }
 
