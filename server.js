@@ -9,8 +9,7 @@ const express = require('express'),
 
 const COUNT = config.questionCount ;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var studentMap = new Map() , mappedQB = new Map();
-var questionBank ;
+var studentMap = new Map() , mappedQB = new Map() , questionBank = undefined , questionsExist = false  ;
 
 app.set ( 'view engine' , 'ejs' );
 app.use(express.json());
@@ -32,6 +31,10 @@ app.get ( '/login' , (req,res) => {
 });
 
 app.get ( '/quiz' , (req,res) => {
+    if ( questionsExist == false ){
+        // No quiz since questions do not exist , admin fault
+        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Please ask admin to make questions for the Quiz and restart server. :-)' } );
+    }
     console.log ( 'Returning quiz page to : ' , req.session.username );
     var questions = getQuestions( COUNT ); 
     console.log ( 'Starting quiz with questions : ' , questions.length );
@@ -146,6 +149,7 @@ function getQuestions(count){
 
 function updateQuestions(){
     questionBank = io.fetchQuestions().questions;
+    questionsExist = true ;
     for ( var i =0 ; i < questionBank.length ; i++ )
         mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
 }
