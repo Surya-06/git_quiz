@@ -1,0 +1,11 @@
+{
+    "admin" : {
+        "username" : "admin123",
+        "password" : "password1234"
+    },
+    "sessionKeyValue" : 689852918 ,
+    "questionCount" : 2 ,
+    "duration" : 1 ,
+    "pointsPerQuestion" : 1 ,
+    "negativeMarking" : false 
+}

@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title> QUIZ PAGE </title>
+    </head>
+    <body>
+        <fieldset>
+            <p id='timer'> </p> 
+        </fieldset>
+        <form name='question_list' action='quiz' method='POST'>
+            <%for (var i=0 ; i<questions.length ; i++ ) { %>
+                <% if( questions[i].type == 'mcq' ) { %>
+                    <%- include('partials/mcq.ejs',{q:questions[i]}) %>
+                <% } %>
+                <% if( questions[i].type == 'fill' ) { %>
+                    <%- include('partials/fill.ejs',{q:questions[i]}) %>
+                <% } %>
+            <% } %>
+            <input type="submit" value="Submit"/>
+        </form>
+
+        <script>
+            var endTime = <%= endTime %>;
+            var countDown = setInterval ( () => {
+                let distance = endTime - ( new Date().getTime() );
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)), 
+                    seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("timer").innerHTML = "TIME : " + minutes + "m " + seconds + "s ";
+
+                // If the count down is finished, write some text 
+                if (distance < 0) {
+                    clearInterval(countDown);
+                    document.getElementById("timer").innerHTML = "EXPIRED";
+                    alert ( 'Time up' );
+                    document.forms["question_list"].submit();
+                }
+            }, 1000 );
+
+
+        </script>
+
+    </body>
+</html>

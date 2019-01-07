@@ -17,10 +17,12 @@
   "bugs": {
     "url": "https://github.com/krishna-iwnl/git_quiz/issues"
   },
-  "homepage": "https://github.com/krishna-iwnl/git_quiz#readme",
+  "homepage": "https://github.com/Surya-06/git_quiz#readme" ,
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "basic-auth": "^2.0.1",
     "ejs": "^2.6.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "body-parser": "^1.18.3",
   }
 }
