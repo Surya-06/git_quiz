@@ -1,0 +1,210 @@
+<html>
+
+<head>
+    <title>
+        Admin Page
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h1>Add Questions</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s8">
+
+                <div class="divider"></div>
+                <div>
+                    <h2>
+                        Multiple choice question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="multi" name="type" hidden>
+
+
+                    <div class="input-field col s12"><label >Question 1</label>
+                        <input type="text" name="question">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option1</label>
+                        <input type="text" name="option1">
+
+                    </div>
+
+                    <div class="input-field col s12">
+                        <label >option2</label>
+                        <input type="text" name="option2">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option3</label>
+                        <input type="text" name="option3">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option4</label>
+                        <input type="text" name="option4">
+                    </div>
+
+
+                    <div class="input-field col s12">
+
+                        <label >answer</label>
+                        <input type="text" name="answer">
+
+                    </div>
+                    <div class="input-field col s12">
+
+                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+
+                    </div>
+
+                </form>
+
+                <div class="divider"></div>
+
+                <div>
+                    <h2>
+                        Fill in the blank question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="fill" name="type" hidden>
+
+
+                    <div class="input-field col s12"><label >Question 1</label>
+                        <input type="text" name="question">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option1</label>
+                        <input type="text" name="option1">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option2</label>
+                        <input type="text" name="option2">
+                    </div>
+
+                    <div class="input-field col s12">
+                        <label >option3</label>
+                        <input type="text" name="option3">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >option4</label>
+                        <input type="text" name="option4">
+                    </div>
+
+
+                    <div class="input-field col s12">
+
+                        <label >answer</label>
+                        <input type="text" name="answer">
+                    </div>
+
+                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+
+
+
+                </form>
+                <div class="divider"></div>
+                <div>
+                    <h2>
+                        Matching question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="match" name="type" hidden>
+
+
+                    <div class="input-field col s12">
+                        <label >Question 1</label>
+                        <input type="text" name="question">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+                        <label >Left1</label>
+                        <input type="text" name="left">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+
+                        <label >Left2</label>
+                        <input type="text" name="left">
+                    </div>
+
+
+                    <div class="input-field col s12"> <label >Left3</label>
+                        <input type="text" name="left">
+                    </div>
+
+
+                    <div class="input-field col s12"> <label >Left4</label>
+                        <input type="text" name="left">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+                        <label >Right1</label>
+                        <input type="text" name="right">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >Right2</label>
+                        <input type="text" name="right"></div>
+
+
+                    <div class="input-field col s12">
+                        <label >Right3</label>
+                        <input type="text" name="right">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label >Right4</label>
+                        <input type="text" name="right">
+                    </div>
+
+
+                    <div class="input-field col s12">
+
+                        <label >Answer</label>
+                        <input type="text" name="answer" placeholder="Ex : 2,1,0,4">
+                    </div>
+
+                    <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+
+
+
+                </form>
+                <div class="divider"></div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>

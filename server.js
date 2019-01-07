@@ -2,12 +2,14 @@ const express = require('express'),
     app = express(),
     session = require('express-session'),
     model = require('./model.js'),
-    config = require('./config.json');
+    config = require('./config.json'),
+    io = require('./QuizIO'),
+    bodyParser = require('body-parser');
 
 const COUNT = config.questionCount ;
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var studentMap = new Map() , mappedQB = new Map();
-
 var questionBank ;
 
 app.set ( 'view engine' , 'ejs' );
@@ -57,10 +59,15 @@ app.post ( '/quiz' , (req,res) => {
     }
 });
 
-app.get ( '/input' , (req,res) => {
-    // return input html file
-    res.sendStatus(200);
+app.post('/admin' , urlencodedParser , function (req,res) {
+    // console.log(req.body);
+    io.addQuestions(req.body);
 });
+
+app.get('/admin' , function (req,res) {
+   res.render('admin'); 
+});
+
 
 app.get ( '/' , (req,res) => {    
     if ( req.session.username == undefined || req.session.password == undefined ){
@@ -79,7 +86,7 @@ app.get ( '/' , (req,res) => {
         // user authenticated 
         if ( req.session.username == config.admin.username && req.session.password == config.admin.password ){
             // redirect to input page 
-            res.redirect ( '/input' );
+            res.redirect ( '/admin' );
         }
         else {
             // registering student details 
