@@ -69,6 +69,7 @@ app.get ( '/' , (req,res) => {
             res.redirect ( '/input' );
         }
         else {
+            // registering student details 
             students_attempted.push ( req.session.username );
             // req.session.destroy() after logout
             res.redirect ( '/quiz' );
@@ -112,7 +113,7 @@ function initServer(){
         {
             qid : 2 ,
             type : 'fill' ,
-            question : 'this is another question' ,
+            question_text : 'this is another question' ,
             answer : 20  
         }
     ] ; // GET QUESTIONS FROM JSON FILE 
