@@ -71,6 +71,7 @@ app.get('/admin' , function (req,res) {
 
 app.post('/code',urlencodedParser,function(req,res){
     var result = codeExec.exec(req.body);
+    updateQuestions();
 });
 
 app.get ( '/' , (req,res) => {    
@@ -118,7 +119,6 @@ function eval ( answers ) {
 
 function getQuestions(count){
     var questions = [] , dupQuestions = JSON.parse ( JSON.stringify ( questionBank ) );
-    console.log ( dupQuestions.length );
     for ( var i=0 ; i<count ; i++ ){
         var randomIndex = Math.floor(Math.random()*dupQuestions.length);
         questions.push ( dupQuestions[randomIndex] );
@@ -127,32 +127,17 @@ function getQuestions(count){
     return questions ;
 }
 
-function initServer(){
-    console.log ( 'Initializing server : --- ' );
-
-    console.log ( 'Server at port : 3000' );
-    app.listen ( 3000 );
-
-    // var questions = db.getQuestions();
-    // Sample questions 
-    questionBank = [
-        {
-            id : 1 , 
-            type : 'mcq' , 
-            question : 'this is the question' , 
-            options : [ 'a' , 'b' , 'c' , 'd' ],
-            answer : 'a' 
-        },
-        {
-            id : 2 ,
-            type : 'fill' ,
-            question : 'this is another question' ,
-            answer : 20  
-        }
-    ] ; // GET QUESTIONS FROM JSON FILE 
+function updateQuestions(){
+    questionBank = io.fetchQuestions().questions;
     for ( var i =0 ; i < questionBank.length ; i++ )
         mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
+}
 
+function initServer(){
+    console.log ( 'Initializing server : --- ' );
+    console.log ( 'Server at port : 3000' );
+    app.listen ( 3000 );
+    updateQuestions();
 }
 
 initServer();
