@@ -1,4 +1,11 @@
 <p> <%= q.question %></p>
+<% if ( (<%= q.code %>).length > 0 ) { %>
+    <pre>
+        <code>
+            <%= q.code %>
+        </code>
+    </pre>
+<% } %>
 <fieldset>
     <input type="radio" value="<%= q.options[0] %>" name="<%= q.id %>"> <%= q.options[0] %>
     <input type="radio" value="<%= q.options[1] %>" name="<%= q.id %>"> <%= q.options[1] %>

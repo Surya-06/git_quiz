@@ -39,6 +39,12 @@ app.get ( '/quiz' , (req,res) => {
     // If this happens, something might be wrong ( TEST )
     if ( current_student == undefined ) 
         res.redirect ( '/login' );
+    // Adjust code for rendering
+    for ( var i=0 ; i<questions.length ; i++ )
+        if ( questions[i].code.length > 0 ){
+            questions[i].code = questions[i].code.replace("<","&lt;");
+            questions[i].code = questions[i].code.replace(">","&gt;");
+        }
     current_student.testStartTime = new Date().getTime();
     // Since duration is in minutes , calculating the end time by adding the required amount 
     current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000 ;
