@@ -11,6 +11,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.post('/admin' , urlencodedParser , function (req,res) {
     // console.log(req.body);
     io.addQuestions(req.body);
+    res.redirect('/admin');
 });
 
 app.get('/admin' , function (req,res) {
