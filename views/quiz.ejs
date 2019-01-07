@@ -19,7 +19,7 @@
         </form>
 
         <script>
-            var endTime = <%= endTime %>;
+           // var endTime = <%= endTime %>;
             var countDown = setInterval ( () => {
                 let distance = endTime - ( new Date().getTime() );
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)), 
