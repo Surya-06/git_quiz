@@ -4,14 +4,11 @@ const express = require('express'),
     model = require('./model.js'),
     config = require('./config.json'),
     io = require('./QuizIO'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    codeExec = require('./codeIO');
 
 const COUNT = config.questionCount ;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-const io = require('./QuizIO');
-const codeExec = require('./codeIO');
-app.set('view engine', 'ejs');
-
 var studentMap = new Map() , mappedQB = new Map();
 var questionBank ;
 
@@ -72,6 +69,9 @@ app.get('/admin' , function (req,res) {
    res.render('admin'); 
 });
 
+app.post('/code',urlencodedParser,function(req,res){
+    var result = codeExec.exec(req.body);
+});
 
 app.get ( '/' , (req,res) => {    
     if ( req.session.username == undefined || req.session.password == undefined ){
@@ -79,7 +79,7 @@ app.get ( '/' , (req,res) => {
         res.redirect ( '/login' );
     }
     else if ( studentMap.has ( req.session.username ) ){
-        var current_student = studentMap.get(req.session.username).score ;
+        var current_student = studentMap.get(req.session.username) ;
         if ( current_student.score == undefined )   {
             console.log ( 'Making score 0 since previous attempt unsuccessful' );
             current_student.score = 0;
@@ -156,9 +156,3 @@ function initServer(){
 }
 
 initServer();
-app.post('/code',urlencodedParser,function(req,res){
-    var result = codeExec.exec(req.body);
-});
-
-app.listen(3000);
-console.log('on 3000');
