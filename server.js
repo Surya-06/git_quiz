@@ -45,13 +45,14 @@ app.get ( '/quiz' , (req,res) => {
 
 app.post ( '/quiz' , (req,res) => {
     console.log ( 'Received answers' );
-    if ( studentMap.get ( req.session.username ).score != undefined ){
-        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : 0' } );
+    let current_student = studentMap.get ( req.session.username );
+    if ( current_student.score != undefined ){
+        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Test completed earlier , answers cannot be saved. Score : ' +  current_student.score.toString() } );
     }
     else {
         var answers = req.body , score = eval ( answers );
         console.log ( answers );
-        studentMap.get(req.session.username).score = score ;
+        current_student.score = score ;
         res.render ( 'error.ejs' , { context : 'Test complete' , msg : 'Answers saved successfully , score = ' + score } );
     }
 });
