@@ -1,0 +1,70 @@
+{
+    "questions": [{
+        "type": "Multi",
+        "id": "1",
+        "question": "what is your name? ",
+        "options": ["stew", "auti", "tarik", "tyler"],
+        "answer": "a"
+    }, {
+        "type": "multi",
+        "question": "ques",
+        "option1": "1",
+        "option2": "2",
+        "option3": "3",
+        "option4": "4",
+        "answer": "a",
+        "id": 2
+    }, {
+        "type": "multi",
+        "question": "ques",
+        "option1": "1",
+        "option2": "2",
+        "option3": "3",
+        "option4": "4",
+        "answer": "a",
+        "id": 3
+    }, {
+        "type": "match",
+        "question": "ques",
+        "left": ["dsa", "dsa", "dsa", "dsa"],
+        "right": ["ds", "ds", "ds", "ds"],
+        "answer": ["2", "1", "0", "4"],
+        "id": 4
+    }, {
+        "type": "multi",
+        "question": "dsda",
+        "option1": "dsa",
+        "option2": "dsa",
+        "option3": "dsa",
+        "option4": "dsa",
+        "answer": "das",
+        "id": 5
+    }, {
+        "type": "multi",
+        "question": "dsda",
+        "option1": "dsa",
+        "option2": "dsa",
+        "option3": "dsa",
+        "option4": "dsa",
+        "answer": "das",
+        "id": 6
+    }, {
+        "type": "fill",
+        "question": "dsda",
+        "option1": "1",
+        "option2": "o2",
+        "option3": "o3",
+        "option4": "o4",
+        "answer": "ans",
+        "id": 7
+    }, {
+        "type": "fill",
+        "question": "dsda",
+        "option1": "1",
+        "option2": "o2",
+        "option3": "o3",
+        "option4": "o4",
+        "answer": "ans",
+        "id": 8
+    }]
+}
