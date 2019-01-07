@@ -3,17 +3,24 @@
     <body>
         <%- include('partials/style.ejs') %>
         <%- include('partials/header.ejs') %>
+
         <form action="login" method="POST">
-            <div class="form-group">
-                <label class="col-md-6 col-sm-4 col-form-label">Username</label>
-                <div class="col-md-10 col-sm-11">
-                    <input type="text" class="form-control" name="username" placeholder="Username" />
+            <div class="container">
+                <div class="row center">
+                    <div class="col s12 m8 offset-m2">
+                        <div class="card blue-grey darken-1 hoverable center">
+                            <div class="card-content white-text">
+                                <span class="card-title">User Login</span>
+                                <input type="text" name="username" placeholder="Username" />
+                                <input type="password" name="password" placeholder="Password" />
+                                <div class="card-action">
+                                    <input class="waves-effect waves-light btn" type="Submit" value="Submit" />
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 </div>
-                <label class="col-md-6 col-sm-4 col-form-label">Password</label>
-                <div class="col-md-10 col-sm-11">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
-                </div>
-                <input type="submit" class="btn btn-primary form-control" value="submit" />
             </div>
         </form>
     </body>
