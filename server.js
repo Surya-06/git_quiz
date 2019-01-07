@@ -9,8 +9,7 @@ const express = require('express'),
 
 const COUNT = config.questionCount ;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var studentMap = new Map() , mappedQB = new Map();
-var questionBank ;
+var studentMap = new Map() , mappedQB = new Map() , questionBank = undefined , questionsExist = false  ;
 
 app.set ( 'view engine' , 'ejs' );
 app.use(express.json());
@@ -32,6 +31,10 @@ app.get ( '/login' , (req,res) => {
 });
 
 app.get ( '/quiz' , (req,res) => {
+    if ( questionsExist == false ){
+        // No quiz since questions do not exist , admin fault
+        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Please ask admin to make questions for the Quiz and restart server. :-)' } );
+    }
     console.log ( 'Returning quiz page to : ' , req.session.username );
     var questions = getQuestions( COUNT ); 
     console.log ( 'Starting quiz with questions : ' , questions.length );
@@ -39,6 +42,23 @@ app.get ( '/quiz' , (req,res) => {
     // If this happens, something might be wrong ( TEST )
     if ( current_student == undefined ) 
         res.redirect ( '/login' );
+    
+    // TEST 
+        questions[0].code = `#include <iostream> 
+            int main(){
+                cout << "Hello world" << endl;
+                cout << "This is so exciting" << endl;
+                return 0;
+            }`;
+    // TEST
+
+    // Adjust code for rendering if there are any problems with < and > 
+    /*for ( var i=0 ; i<questions.length ; i++ )
+        if ( questions[i].code.length > 0 ){
+            questions[i].code = questions[i].code.replace("<","&lt;");
+            questions[i].code = questions[i].code.replace(">","&gt;");
+        }
+    */
     current_student.testStartTime = new Date().getTime();
     // Since duration is in minutes , calculating the end time by adding the required amount 
     current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000 ;
@@ -129,6 +149,7 @@ function getQuestions(count){
 
 function updateQuestions(){
     questionBank = io.fetchQuestions().questions;
+    questionsExist = true ;
     for ( var i =0 ; i < questionBank.length ; i++ )
         mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
 }
