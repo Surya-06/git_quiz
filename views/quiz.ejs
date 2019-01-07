@@ -9,7 +9,7 @@
         </fieldset>
         <form name='question_list' action='quiz' method='POST'>
             <%for (var i=0 ; i<questions.length ; i++ ) { %>
-                <% if( questions[i].type == 'mcq' ) { %>
+                <% if( questions[i].type == 'multi' ) { %>
                     <%- include('partials/mcq.ejs',{q:questions[i]}) %>
                 <% } %>
                 <% if( questions[i].type == 'fill' ) { %>
@@ -20,7 +20,7 @@
         </form>
 
         <script>
-           // var endTime = <%= endTime %>;
+           var endTime = <%= endTime %>;
             var countDown = setInterval ( () => {
                 let distance = endTime - ( new Date().getTime() );
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)), 
