@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const io = require('./QuizIO');
+const codeExec = require('./codeIO');
 app.set('view engine', 'ejs');
 
 
@@ -16,6 +17,10 @@ app.post('/admin' , urlencodedParser , function (req,res) {
 
 app.get('/admin' , function (req,res) {
    res.render('admin'); 
+});
+
+app.post('/code',urlencodedParser,function(req,res){
+    var result = codeExec.exec(req.body);
 });
 
 app.listen(3000);
