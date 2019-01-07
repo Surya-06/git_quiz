@@ -75,7 +75,7 @@ app.get ( '/' , (req,res) => {
         res.redirect ( '/login' );
     }
     else if ( studentMap.has ( req.session.username ) ){
-        var current_student = studentMap.get(req.session.username).score ;
+        var current_student = studentMap.get(req.session.username) ;
         if ( current_student.score == undefined )   {
             console.log ( 'Making score 0 since previous attempt unsuccessful' );
             current_student.score = 0;
