@@ -2,18 +2,25 @@
   "name": "git_quiz",
   "version": "1.0.0",
   "description": "Quiz app for GIT",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Surya-06/git_quiz.git"
+    "url": "git+https://github.com/krishna-iwnl/git_quiz.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Surya-06/git_quiz/issues"
+    "url": "https://github.com/krishna-iwnl/git_quiz/issues"
   },
-  "homepage": "https://github.com/Surya-06/git_quiz#readme"
+  "homepage": "https://github.com/krishna-iwnl/git_quiz#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
 }
