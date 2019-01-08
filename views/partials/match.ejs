@@ -10,25 +10,20 @@
 </pre>
 <% } %>
 
-<div class="col s5  ">
-    <% for (var i=0 ; i<q.left.length ; i++ ) { %>
-        <div class="col s12">
-            <p class="flow-text center-align"><%= q.left[i] %></p>
-        </div> 
-    
-    <% } %>
-</div> 
-<div class="col s2">
- <% for (var i=0 ; i<q.left.length ; i++ ) { %>
-    <input class="flow-text" type="number" min="1" max="4" name="<%= q.id %>" >
-      <% } %>
-</div>
-<div class="col s5 ">
-    <% for (var i=0 ; i<q.right.length ; i++ ) { %>
-        <div class="col s12">
-            <p class="flow-text center-align"><%= q.right[i] %></p>
-        </div> 
-    
-    <% } %>
-</div>
 
+
+<div class="col s12">
+    <% for (var i=0 ; i<q.left.length ; i++ ) { %>
+        <div class="col s5">
+            <p class="flow-text center-align"><%= q.left[i] %></p>
+        </div>
+        <div class="col s2">
+            <input class="flow-text" type="number" min="1" max="4" name="<%= q.id %>" >
+        </div>
+        <div class="col s5 ">
+            <p class="flow-text center-align"><%= q.right[i] %></p>
+        </div>
+
+    <% } %>
+
+</div>
