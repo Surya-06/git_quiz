@@ -1,6 +1,14 @@
 <p class="flow-text">
     <%= q.question %>
 </p>
+
+<% if ( q.code.length > 0 ) { %>
+    <pre>
+        <code>
+            <%= q.code %>
+        </code>
+    </pre>
+<% } %>
 <fieldset>
     <div class="col s12">
         <label>

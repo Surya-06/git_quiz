@@ -1,7 +1,21 @@
-<p class="flow-text"> <%= q.question %></p>
+<p class="flow-text">
+    <%= q.question %>
+</p>
+
 <div class="col s12">
- <label for="<%= q.id %>">Answer :</label>   
-<input id="<%= q.id %>" type="text" name="<%= q.id %>" />
+    <% if ( (<%= q.code %>).length > 0 ) { %>
+    <pre>
+        <code>
+            <%= q.code %>
+        </code>
+    </pre>
+    <% } %>
 </div>
+
+<div class="col s12">
+    <label for="<%= q.id %>">Answer :</label>
+    <input id="<%= q.id %>" type="text" name="<%= q.id %>" />
+</div>
+
 <div class="divider"></div>
 <div class="divider"></div>

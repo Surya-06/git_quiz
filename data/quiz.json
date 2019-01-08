@@ -1,33 +1,15 @@
 {
     "questions": [{
         "type": "multi",
-        "question": "question1",
-        "options": ["op1", "op2", "op3", "op3"],
-        "answer": "op2",
+        "question": "asdfasdfasdf",
+        "options": ["asd", "wqe", "fgd", "56"],
+        "answer": "asd",
         "id": 1
     }, {
         "type": "multi",
-        "question": "q2",
-        "options": ["op1", "op2", "op3", "op4"],
-        "answer": "op3",
+        "question": "this is a sample question",
+        "options": ["value1", "value2", "value3", "value4"],
+        "answer": "value2",
         "id": 2
-    }, {
-        "type": "fill",
-        "question": "what is my name ? ?",
-        "answer": "surya",
-        "id": 3
-    },  {
-        "type": "multi",
-        "question": "ques",
-        "options": ["dsa", "dsa", "dsa", "dsa"],
-        "answer": "dsa",
-        "code": "",
-        "id": 4
-    }, {
-        "type": "fill", 
-        "question": "dsa",
-        "answer": "dsadsadas",
-        "code": "#include <iostream> \r\n#include <vector> // for 2D vector \r\nusing namespace std; \r\n  \r\nint main() \r\n{ \r\n    // Initializing 2D vector \"vect\" with \r\n    // values \r\n    vector<vector<int> > vect{ { 1, 2, 3 }, \r\n                               { 4, 5, 6 }, \r\n                               { 7, 8, 9 } }; \r\n  \r\n    // Displaying the 2D vector \r\n    for (int i = 0; i < vect.size(); i++) { \r\n        for (int j = 0; j < vect[i].size(); j++) \r\n            cout << vect[i][j] << \" \"; \r\n        cout << endl; \r\n    } \r\n  \r\n    return 0; \r\n} ",
-        "id": 5
     }]
 }
