@@ -1,4 +1,7 @@
-<p> <%= q.question %></p>
+<p class="flow-text">
+    <%= q.question %>
+</p>
+
 <% if ( q.code.length > 0 ) { %>
     <pre>
         <code>
@@ -7,8 +10,36 @@
     </pre>
 <% } %>
 <fieldset>
-    <input type="radio" value="<%= q.options[0] %>" name="<%= q.id %>"> <%= q.options[0] %>
-    <input type="radio" value="<%= q.options[1] %>" name="<%= q.id %>"> <%= q.options[1] %>
-    <input type="radio" value="<%= q.options[2] %>" name="<%= q.id %>"> <%= q.options[2] %>
-    <input type="radio" value="<%= q.options[3] %>" name="<%= q.id %>"> <%= q.options[3] %>
+    <div class="col s12">
+        <label>
+            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[0] %>" />
+            <span>
+                <%= q.options[0] %></span>
+        </label>
+    </div>
+    <div class="col s12">
+        <label>
+            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[1] %>" />
+            <span>
+                <%= q.options[1] %></span>
+        </label>
+    </div>
+    <div class="col s12">
+        <label>
+            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[2] %>" />
+            <span>
+                <%= q.options[2] %></span>
+        </label></div>
+    <div class="col s12">
+        <label>
+            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[3] %>" />
+            <span>
+                <%= q.options[3] %></span>
+        </label>
+    </div>
+
+
+
 </fieldset>
+<div class="divider"></div>
+<div class="divider"></div>

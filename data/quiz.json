@@ -1,1 +1,15 @@
-{"questions":[{"type":"multi","question":"asdfasdfasdf","options":["asd","wqe","fgd","56"],"answer":"asd","id":1},{"type":"multi","question":"this is a sample question","options":["value1","value2","value3","value4"],"answer":"value2","id":2}]}
+{
+    "questions": [{
+        "type": "multi",
+        "question": "asdfasdfasdf",
+        "options": ["asd", "wqe", "fgd", "56"],
+        "answer": "asd",
+        "id": 1
+    }, {
+        "type": "multi",
+        "question": "this is a sample question",
+        "options": ["value1", "value2", "value3", "value4"],
+        "answer": "value2",
+        "id": 2
+    }]
+}
