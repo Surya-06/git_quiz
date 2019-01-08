@@ -2,7 +2,7 @@
     <%= q.question %>
 </p>
 
-<% if ( q.code.length > 0 ) { %>
+<% if ( q.code != undefined && q.code.length > 0 ) { %>
     <pre>
         <code>
             <%= q.code %>
