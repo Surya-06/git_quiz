@@ -7,9 +7,14 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     codeExec = require('./codeIO');
 
-var COUNT = config.questionCount ;
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var studentMap = new Map() , mappedQB = new Map() , questionBank = undefined , questionsExist = false  ;
+var COUNT = config.questionCount;
+var urlencodedParser = bodyParser.urlencoded({
+    extended: false
+});
+var studentMap = new Map(),
+    mappedQB = new Map(),
+    questionBank = undefined,
+    questionsExist = false;
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -22,6 +27,7 @@ app.use(session({
 app.post('/login', (req, res) => {
     // getting parameters from login page 
     console.log(req.body);
+
     req.session.username = req.body.username;
     req.session.password = req.body.password;
     res.statusCode = 200;
@@ -31,21 +37,24 @@ app.get('/login', (req, res) => {
     res.render('login.ejs');
 });
 
-app.get ( '/quiz' , (req,res) => {
-    if ( questionsExist == false ){
+app.get('/quiz', (req, res) => {
+    if (questionsExist == false) {
         // No quiz since questions do not exist , admin fault
-        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Please ask admin to make questions for the Quiz and restart server. :-)' } );
+        res.render('error.ejs', {
+            context: 'Error',
+            msg: 'Please ask admin to make questions for the Quiz and restart server. :-)'
+        });
     }
-    console.log ( 'Returning quiz page to : ' , req.session.username );
-    var questions = getQuestions( COUNT ); 
-    console.log ( 'Starting quiz with questions : ' , questions.length );
+    console.log('Returning quiz page to : ', req.session.username);
+    var questions = getQuestions(COUNT);
+    console.log('Starting quiz with questions : ', questions.length);
     let current_student = studentMap.get(req.session.username);
     // If this happens, something might be wrong ( TEST )
-    if ( current_student == undefined ) 
-        res.redirect ( '/login' );
-    
+    if (current_student == undefined)
+        res.redirect('/login');
+
     // TEST 
-        questions[0].code = `
+    questions[0].code = `
         def func(value,lister):
             print('this is a sample function in python)
             return func(value-1,lister)
@@ -63,9 +72,9 @@ app.get ( '/quiz' , (req,res) => {
         }
     */
     // CHECK FOR RELOAD
-    console.log ( 'Checks for reload , happen here ' );
-    if ( current_student.testStartTime == undefined && current_student.testEndTime == undefined ){
-        console.log ( 'Setting start and end times for fresh attempt ' );
+    console.log('Checks for reload , happen here ');
+    if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
+        console.log('Setting start and end times for fresh attempt ');
         current_student.testStartTime = new Date().getTime();
         // Since duration is in minutes , calculating the end time by adding the required amount 
         current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000;
@@ -73,16 +82,14 @@ app.get ( '/quiz' , (req,res) => {
             questions: questions,
             endTime: current_student.testEndTime
         });
-    }
-    else if ( req.cookies.startTime < current_student.testEndTime ){
-        console.log ( 'Previous test start time : ' , current_student.testStartTime );
-        console.log ( 'New test start time : ' , req.cookies.startTime );
-        res.render('quiz.ejs' , {
-            questions : questions,
-            endTime : current_student.testEndTime
+    } else if (req.cookies.startTime < current_student.testEndTime) {
+        console.log('Previous test start time : ', current_student.testStartTime);
+        console.log('New test start time : ', req.cookies.startTime);
+        res.render('quiz.ejs', {
+            questions: questions,
+            endTime: current_student.testEndTime
         });
-    }
-    else {
+    } else {
         res.render('error.ejs', {
             context: 'Test completed earlier',
             msg: 'Your score = ' + current_student.score
@@ -184,9 +191,9 @@ function updateQuestions() {
     if (COUNT > questionBank.length) {
         COUNT = questionBank.length;
     }
-    questionsExist = true ;
-    for ( var i =0 ; i < questionBank.length ; i++ )
-        mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
+    questionsExist = true;
+    for (var i = 0; i < questionBank.length; i++)
+        mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
 }
 
 function initServer() {

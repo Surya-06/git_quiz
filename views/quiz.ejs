@@ -9,12 +9,12 @@
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-    <div class="container" >
+    <div class="container">
 
         <div class="row">
             <div class="col s12 ">
                 <fieldset class="card-panel">
-                    <p id='timer' class="flow-text center" > </p>
+                    <p id='timer' class="flow-text center"> </p>
                 </fieldset>
             </div>
             <div class="divider"></div>
@@ -24,7 +24,7 @@
                 <form name='question_list' action='quiz' method='POST'>
                     <%for (var i=0 ; i<questions.length ; i++ ) { %>
                     <div class="divider"></div>
-                    
+
                     <p class="flow-text col s1">
                         <%= i +")"%>
                     </p>
@@ -46,8 +46,7 @@
 
                     <% } %>
                     <div class="col s11 offset-s1">
-                        <button class="waves-effect waves-light btn-large"
-                        type="submit">Submit</button>
+                        <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -71,6 +70,5 @@
             }
         }, 1000);
     </script>
-    
-</body>
 
+</body>
