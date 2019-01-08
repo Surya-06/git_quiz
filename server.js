@@ -27,9 +27,12 @@ app.use(session({
 app.post('/login', (req, res) => {
     // getting parameters from login page 
     console.log(req.body);
-
-    req.session.username = req.body.username;
-    req.session.password = req.body.password;
+    if (req.body.username && req.body.password) {
+        req.session.username = req.body.username;
+        req.session.password = req.body.password;
+    } else {
+        res.redirect('/login');
+    }
     res.statusCode = 200;
     res.redirect('/');
 });
@@ -52,7 +55,6 @@ app.get('/quiz', (req, res) => {
     // If this happens, something might be wrong ( TEST )
     if (current_student == undefined)
         res.redirect('/login');
-
     // Adjust code for rendering if there are any problems with < and > 
     /*for ( var i=0 ; i<questions.length ; i++ )
         if ( questions[i].code.length > 0 ){
@@ -62,7 +64,12 @@ app.get('/quiz', (req, res) => {
     */
     // CHECK FOR RELOAD
     console.log('Checks for reload , happen here ');
-    if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
+    if (current_student.submitted == true) {
+        res.render('error.ejs', {
+            context: 'Test completed earlier',
+            msg: 'Your score = ' + current_student.score
+        });
+    } else if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
         console.log('Setting start and end times for fresh attempt ');
         current_student.testStartTime = new Date().getTime();
         // Since duration is in minutes , calculating the end time by adding the required amount 
@@ -71,9 +78,9 @@ app.get('/quiz', (req, res) => {
             questions: questions,
             endTime: current_student.testEndTime
         });
-    } else if (req.cookies.startTime < current_student.testEndTime) {
-        console.log('Previous test start time : ', current_student.testStartTime);
-        console.log('New test start time : ', req.cookies.startTime);
+    }
+    // see if the current time is ok for the student to continue his test 
+    else if (new Date().getTime() < current_student.testEndTime) {
         res.render('quiz.ejs', {
             questions: questions,
             endTime: current_student.testEndTime
@@ -89,6 +96,7 @@ app.get('/quiz', (req, res) => {
 app.post('/quiz', (req, res) => {
     console.log('Received answers');
     let current_student = studentMap.get(req.session.username);
+    current_student.submitted = true;
     if (current_student.score != undefined) {
         res.render('error.ejs', {
             context: 'Error',
@@ -149,9 +157,9 @@ app.get('/', (req, res) => {
     }
 });
 
-function compareArray(a,b){
-    for(var i = 0 ;i < a.length ; i++){
-        if(a[i]!=b[i]){
+function compareArray(a, b) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) {
             return false;
         }
     }
@@ -167,7 +175,7 @@ function eval(answers) {
         console.log(answers[i]);
         if (mappedQB.get(i).type == 'match') {
             if (compareArray(mappedQB.get(i).answer, answers[i])) {
-                score += config.pointsPerQuestion;    
+                score += config.pointsPerQuestion;
             }
         } else if (answers[i] === mappedQB.get(i).answer)
             score += config.pointsPerQuestion;
