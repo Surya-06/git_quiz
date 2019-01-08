@@ -1,0 +1,11 @@
+{
+    "questions": [{
+        "type": "match",
+        "question": "ques",
+        "left": ["dsa", "dsa", "dsa", "a"],
+        "right": ["f", "r1", "f", "dsa"],
+        "code": "#include <iostream> \r\n#include <vector> // for 2D vector \r\nusing namespace std; \r\n  \r\nint main() \r\n{ \r\n    // Initializing 2D vector \"vect\" with \r\n    // values \r\n    vector<vector<int> > vect{ { 1, 2, 3 }, \r\n                               { 4, 5, 6 }, \r\n                               { 7, 8, 9 } }; \r\n  \r\n    // Displaying the 2D vector \r\n    for (int i = 0; i < vect.size(); i++) { \r\n        for (int j = 0; j < vect[i].size(); j++) \r\n            cout << vect[i][j] << \" \"; \r\n        cout << endl; \r\n    } \r\n  \r\n    return 0; \r\n} ",
+        "answer": ["1", "1", "1", "1"],
+        "id": 1
+    }]
+}

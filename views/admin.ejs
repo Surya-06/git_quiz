@@ -1,0 +1,263 @@
+<html>
+
+<head>
+    <title>
+        Admin Page
+    </title>
+   
+</head>
+
+<body class="lime lighten-5">
+    <%- include('partials/style.ejs') %>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h1>Add Questions</h1>
+            </div>
+
+            <div class="col s12">
+                <h4>
+                    Guidelines
+                </h4>
+            </div>
+            <div class="col s12 flow-text">
+
+
+                <p> Multiple :</p>
+                <p> -Enter the text of correct answer not the option like a,b,c,d.</p>
+                <p> Matching :</p>
+                <p> -Enter the answer in ',' delimiter list; 2 means 2nd in right; ONLY 1 to 4</p>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+
+                <div class="divider"></div>
+                <div>
+                    <h2>
+                        Multiple choice question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="multi" name="type" hidden>
+
+
+                    <div class="input-field col s12">
+                        <label for="mq_id">Question 1</label>
+                        <input type="text" name="question" id="mq_id">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <input type="text" id="mop1_id" name="options">
+                        <label for="mop1_id">option1</label>
+
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input type="text" id="mop2_id" name="options">
+                        <label for="mop2_id">option2</label>
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <input id="mop3_id" type="text" name="options">
+                        <label for="mop3_id">option3</label>
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <input id="mop4_id" type="text" name="options">
+                        <label for="mop4_id">option4</label>
+                    </div>
+
+
+                    <div class="input-field col s12">
+
+                        <label for="mans_id">answer</label>
+                        <input type="text" id="mans_id" name="answer">
+
+                    </div>
+                    <div id="code_id" class="input-field col s12" hidden>
+                        <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                        <label for="codeArea">Code</label>
+                    </div>
+                    <div class="input-field col s10 ">
+
+                        <button class="waves-effect waves-light btn-large" onclick="M.toast({html: 'Question added'})"
+                            type="submit">Submit</button>
+
+                    </div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle()" />
+                            <span>Code</span>
+                        </label>
+                    </div>
+
+                </form>
+
+                <div class="divider"></div>
+
+
+
+                <div class="col s12">
+                    <h2>
+                        Fill in the blank question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="fill" name="type" hidden>
+
+                    <div class="input-field col s12"><label for="fq_id">Question 1</label>
+                        <input type="text" id="fq_id" name="question">
+                    </div>
+
+                    <div class="input-field col s12">
+
+                        <label for="fans_id">answer</label>
+                        <input type="text" id="fans_id" name="answer">
+                    </div>
+                    <div id="code_id1" class="input-field col s12" hidden>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                            <label for="codeArea">Code</label>
+                        </div>
+                    <div class="col s10">
+                        <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
+                    </div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle1()" />
+                            <span>Code</span>
+                        </label>
+                    </div>
+
+                </form>
+                <div class="divider"></div>
+
+
+
+
+                <div>
+                    <h2>
+                        Matching question
+                    </h2>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="match" name="type" hidden>
+
+
+                    <div class="input-field col s12">
+                        <label for="maq_id">Question 1</label>
+                        <input type="text" id="maq_id" name="question">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+                        <label for="ml1_id">Left1</label>
+                        <input id="ml1_id" type="text" name="left">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+
+                        <label for="ml2_id">Left2</label>
+                        <input id="ml2_id" type="text" name="left">
+                    </div>
+
+
+                    <div class="input-field col s12"> <label for="ml3_id">Left3</label>
+                        <input id="ml3_id" type="text" name="left">
+                    </div>
+
+
+                    <div class="input-field col s12"> <label for="ml4_id">Left4</label>
+                        <input id="ml4_id" type="text" name="left">
+                    </div>
+
+
+
+                    <div class="input-field col s12">
+                        <label for="mr1_id">Right1</label>
+                        <input id="mr1_id" type="text" name="right">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label for="mr2_id">Right2</label>
+                        <input id="mr2_id" type="text" name="right"></div>
+
+
+                    <div class="input-field col s12">
+                        <label for="mr3_id">Right3</label>
+                        <input id="mr3_id" type="text" name="right">
+                    </div>
+
+
+                    <div class="input-field col s12">
+                        <label for="mr4_id">Right4</label>
+                        <input id="mr4_id" type="text" name="right">
+                    </div>
+
+ <div id="code_id2" class="input-field col s12" hidden>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                            <label for="codeArea">Code</label>
+                        </div>
+                    <div class="input-field col s12">
+
+                        <label for="ma_ans_id">Answer</label>
+                        <input id="ma_ans_id" type="text" name="answer" placeholder="Ex : 2,1,0,4">
+                    </div>
+                    <div class="col s10">
+                        <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle2()" />
+                            <span>Code</span>
+                        </label>
+                    </div>
+
+
+                </form>
+                <div class="divider"></div>
+            </div>
+        </div>
+
+
+    </div>
+     <script>
+    
+        function toggle() {
+            var x = document.getElementById("code_id");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+        function toggle1() {
+            var x = document.getElementById("code_id1");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+        
+        function toggle2() {
+            var x = document.getElementById("code_id2");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+    </script>
+    
+</body>
+
+</html>
