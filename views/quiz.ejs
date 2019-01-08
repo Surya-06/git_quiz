@@ -5,7 +5,7 @@
     <title> QUIZ PAGE </title>
 </head>
 
-<body>
+<body onload="laodTimers()">
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col s12 ">
                 <fieldset class="card-panel">
-                    <p id='timer'> </p>
+                    <p id='timer' class="flow-text center" > </p>
                 </fieldset>
             </div>
             <div class="divider"></div>
@@ -46,12 +46,14 @@
 
                     <% } %>
                     <div class="col s11 offset-s1">
-                        <input type="submit" value="Submit" class="waves-effect waves-light btn" />
+                        <button class="waves-effect waves-light btn-large"
+                        type="submit">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script src="js/Cookies.js" type="text/javascript"></script>
     <script>
         var endTime = <%= endTime %>;
         var countDown = setInterval(() => {
@@ -69,6 +71,6 @@
             }
         }, 1000);
     </script>
-
+    
 </body>
 
