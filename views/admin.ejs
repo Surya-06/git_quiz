@@ -79,18 +79,30 @@
                         <input type="text" id="mans_id" name="answer">
 
                     </div>
-                    <div class="input-field col s12">
+                    <div id="code_id" class="input-field col s12" hidden>
+                        <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                        <label for="codeArea">Code</label>
+                    </div>
+                    <div class="input-field col s10 ">
 
                         <button class="waves-effect waves-light btn-large" onclick="M.toast({html: 'Question added'})"
                             type="submit">Submit</button>
 
+                    </div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle()" />
+                            <span>Code</span>
+                        </label>
                     </div>
 
                 </form>
 
                 <div class="divider"></div>
 
-                <div>
+
+
+                <div class="col s12">
                     <h2>
                         Fill in the blank question
                     </h2>
@@ -98,26 +110,35 @@
                 <form action="/admin" method="POST" id="question-form">
                     <input type="text" value="fill" name="type" hidden>
 
-
                     <div class="input-field col s12"><label for="fq_id">Question 1</label>
                         <input type="text" id="fq_id" name="question">
                     </div>
-
-
-
 
                     <div class="input-field col s12">
 
                         <label for="fans_id">answer</label>
                         <input type="text" id="fans_id" name="answer">
                     </div>
-
-                    <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
-
-
+                    <div id="code_id1" class="input-field col s12" hidden>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                            <label for="codeArea">Code</label>
+                        </div>
+                    <div class="col s10">
+                        <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
+                    </div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle1()" />
+                            <span>Code</span>
+                        </label>
+                    </div>
 
                 </form>
                 <div class="divider"></div>
+
+
+
+
                 <div>
                     <h2>
                         Matching question
@@ -187,9 +208,14 @@
                         <label for="ma_ans_id">Answer</label>
                         <input id="ma_ans_id" type="text" name="answer" placeholder="Ex : 2,1,0,4">
                     </div>
-
-                    <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
-
+                    <div class="col s10">
+                        <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
+                    <div class="col s2">
+                        <label>
+                            <input type="checkbox" onclick="toggle()" />
+                            <span>Code</span>
+                        </label>
+                    </div>
 
 
                 </form>
@@ -199,6 +225,24 @@
 
 
     </div>
+    <script>
+        function toggle() {
+            var x = document.getElementById("code_id");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+        function toggle1() {
+            var x = document.getElementById("code_id1");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+    </script>
 </body>
 
 </html>
