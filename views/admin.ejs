@@ -4,6 +4,7 @@
     <title>
         Admin Page
     </title>
+   
 </head>
 
 <body class="lime lighten-5">
@@ -25,7 +26,7 @@
                 <p> Multiple :</p>
                 <p> -Enter the text of correct answer not the option like a,b,c,d.</p>
                 <p> Matching :</p>
-                <p> -Enter the answer in ',' delimiter list; 2 means 2nd in right;</p>
+                <p> -Enter the answer in ',' delimiter list; 2 means 2nd in right; ONLY 1 to 4</p>
 
             </div>
         </div>
@@ -202,7 +203,10 @@
                         <input id="mr4_id" type="text" name="right">
                     </div>
 
-
+ <div id="code_id2" class="input-field col s12" hidden>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                            <label for="codeArea">Code</label>
+                        </div>
                     <div class="input-field col s12">
 
                         <label for="ma_ans_id">Answer</label>
@@ -212,7 +216,7 @@
                         <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
                     <div class="col s2">
                         <label>
-                            <input type="checkbox" onclick="toggle()" />
+                            <input type="checkbox" onclick="toggle2()" />
                             <span>Code</span>
                         </label>
                     </div>
@@ -225,7 +229,8 @@
 
 
     </div>
-    <script>
+     <script>
+    
         function toggle() {
             var x = document.getElementById("code_id");
             if (x.style.display === "block") {
@@ -242,7 +247,17 @@
                 x.style.display = "block";
             }
         }
+        
+        function toggle2() {
+            var x = document.getElementById("code_id2");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
     </script>
+    
 </body>
 
 </html>

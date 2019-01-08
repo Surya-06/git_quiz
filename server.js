@@ -7,9 +7,14 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     codeExec = require('./codeIO');
 
-var COUNT = config.questionCount ;
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var studentMap = new Map() , mappedQB = new Map() , questionBank = undefined , questionsExist = false  ;
+var COUNT = config.questionCount;
+var urlencodedParser = bodyParser.urlencoded({
+    extended: false
+});
+var studentMap = new Map(),
+    mappedQB = new Map(),
+    questionBank = undefined,
+    questionsExist = false;
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -30,21 +35,24 @@ app.get('/login', (req, res) => {
     res.render('login.ejs');
 });
 
-app.get ( '/quiz' , (req,res) => {
-    if ( questionsExist == false ){
+app.get('/quiz', (req, res) => {
+    if (questionsExist == false) {
         // No quiz since questions do not exist , admin fault
-        res.render ( 'error.ejs' , { context : 'Error' , msg : 'Please ask admin to make questions for the Quiz and restart server. :-)' } );
+        res.render('error.ejs', {
+            context: 'Error',
+            msg: 'Please ask admin to make questions for the Quiz and restart server. :-)'
+        });
     }
-    console.log ( 'Returning quiz page to : ' , req.session.username );
-    var questions = getQuestions( COUNT ); 
-    console.log ( 'Starting quiz with questions : ' , questions.length );
+    console.log('Returning quiz page to : ', req.session.username);
+    var questions = getQuestions(COUNT);
+    console.log('Starting quiz with questions : ', questions.length);
     let current_student = studentMap.get(req.session.username);
     // If this happens, something might be wrong ( TEST )
-    if ( current_student == undefined ) 
-        res.redirect ( '/login' );
-    
+    if (current_student == undefined)
+        res.redirect('/login');
+
     // TEST 
-        
+
     // TEST
 
     // Adjust code for rendering if there are any problems with < and > 
@@ -126,12 +134,27 @@ app.get('/', (req, res) => {
     }
 });
 
+function compareArray(a,b){
+    for(var i = 0 ;i < a.length ; i++){
+        if(a[i]!=b[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
 function eval(answers) {
     let score = 0;
     console.log('Answers received are : ');
-    console.log(answers);
+    // console.log(answers);
     for (var i in answers) {
-        if (answers[i] == mappedQB.get(i).answer)
+        console.log(mappedQB.get(i).type);
+        console.log(answers[i]);
+        if (mappedQB.get(i).type == 'match') {
+            if (compareArray(mappedQB.get(i).answer, answers[i])) {
+                score += config.pointsPerQuestion;    
+            }
+        } else if (answers[i] === mappedQB.get(i).answer)
             score += config.pointsPerQuestion;
         else {
             if (config.negativeMarking)
@@ -158,11 +181,11 @@ function updateQuestions() {
         COUNT = questionBank.length;
     }
 
-   
 
-    questionsExist = true ;
-    for ( var i =0 ; i < questionBank.length ; i++ )
-        mappedQB.set ( questionBank[i].id.toString() , questionBank[i] );
+
+    questionsExist = true;
+    for (var i = 0; i < questionBank.length; i++)
+        mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
 }
 
 function initServer() {
