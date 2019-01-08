@@ -7,7 +7,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     codeExec = require('./codeIO');
 
-const COUNT = config.questionCount ;
+var COUNT = config.questionCount ;
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var studentMap = new Map() , mappedQB = new Map() , questionBank = undefined , questionsExist = false  ;
 
