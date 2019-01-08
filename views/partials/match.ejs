@@ -3,7 +3,7 @@
 </p>
 
 <% if ( q.code != undefined && q.code.length > 0 ) { %>
-    <pre>
+<pre>
 <code>
 <%= q.code %>
 </code>
@@ -14,15 +14,20 @@
 
 <div class="col s12">
     <% for (var i=0 ; i<q.left.length ; i++ ) { %>
-        <div class="col s5">
-            <p class="flow-text center-align"><%= q.left[i] %></p>
-        </div>
-        <div class="col s2">
-            <input class="flow-text" type="number" min="1" max="4" name="<%= q.id %>" >
-        </div>
-        <div class="col s5 ">
-            <p class="flow-text center-align"><%= q.right[i] %></p>
-        </div>
+    <div class="col s5">
+        <p class="flow-text center-align">
+            <%= q.left[i] %>
+        </p>
+    </div>
+    <div class="col s2">
+        <input class="flow-text" type="number" min="1" max="4" name="<%= q.id %>">
+    </div>
+    <div class="col s5 ">
+        <p class="flow-text center-align">
+            <%= i %>. &nbsp;
+            <%= q.right[i] %>
+        </p>
+    </div>
 
     <% } %>
 
