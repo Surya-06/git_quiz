@@ -19,6 +19,7 @@ var studentMap = new Map(),
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(express.static('public'));
 app.use(session({
     secret: (new Date().getTime() + config.sessionKeyValue).toString()
 }));
@@ -26,6 +27,7 @@ app.use(session({
 app.post('/login', (req, res) => {
     // getting parameters from login page 
     console.log(req.body);
+
     req.session.username = req.body.username;
     req.session.password = req.body.password;
     res.statusCode = 200;
@@ -51,10 +53,6 @@ app.get('/quiz', (req, res) => {
     if (current_student == undefined)
         res.redirect('/login');
 
-    // TEST 
-
-    // TEST
-
     // Adjust code for rendering if there are any problems with < and > 
     /*for ( var i=0 ; i<questions.length ; i++ )
         if ( questions[i].code.length > 0 ){
@@ -62,13 +60,30 @@ app.get('/quiz', (req, res) => {
             questions[i].code = questions[i].code.replace(">","&gt;");
         }
     */
-    current_student.testStartTime = new Date().getTime();
-    // Since duration is in minutes , calculating the end time by adding the required amount 
-    current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000;
-    res.render('quiz.ejs', {
-        questions: questions,
-        endTime: current_student.testEndTime
-    });
+    // CHECK FOR RELOAD
+    console.log('Checks for reload , happen here ');
+    if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
+        console.log('Setting start and end times for fresh attempt ');
+        current_student.testStartTime = new Date().getTime();
+        // Since duration is in minutes , calculating the end time by adding the required amount 
+        current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000;
+        res.render('quiz.ejs', {
+            questions: questions,
+            endTime: current_student.testEndTime
+        });
+    } else if (req.cookies.startTime < current_student.testEndTime) {
+        console.log('Previous test start time : ', current_student.testStartTime);
+        console.log('New test start time : ', req.cookies.startTime);
+        res.render('quiz.ejs', {
+            questions: questions,
+            endTime: current_student.testEndTime
+        });
+    } else {
+        res.render('error.ejs', {
+            context: 'Test completed earlier',
+            msg: 'Your score = ' + current_student.score
+        });
+    }
 });
 
 app.post('/quiz', (req, res) => {
@@ -180,9 +195,6 @@ function updateQuestions() {
     if (COUNT > questionBank.length) {
         COUNT = questionBank.length;
     }
-
-
-
     questionsExist = true;
     for (var i = 0; i < questionBank.length; i++)
         mappedQB.set(questionBank[i].id.toString(), questionBank[i]);

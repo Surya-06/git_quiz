@@ -1,21 +1,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
-    <body >
-        <%- include('partials/style.ejs') %>
-        <%- include('partials/header.ejs') %>
 
-        <div class="container ">
-            <div class="row">
-                <div class="col s12">
-                    <form action="login" method="POST"> 
-                        <h2> User Login </h2>
-                        <input type="text" name="username" placeholder="Username" />
-                        <input type="password" name="password" placeholder="Password" />
-                        <button class="waves-effect waves-light btn-large"
-                            type="submit">Submit</button>
-                    </form>
-                </div>
+<body>
+    <%- include('partials/style.ejs') %>
+    <%- include('partials/header.ejs') %>
+
+    <div class="container ">
+        <div class="row">
+            <div class="col s12">
+                <form action="login" method="POST">
+                    <h2> User Login </h2>
+                    <input type="text" name="username" placeholder="Username" />
+                    <input type="password" name="password" placeholder="Password" />
+                    <button class="waves-effect waves-light btn-large" onclick="validate()" type="submit">Submit</button>
+                </form>
             </div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
