@@ -22,22 +22,25 @@
             <div class="col s12">
 
                 <form name='question_list' action='quiz' method='POST'>
-                    <%for (var i=0 ; i<questions.length ; i++ ) { %>
+                    <% for (var i=0 ; i<questions.length ; i++ ) { %>
                     <div class="divider"></div>
 
                     <p class="flow-text col s1">
                         <%= i +")"%>
                     </p>
+
                     <% if( questions[i].type == 'multi' ) { %>
                     <div class="col s11">
                         <%- include('partials/mcq.ejs',{q:questions[i]}) %>
                     </div>
                     <% } %>
+
                     <% if( questions[i].type == 'fill' ) { %>
                     <div class="col s11">
                         <%- include('partials/fill.ejs',{q:questions[i]}) %>
                     </div>
                     <% } %>
+                    
                     <% if( questions[i].type == 'match' ) { %>
                     <div class="col s11">
                         <%- include('partials/match.ejs',{q:questions[i]}) %>
@@ -45,6 +48,7 @@
                     <% } %>
 
                     <% } %>
+                    <div class="divider"></div>
                     <div class="col s11 offset-s1">
                         <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
                     </div>

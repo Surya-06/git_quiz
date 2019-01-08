@@ -53,17 +53,6 @@ app.get('/quiz', (req, res) => {
     if (current_student == undefined)
         res.redirect('/login');
 
-    // TEST 
-    questions[0].code = `
-        def func(value,lister):
-            print('this is a sample function in python)
-            return func(value-1,lister)
-        
-        print("calling the function")
-        func(12,12)
-        `;
-    // TEST
-
     // Adjust code for rendering if there are any problems with < and > 
     /*for ( var i=0 ; i<questions.length ; i++ )
         if ( questions[i].code.length > 0 ){
@@ -160,12 +149,27 @@ app.get('/', (req, res) => {
     }
 });
 
+function compareArray(a,b){
+    for(var i = 0 ;i < a.length ; i++){
+        if(a[i]!=b[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
 function eval(answers) {
     let score = 0;
     console.log('Answers received are : ');
-    console.log(answers);
+    // console.log(answers);
     for (var i in answers) {
-        if (answers[i] == mappedQB.get(i).answer)
+        console.log(mappedQB.get(i).type);
+        console.log(answers[i]);
+        if (mappedQB.get(i).type == 'match') {
+            if (compareArray(mappedQB.get(i).answer, answers[i])) {
+                score += config.pointsPerQuestion;    
+            }
+        } else if (answers[i] === mappedQB.get(i).answer)
             score += config.pointsPerQuestion;
         else {
             if (config.negativeMarking)
