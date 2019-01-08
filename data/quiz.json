@@ -1,15 +1,23 @@
 {
     "questions": [{
         "type": "multi",
-        "question": "asdfasdfasdf",
-        "options": ["asd", "wqe", "fgd", "56"],
-        "answer": "asd",
+        "question": "ques",
+        "options": ["a", "op1", "op1", "op1"],
+        "answer": "a",
+        "code": "",
         "id": 1
     }, {
-        "type": "multi",
-        "question": "this is a sample question",
-        "options": ["value1", "value2", "value3", "value4"],
-        "answer": "value2",
+        "type": "fill",
+        "question": "ques",
+        "answer": "ans",
+        "code": "",
         "id": 2
+    }, {
+        "type": "multi",
+        "question": "1",
+        "options": ["op1", "a", "op1", "op1"],
+        "answer": "ans",
+        "code": "dsa",
+        "id": 3
     }]
 }
