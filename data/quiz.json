@@ -19,7 +19,7 @@
     }, {
         "type": "coding",
         "question": "fdsafasd",
-        "lang": "fsdaf",
+        "lang": "c++",
         "test_input": "fdas",
         "test_output": "fdsa",
         "input": ["fdsa", "fdsaf", "sdf", "sgdfh", "gfjhgj", "k"],
