@@ -117,11 +117,11 @@ app.post('/quiz', (req, res) => {
 app.post('/admin', urlencodedParser, function (req, res) {
     // console.log(req.body);
     io.addQuestions(req.body);
-    res.redirect('/admin');
+    res.redirect('/admin',{cfg:''});
 });
 
 app.get('/admin', function (req, res) {
-    res.render('admin');
+    res.render('admin',{cfg:''});
 });
 
 app.post('/code', urlencodedParser, function (req, res) {
@@ -155,6 +155,19 @@ app.get('/', (req, res) => {
             res.redirect('/quiz');
         }
     }
+});
+
+app.get('/cfg',function(req,res){
+    var cfg = io.fetchCFG();
+    res.send(cfg);
+});
+
+app.post('/cfg',function(req,res){
+    var cfg = req.body.cfg;
+    io.saveCFG(cfg);
+
+    res.redirect('admin');
+
 });
 
 function compareArray(a, b) {
