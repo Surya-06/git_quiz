@@ -4,7 +4,7 @@
     <title>
         Admin Page
     </title>
-   
+
 </head>
 
 <body class="lime lighten-5">
@@ -121,9 +121,9 @@
                         <input type="text" id="fans_id" name="answer">
                     </div>
                     <div id="code_id1" class="input-field col s12" hidden>
-                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
-                            <label for="codeArea">Code</label>
-                        </div>
+                        <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                        <label for="codeArea">Code</label>
+                    </div>
                     <div class="col s10">
                         <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
                     </div>
@@ -203,10 +203,10 @@
                         <input id="mr4_id" type="text" name="right">
                     </div>
 
- <div id="code_id2" class="input-field col s12" hidden>
-                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
-                            <label for="codeArea">Code</label>
-                        </div>
+                    <div id="code_id2" class="input-field col s12" hidden>
+                        <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
+                        <label for="codeArea">Code</label>
+                    </div>
                     <div class="input-field col s12">
 
                         <label for="ma_ans_id">Answer</label>
@@ -223,14 +223,93 @@
 
 
                 </form>
+
+
+
                 <div class="divider"></div>
+                <div class="divider"></div>
+                <div class="col s12">
+                    <div>
+                        <h2>
+                            Coding question
+                        </h2>
+                    </div>
+                </div>
+                <form action="/admin" method="POST" id="question-form">
+                    <input type="text" value="coding" name="type" hidden>
+
+
+                    <div class="input-field col s12">
+                        <label for="cq_id">Question</label>
+                        <input type="text" id="cq_id" name="question">
+                    </div>
+                    <div class="col s12 input-field">
+                        <label for="cl_id">Language</label>
+                        <input type="text" id="cl_id" name="lang">
+
+                    </div>
+
+                    <div class="col s12">
+                        <div class=" input-field  col s6">
+                            <label for="ctesti_id">Test Input</label>
+
+                            <textarea type="text" class="materialize-textarea" id="ctesti_id" name="test_input"></textarea>
+                        </div>
+                        <div class=" input-field  col s6">
+                            <label for="ctesto_id">Test Output</label>
+
+                            <textarea type="text" id="ctesto_id" name="test_output" class="materialize-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="new_root" class="input-field col s12">
+                        <div>
+                            <div class="col s6  input-field ">
+                                <label for="ci_id">Input</label>
+                                <textarea type="text" id="ci_id" name="input" class="materialize-textarea"></textarea>
+                            </div>
+                            <div class="col s6  input-field ">
+                                <label for="ca_id">Answer</label>
+                                <textarea type="text" id="ca_id" name="answer" class="materialize-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s10">
+                        <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
+                </form>
+                <div class="col s2">
+                    <label for="add_id">+</label>
+                    <input type="button" value="Add output" class="waves-light btn-large" onclick="addNewIO()">
+                </div>
             </div>
         </div>
 
 
     </div>
-     <script>
-    
+    <script>
+        class IOpair {
+            constructor(minput, moutput) {
+                this.minput = minput;
+                this.moutput = moutput;
+            }
+
+        }
+
+        function addNewIO() {
+            const main = document.querySelector("#new_root");
+            const innerDiv = document.createElement('div');
+            innerDiv.innerHTML =
+                `<div class="col s6  input-field ">
+                                <label for="ci_id">Input</label>
+                                <textarea type="text" id="ci_id" name="input" class="materialize-textarea"></textarea>
+                            </div>
+                            <div class="col s6  input-field ">
+                                <label for="ca_id">Answer</label>
+                                <textarea type="text" id="ca_id" name="answer" class="materialize-textarea"></textarea>
+                            </div>`;
+            main.appendChild(innerDiv);
+        }
+
         function toggle() {
             var x = document.getElementById("code_id");
             if (x.style.display === "block") {
@@ -239,6 +318,12 @@
                 x.style.display = "block";
             }
         }
+        $(function () {
+            $("#button").click(function () {
+                $("#item").toggle();
+            });
+        });
+
         function toggle1() {
             var x = document.getElementById("code_id1");
             if (x.style.display === "block") {
@@ -247,7 +332,7 @@
                 x.style.display = "block";
             }
         }
-        
+
         function toggle2() {
             var x = document.getElementById("code_id2");
             if (x.style.display === "block") {
@@ -257,7 +342,7 @@
             }
         }
     </script>
-    
+
 </body>
 
 </html>

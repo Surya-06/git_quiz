@@ -47,6 +47,12 @@
                     </div>
                     <% } %>
 
+                    <% if( questions[i].type == 'coding' ) { %>
+                        <div class="col s11">
+                            <%- include('partials/coding.ejs',{q:questions[i]}) %>
+                        </div>
+                        <% } %>
+
                     <% } %>
                     <div class="divider"></div>
                     <div class="col s11 offset-s1">
@@ -58,6 +64,7 @@
     </div>
     <script src="js/Cookies.js" type="text/javascript"></script>
     <script>
+        
         var endTime = <%= endTime %>;
         var countDown = setInterval(() => {
             let distance = endTime - (new Date().getTime());

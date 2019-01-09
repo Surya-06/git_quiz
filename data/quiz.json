@@ -7,5 +7,23 @@
         "code": "#include <iostream> \r\n#include <vector> // for 2D vector \r\nusing namespace std; \r\n  \r\nint main() \r\n{ \r\n    // Initializing 2D vector \"vect\" with \r\n    // values \r\n    vector<vector<int> > vect{ { 1, 2, 3 }, \r\n                               { 4, 5, 6 }, \r\n                               { 7, 8, 9 } }; \r\n  \r\n    // Displaying the 2D vector \r\n    for (int i = 0; i < vect.size(); i++) { \r\n        for (int j = 0; j < vect[i].size(); j++) \r\n            cout << vect[i][j] << \" \"; \r\n        cout << endl; \r\n    } \r\n  \r\n    return 0; \r\n} ",
         "answer": ["1", "1", "1", "1"],
         "id": 1
+    }, {
+        "type": "coding",
+        "question": "ques",
+        "lang": "c",
+        "test_input": "00 0 0\r\n0 \r\n0 \r\n0\r\n",
+        "test_output": "0 12 10 \r\n0 121",
+        "input": [" 25120 102 \r\n0 21\r\n 45", " 23.0 \r\n1\r\n0 \r\n1"],
+        "answer": ["1 12\r\n 1\r\n1 \r\n", "21 20\r\n10"],
+        "id": 2
+    }, {
+        "type": "coding",
+        "question": "fdsafasd",
+        "lang": "fsdaf",
+        "test_input": "fdas",
+        "test_output": "fdsa",
+        "input": ["fdsa", "fdsaf", "sdf", "sgdfh", "gfjhgj", "k"],
+        "answer": ["fasdf", "gfdsg", "sdfg", "dfsg", "gsdfg", "dsfgdf"],
+        "id": 3
     }]
 }
