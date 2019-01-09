@@ -117,7 +117,7 @@ app.post('/quiz', (req, res) => {
 app.post('/admin', urlencodedParser, function (req, res) {
     // console.log(req.body);
     io.addQuestions(req.body);
-    res.redirect('/admin',{cfg:''});
+    res.redirect('/admin');
 });
 
 app.get('/admin', function (req, res) {

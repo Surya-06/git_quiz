@@ -243,11 +243,18 @@
                         <label for="cq_id">Question</label>
                         <input type="text" id="cq_id" name="question">
                     </div>
-                    <div class="col s12 input-field">
-                        <label for="cl_id">Language</label>
-                        <input type="text" id="cl_id" name="lang">
 
+
+                    <div class="input-field col s12">
+                        <select name="lang">
+
+                            <option value="c++">C++</option>
+                            <option value="java">Java</option>
+                            <option value="python">Python</option>
+                        </select>
+                        <label>Choose the language</label>
                     </div>
+
 
                     <div class="col s12">
                         <div class=" input-field  col s6">
@@ -283,7 +290,7 @@
                 </div>
             </div>
 
-<div class="divider"></div>
+            <div class="divider"></div>
             <form action="/cfg" method="POST">
                 <div class="col s12">
                     <h3>
@@ -293,8 +300,8 @@
                 <div class="col s12">
 
                     <div class="col s12  input-field ">
-                        
-                        
+
+
                         <textarea type="text" id="cfg_id" name="cfg" class="materialize-textarea"></textarea>
                     </div>
 
