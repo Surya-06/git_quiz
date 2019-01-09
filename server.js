@@ -7,7 +7,10 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     codeExec = require('./codeIO'),
     fs = require('fs'),
-    fse = require('fs-extra');
+    fse = require('fs-extra'),
+    exec = require('child_process').exec;
+
+var LOG = config.debug ? console.log.bind(console) : function () {};
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -16,9 +19,6 @@ app.use(express.static('public'));
 app.use(session({
     secret: (new Date().getTime() + config.sessionKeyValue).toString()
 }));
-
-var exec = require('child_process').exec;
-
 
 var COUNT = config.questionCount;
 var urlencodedParser = bodyParser.urlencoded({
@@ -53,9 +53,9 @@ app.get('/quiz', (req, res) => {
             msg: 'Please ask admin to make questions for the Quiz and restart server. :-)'
         });
     }
-    console.log('Returning quiz page to : ', req.session.username);
+    LOG('Returning quiz page to : ', req.session.username);
     var questions = getQuestions(COUNT);
-    console.log('Starting quiz with questions : ', questions.length);
+    LOG('Starting quiz with questions : ', questions.length);
     let current_student = studentMap.get(req.session.username);
     // If this happens, something might be wrong ( TEST )
     if (current_student == undefined)
@@ -68,14 +68,14 @@ app.get('/quiz', (req, res) => {
         }
     */
     // CHECK FOR RELOAD
-    console.log('Checks for reload , happen here ');
+    LOG('Checks for reload , happen here ');
     if (current_student.submitted == true) {
         res.render('error.ejs', {
             context: 'Test completed earlier',
             msg: 'Your score = ' + current_student.score
         });
     } else if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
-        console.log('Setting start and end times for fresh attempt ');
+        LOG('Setting start and end times for fresh attempt ');
         current_student.testStartTime = new Date().getTime();
         // Since duration is in minutes , calculating the end time by adding the required amount 
         current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000;
@@ -99,7 +99,7 @@ app.get('/quiz', (req, res) => {
 });
 
 app.post('/quiz', async (req, res) => {
-    console.log('Received answers');
+    LOG('Received answers');
     let current_student = studentMap.get(req.session.username);
     current_student.submitted = true;
     if (current_student.score != undefined) {
@@ -110,7 +110,7 @@ app.post('/quiz', async (req, res) => {
     } else {
         var answers = req.body;
         eval(answers, current_student);
-        console.log('\nEval complete , continuing post');
+        LOG('\nEval complete , continuing post');
         res.render('error.ejs', {
             context: 'Test complete',
             msg: 'Answers saved successfully'
@@ -119,7 +119,7 @@ app.post('/quiz', async (req, res) => {
 });
 
 app.post('/admin', urlencodedParser, function (req, res) {
-    // console.log(req.body);
+    // LOG(req.body);
     io.addQuestions(req.body);
     res.redirect('/admin');
 });
@@ -140,7 +140,7 @@ app.get('/', (req, res) => {
     } else if (studentMap.has(req.session.username)) {
         var current_student = studentMap.get(req.session.username);
         if (current_student.score == undefined) {
-            console.log('Making score 0 since previous attempt unsuccessful');
+            LOG('Making score 0 since previous attempt unsuccessful');
             current_student.score = 0;
         }
         res.render('error.ejs', {
@@ -184,24 +184,24 @@ function write_to_file(code, extension, fileName) {
 function execPromise(command) {
     return new Promise(function (resolve, reject) {
         exec(command, (error, stdout, stderr) => {
-            console.log("\n\nReturning from call : " + command);
+            LOG("\n\nReturning from call : " + command);
             if (error) {
-                console.log("Rejection due to error : " + error)
+                LOG("Rejection due to error : " + error)
                 reject(error);
                 return;
             }
             if (stderr) {
-                console.log("Returning stderr " + stderr);
+                LOG("Returning stderr " + stderr);
                 resolve(false);
                 return;
             }
-            console.log("stdout trim right : " + stdout.trimRight());
+            LOG("stdout trim right : " + stdout.trimRight());
             if (stdout.trimRight() == "") {
-                console.log("Resolving true ");
+                LOG("Resolving true ");
                 resolve(true);
                 return;
             }
-            console.log("Resolving with stdout : " + stdout.trim());
+            LOG("Resolving with stdout : " + stdout.trim());
             resolve(stdout.trim());
             return;
         });
@@ -211,7 +211,7 @@ function execPromise(command) {
 
 function execCode(code, lang, username, id, inputFile) {
     var fileName = username + "_" + id;
-    console.log("File Name : " + fileName);
+    LOG("File Name : " + fileName);
     var result = write_to_file(code, lang, fileName);
     return new Promise((resolve, reject) => {
         if (lang == "cpp") {
@@ -219,28 +219,28 @@ function execCode(code, lang, username, id, inputFile) {
             var execution = "code/" + fileName + config.cppExecFile + "< " + inputFile;
             var compilation_promise = execPromise(compilation);
             compilation_promise.then((result) => {
-                console.log("\n\n");
+                LOG("\n\n");
                 if (result == false) {
-                    console.log("Resolving false at compilation from id ", id);
+                    LOG("Resolving false at compilation from id ", id);
                     resolve(false);
                 } else {
-                    console.log("Compilation complete , proceeding to execution");
+                    LOG("Compilation complete , proceeding to execution");
                     // proceed with execution 
                     var execution_promise = execPromise(execution);
                     execution_promise.then((result) => {
-                        console.log("Execution complete");
+                        LOG("Execution complete");
                         if (result == false) {
-                            console.log("Resolving false at execution");
+                            LOG("Resolving false at execution");
                             resolve(false);
                         }
                         resolve(result);
                     }, (error) => {
-                        console.log("Error in process during execution");
+                        LOG("Error in process during execution");
                         reject(error);
                     });
                 }
             }, (error) => {
-                console.log("Error during compilation ", id);
+                LOG("Error during compilation ", id);
                 reject(error);
             });
         } else if (lang == 'python') {
@@ -253,7 +253,7 @@ function execCode(code, lang, username, id, inputFile) {
 
 async function eval(answers, student) {
     student.score = 0;
-    console.log("Evaluating answers");
+    LOG("Evaluating answers");
     for (var i in answers) {
         let question = mappedQB.get(i);
         let negative = false;
@@ -262,27 +262,28 @@ async function eval(answers, student) {
                 student.score += config.pointsPerQuestion;
             } else if (config.negativeMarking)
                 negative = true;
+            LOG("Score after matching question : " + student.score);
         } else if (question.type == 'coding') {
-            console.log("Coding question");
+            LOG("Coding question");
             if (question.lang == 'cpp') {
                 var executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
-                console.log("Waiting for execution promise");
+                LOG("Waiting for execution promise");
                 executionPromise.then((result) => {
                     if (result == false)
-                        console.log('The execution generated error ! ', id);
+                        LOG('The execution generated error ! ', id);
                     else {
-                        console.log("Execution complete");
+                        LOG("Execution complete");
                         if (result == question.answer) {
                             student.score += config.pointsPerQuestion;
-                            console.log("Updated score of student is " + student.score.toString());
+                            LOG("Updated score of student is " + student.score.toString());
                         } else if (config.negativeMarking) {
                             negative = true;
                         } else {
-                            console.log("Eval complete for code , no change in marks of student : " + student.username + " " + student.score);
+                            LOG("Eval complete for code , no change in marks of student : " + student.username + " " + student.score);
                         }
                     }
                 }, (error) => {
-                    console.log("Error occured during processing -- HANDLE ADMIN , ", i);
+                    LOG("Error occured during processing -- HANDLE ADMIN , ", i);
                 });
             } else if (question.lang == 'python') {
                 // handle python code 
@@ -326,10 +327,46 @@ function updateQuestions() {
 }
 
 function initServer() {
-    console.log('Initializing server : --- ');
+    LOG('Initializing server : --- ');
     console.log('Server at port : 3000');
     app.listen(3000);
     updateQuestions();
 }
 
 initServer();
+
+// Handle admin input to server
+var stdin = process.openStdin();
+
+function show_scores() {
+    console.log("Showing results");
+    console.log("------------------------------------\n");
+    var entries = studentMap.entries();
+    for (var val of entries) {
+        console.log("Student : " + val[0] + " || Score : " + val[1].score);
+    }
+    console.log("\n------------------------------------\n");
+    return;
+}
+
+function help() {
+    console.log("------------------------------------\n");
+    console.log(
+        `
+        results ------ 'Display results'
+        help ------ 'Display help'
+        `);
+    console.log("\n------------------------------------\n");
+    return;
+}
+
+stdin.addListener("data", function (command) {
+    // convert to usable state
+    command = command.toString().trim();
+    if (command == "results") {
+        show_scores();
+    } else if (command == "help") {
+        help();
+    }
+    process.stdout.write(`COMMAND(Type 'help' for help) : `);
+});

@@ -8,5 +8,6 @@
     "duration": 4,
     "pointsPerQuestion": 1,
     "negativeMarking": false,
-    "cppExecFile": ".out"
+    "cppExecFile": ".out",
+    "debug": false
 }
