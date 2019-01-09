@@ -6,6 +6,7 @@ const express = require('express'),
     io = require('./QuizIO'),
     bodyParser = require('body-parser'),
     codeExec = require('./codeIO'),
+    fs = require('fs'),
     fse = require('fs-extra');
 
 app.set('view engine', 'ejs');
@@ -16,8 +17,9 @@ app.use(session({
     secret: (new Date().getTime() + config.sessionKeyValue).toString()
 }));
 
-var exec = util.promisify(require('child_process').exec),
-    fs = require('fs');
+var exec = require('child_process').exec;
+
+
 var COUNT = config.questionCount;
 var urlencodedParser = bodyParser.urlencoded({
     extended: false
@@ -106,13 +108,12 @@ app.post('/quiz', async (req, res) => {
             msg: 'Test completed earlier , answers cannot be saved. Score : ' + current_student.score.toString()
         });
     } else {
-        var answers = req.body,
-            score = await eval(answers, current_student);
+        var answers = req.body;
+        eval(answers, current_student);
         console.log('\nEval complete , continuing post');
-        current_student.score = score;
         res.render('error.ejs', {
             context: 'Test complete',
-            msg: 'Answers saved successfully , score = ' + score
+            msg: 'Answers saved successfully'
         });
     }
 });
@@ -180,82 +181,115 @@ function write_to_file(code, extension, fileName) {
     return filePath;
 }
 
-async function execCode(code, lang, username, id, test_input) {
+function execPromise(command) {
+    return new Promise(function (resolve, reject) {
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            if (stderr) {
+                console.log("Returning stderr " + stderr);
+                resolve(false);
+            }
+            console.log("Returning stdout " + stdout.trimRight());
+            if (stdout.trimRight() == "") {
+                console.log("Resolving true ");
+                resolve(true);
+            }
+            console.log("Resolving with stdout");
+            resolve(stdout.trim());
+        });
+    });
+}
+
+
+function execCode(code, lang, username, id, test_input) {
     var fileName = username + "_" + id;
     console.log("File Name : " + fileName);
-    if (lang == 'cpp') {
-        var result = write_to_file(code, lang, fileName);
-        console.log("File written to disk : ", result);
-        if (result) {
-            await exec("g++ " + result + " -o code/" + fileName + config.cppExecFile, (error, stdout, stderr) => {
-                if (stdout.length > 0 || stderr.length > 0) {
-                    console.log("There was an error compiling the code");
-                    return false;
-                } else
-                    console.log("Compilation complete, proceeding to execution");
-                if (error) {
-                    console.log("Error during handling of process");
-                    return false;
-                }
-            });
-            console.log("\nCompiled file created for " + username + " question:" + id);
-            console.log("Starting exection of program : " + "code/" + fileName + config.cppExecFile);
-            await exec("code/" + fileName + config.cppExecFile + "<< " + test_input, (error, stdout, stderr) => {
-                console.log('Output after execution : ' + stdout);
-                if (stderr.length > 0) {
-                    console.log("Error during execution of the file");
-                    return false;
-                } else if (error) {
-                    console.log('Error during process , failure of server');
-                    return false;
+    var result = write_to_file(code, lang, fileName);
+    return new Promise((resolve, reject) => {
+        if (lang == "cpp") {
+            var compilation = "g++ " + result + " -o code/" + fileName + config.cppExecFile;
+            var execution = "code/" + fileName + config.cppExecFile + "<< " + test_input;
+            var compilation_promise = execPromise(compilation);
+            compilation_promise.then((result) => {
+                if (result == false) {
+                    console.log("Resolving false at compilation from id ", id);
+                    resolve(false);
                 } else {
-                    console.log("Returning output")
-                    return stdout;
+                    console.log("Compilation complete , proceeding to execution");
+                    // proceed with execution 
+                    var execution_promise = execPromise(execution);
+                    execution_promise.then((result) => {
+                        console.log("Execution complete");
+                        if (result == false) {
+                            console.log("Resolving false at execution");
+                            resolve(false);
+                        }
+                        resolve(result);
+                    }, (error) => {
+                        console.log("Error in process during execution");
+                        reject(error);
+                    });
                 }
+            }, (error) => {
+                console.log("Error during compilation ", id);
+                reject(error);
             });
+        } else if (lang == 'python') {
+            // execute python 
+        } else if (lang == 'java') {
+            // execute java
         }
-    } else if (lang == 'python') {
-        // execute python 
-    } else if (lang == 'java') {
-        // execute java
-    }
-    return false;
+    });
 }
 
 async function eval(answers, student) {
-    let score = 0;
+    student.score = 0;
     console.log("Evaluating answers");
     for (var i in answers) {
         let question = mappedQB.get(i);
+        let negative = false;
         if (question.type == 'match') {
             if (compareArray(question.answer, answers[i])) {
-                score += config.pointsPerQuestion;
-            }
+                student.score += config.pointsPerQuestion;
+            } else if (config.negativeMarking)
+                negative = true;
         } else if (question.type == 'coding') {
             console.log("Coding question");
             if (question.lang == 'cpp') {
-                // handle c / c++ code 
-                // send username and qid i 
-                var output = await execCode(answers[i], question.lang, student.username, i, question.input);
-                console.log('OUTPUT : ', output);
-                if (output == false) {
-                    console.log('Error while executing code');
-                } else if (output == question.answer)
-                    score += config.pointsPerQuestion;
-                console.log("Completed checking code for cpp file ");
+                var executionPromise = execCode(answers[i], question.lang, student.username, i, question.input);
+                console.log("Waiting for execution promise");
+                executionPromise.then((result) => {
+                    if (result == false)
+                        console.log('The execution generated error ! ', id);
+                    else {
+                        console.log("Execution complete");
+                        if (result == question.answer) {
+                            student.score += config.pointsPerQuestion;
+                            console.log("Updated score of student is " + student.score.toString());
+                        } else if (config.negativeMarking) {
+                            negative = true;
+                        }
+                    }
+                }, (error) => {
+                    console.log("Error occured during processing -- HANDLE ADMIN , ", i);
+                });
             } else if (question.lang == 'python') {
                 // handle python code 
             } else if (question.lang == 'java') {
                 // handle java code 
             }
-        } else if (answers[i] === mappedQB.get(i).answer)
-            score += config.pointsPerQuestion;
-        else {
-            if (config.negativeMarking)
-                score -= config.pointsPerQuestion;
+        } else {
+            if (answers[i] === mappedQB.get(i).answer)
+                student.score += config.pointsPerQuestion;
+            else if (config.negativeMarking)
+                negative = true
         }
+        if (negative)
+            student.score -= config.pointsPerQuestion;
     }
-    return score;
 }
 
 function getQuestions(count) {
