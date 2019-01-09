@@ -24,6 +24,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "fs-extra": "^7.0.1",
     "node-powershell": "^3.3.1"
   }
 }

@@ -10,20 +10,20 @@
     }, {
         "type": "coding",
         "question": "ques",
-        "lang": "c",
+        "lang": "cpp",
         "test_input": "00 0 0\r\n0 \r\n0 \r\n0\r\n",
         "test_output": "0 12 10 \r\n0 121",
-        "input": [" 25120 102 \r\n0 21\r\n 45", " 23.0 \r\n1\r\n0 \r\n1"],
-        "answer": ["1 12\r\n 1\r\n1 \r\n", "21 20\r\n10"],
+        "input": "1 2 3 4 5",
+        "answer": "15",
         "id": 2
     }, {
         "type": "coding",
         "question": "fdsafasd",
-        "lang": "c++",
+        "lang": "cpp",
         "test_input": "fdas",
         "test_output": "fdsa",
-        "input": ["fdsa", "fdsaf", "sdf", "sgdfh", "gfjhgj", "k"],
-        "answer": ["fasdf", "gfdsg", "sdfg", "dfsg", "gsdfg", "dsfgdf"],
+        "input": "Hello world",
+        "answer": "Hello world",
         "id": 3
     }]
 }
