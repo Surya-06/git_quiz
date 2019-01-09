@@ -5,8 +5,8 @@
     },
     "sessionKeyValue": 689852918,
     "questionCount": 5,
-    "duration": 1,
+    "duration": 4,
     "pointsPerQuestion": 1,
     "negativeMarking": false,
-    "cppExecFile": "./a.out"
+    "cppExecFile": ".out"
 }

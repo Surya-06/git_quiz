@@ -5,7 +5,7 @@
     <title> QUIZ PAGE </title>
 </head>
 
-<body onload="laodTimers()">
+<body>
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
@@ -40,7 +40,7 @@
                         <%- include('partials/fill.ejs',{q:questions[i]}) %>
                     </div>
                     <% } %>
-                    
+
                     <% if( questions[i].type == 'match' ) { %>
                     <div class="col s11">
                         <%- include('partials/match.ejs',{q:questions[i]}) %>
@@ -48,10 +48,10 @@
                     <% } %>
 
                     <% if( questions[i].type == 'coding' ) { %>
-                        <div class="col s11">
-                            <%- include('partials/coding.ejs',{q:questions[i]}) %>
-                        </div>
-                        <% } %>
+                    <div class="col s11">
+                        <%- include('partials/coding.ejs',{q:questions[i]}) %>
+                    </div>
+                    <% } %>
 
                     <% } %>
                     <div class="divider"></div>
@@ -64,7 +64,6 @@
     </div>
     <script src="js/Cookies.js" type="text/javascript"></script>
     <script>
-        
         var endTime = <%= endTime %>;
         var countDown = setInterval(() => {
             let distance = endTime - (new Date().getTime());

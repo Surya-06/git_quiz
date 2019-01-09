@@ -16,7 +16,7 @@ app.use(session({
     secret: (new Date().getTime() + config.sessionKeyValue).toString()
 }));
 
-var exec = require('child_process').exec,
+var exec = util.promisify(require('child_process').exec),
     fs = require('fs');
 var COUNT = config.questionCount;
 var urlencodedParser = bodyParser.urlencoded({
@@ -96,7 +96,7 @@ app.get('/quiz', (req, res) => {
     }
 });
 
-app.post('/quiz', (req, res) => {
+app.post('/quiz', async (req, res) => {
     console.log('Received answers');
     let current_student = studentMap.get(req.session.username);
     current_student.submitted = true;
@@ -107,8 +107,8 @@ app.post('/quiz', (req, res) => {
         });
     } else {
         var answers = req.body,
-            score = eval(answers, current_student);
-        console.log(answers);
+            score = await eval(answers, current_student);
+        console.log('\nEval complete , continuing post');
         current_student.score = score;
         res.render('error.ejs', {
             context: 'Test complete',
@@ -169,43 +169,50 @@ function compareArray(a, b) {
     return true;
 }
 
-function write_to_file(code, extension, username, id) {
-    var filePath = "code/" + username + " " + id + "." + extension;
+function write_to_file(code, extension, fileName) {
+    var filePath = "code/" + fileName + "." + extension;
     fse.ensureFileSync(filePath);
     fs.writeFileSync(filePath, code, (err) => {
         if (err) {
             return false;
-        } else
-            return filePath;
+        }
     });
+    return filePath;
 }
 
 async function execCode(code, lang, username, id, test_input) {
-    if (lang == 'c++') {
-        var result = await write_to_file(code, lang, username, id);
-        if (result != false) {
-            await exec("g++ " + result, (error, stdout, stderr) => {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                if (stdout.length > 0 || stderr.length > 0)
+    var fileName = username + "_" + id;
+    console.log("File Name : " + fileName);
+    if (lang == 'cpp') {
+        var result = write_to_file(code, lang, fileName);
+        console.log("File written to disk : ", result);
+        if (result) {
+            await exec("g++ " + result + " -o code/" + fileName + config.cppExecFile, (error, stdout, stderr) => {
+                if (stdout.length > 0 || stderr.length > 0) {
                     console.log("There was an error compiling the code");
-                else
+                    return false;
+                } else
                     console.log("Compilation complete, proceeding to execution");
                 if (error) {
-                    console.log('exec error: ' + error);
+                    console.log("Error during handling of process");
+                    return false;
                 }
             });
-            await exec("code/" + config.cppExecFile + "<< " + test_input, (error, stdout, stderr) => {
-                console.log('stdout : ' + stdout);
-                if (stderr.length > 0)
+            console.log("\nCompiled file created for " + username + " question:" + id);
+            console.log("Starting exection of program : " + "code/" + fileName + config.cppExecFile);
+            await exec("code/" + fileName + config.cppExecFile + "<< " + test_input, (error, stdout, stderr) => {
+                console.log('Output after execution : ' + stdout);
+                if (stderr.length > 0) {
+                    console.log("Error during execution of the file");
                     return false;
-                else if (error) {
-                    console.log('Error during execution');
+                } else if (error) {
+                    console.log('Error during process , failure of server');
                     return false;
                 } else {
+                    console.log("Returning output")
                     return stdout;
                 }
-            })
+            });
         }
     } else if (lang == 'python') {
         // execute python 
@@ -215,28 +222,27 @@ async function execCode(code, lang, username, id, test_input) {
     return false;
 }
 
-function eval(answers, student) {
+async function eval(answers, student) {
     let score = 0;
-    console.log('Answers received are : ');
-    // console.log(answers);
+    console.log("Evaluating answers");
     for (var i in answers) {
-        console.log(mappedQB.get(i).type);
-        console.log(answers[i]);
-        if (mappedQB.get(i).type == 'match') {
-            if (compareArray(mappedQB.get(i).answer, answers[i])) {
+        let question = mappedQB.get(i);
+        if (question.type == 'match') {
+            if (compareArray(question.answer, answers[i])) {
                 score += config.pointsPerQuestion;
             }
-        } else if (mappedQB.get(i).type == 'code') {
-            // check for code validity 
-            let question = mappedQB.get(i);
-            if (question.lang == 'c++') {
+        } else if (question.type == 'coding') {
+            console.log("Coding question");
+            if (question.lang == 'cpp') {
                 // handle c / c++ code 
                 // send username and qid i 
-                var output = execCode(answers[i], question.lang, student.username, i, question.test_input);
+                var output = await execCode(answers[i], question.lang, student.username, i, question.input);
+                console.log('OUTPUT : ', output);
                 if (output == false) {
                     console.log('Error while executing code');
-                } else if (output == question.output)
+                } else if (output == question.answer)
                     score += config.pointsPerQuestion;
+                console.log("Completed checking code for cpp file ");
             } else if (question.lang == 'python') {
                 // handle python code 
             } else if (question.lang == 'java') {
