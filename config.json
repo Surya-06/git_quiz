@@ -8,6 +8,8 @@
     "duration": 4,
     "pointsPerQuestion": 1,
     "negativeMarking": false,
+    "cppCompile": "g++",
     "cppExecFile": ".out",
+    "pythonCommand": "python",
     "debug": false
 }

@@ -215,7 +215,7 @@ function execCode(code, lang, username, id, inputFile) {
     var result = write_to_file(code, lang, fileName);
     return new Promise((resolve, reject) => {
         if (lang == "cpp") {
-            var compilation = "g++ " + result + " -o code/" + fileName + config.cppExecFile;
+            var compilation = config.cppCompile + " " + result + " -o code/" + fileName + config.cppExecFile;
             var execution = "code/" + fileName + config.cppExecFile + "< " + inputFile;
             var compilation_promise = execPromise(compilation);
             compilation_promise.then((result) => {
@@ -232,19 +232,39 @@ function execCode(code, lang, username, id, inputFile) {
                         if (result == false) {
                             LOG("Resolving false at execution");
                             resolve(false);
+                            return;
                         }
                         resolve(result);
+                        return;
                     }, (error) => {
                         LOG("Error in process during execution");
                         reject(error);
+                        return;
                     });
                 }
             }, (error) => {
                 LOG("Error during compilation ", id);
                 reject(error);
+                return;
             });
         } else if (lang == 'python') {
             // execute python 
+            var executePython = config.pythonCommand + " " + result + " < " + inputFile;
+            var executionPromise = execPromise(executePython);
+            executionPromise.then((result) => {
+                LOG("Execution complete");
+                if (result == false) {
+                    LOG("Resolving false at execution");
+                    resolve(false);
+                    return;
+                }
+                resolve(result);
+                return;
+            }, (error) => {
+                LOG("Error in process during execution");
+                reject(error);
+                return;
+            });
         } else if (lang == 'java') {
             // execute java
         }
@@ -266,7 +286,7 @@ async function eval(answers, student) {
         } else if (question.type == 'coding') {
             LOG("Coding question");
             if (question.lang == 'cpp') {
-                var executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
+                let executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
                 LOG("Waiting for execution promise");
                 executionPromise.then((result) => {
                     if (result == false)
@@ -287,6 +307,25 @@ async function eval(answers, student) {
                 });
             } else if (question.lang == 'python') {
                 // handle python code 
+                let executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
+                LOG("Waiting for execution promise");
+                executionPromise.then((result) => {
+                    if (result == false)
+                        LOG('The execution generated error ! ', id);
+                    else {
+                        LOG("Execution complete");
+                        if (result == question.answer) {
+                            student.score += config.pointsPerQuestion;
+                            LOG("Updated score of student is " + student.score.toString());
+                        } else if (config.negativeMarking) {
+                            negative = true;
+                        } else {
+                            LOG("Eval complete for code , no change in marks of student : " + student.username + " " + student.score);
+                        }
+                    }
+                }, (error) => {
+                    LOG("Error occured during processing -- HANDLE ADMIN , ", i);
+                });
             } else if (question.lang == 'java') {
                 // handle java code 
             }
