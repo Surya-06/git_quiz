@@ -184,36 +184,42 @@ function write_to_file(code, extension, fileName) {
 function execPromise(command) {
     return new Promise(function (resolve, reject) {
         exec(command, (error, stdout, stderr) => {
+            console.log("\n\nReturning from call : " + command);
             if (error) {
+                console.log("Rejection due to error : " + error)
                 reject(error);
                 return;
             }
             if (stderr) {
                 console.log("Returning stderr " + stderr);
                 resolve(false);
+                return;
             }
-            console.log("Returning stdout " + stdout.trimRight());
+            console.log("stdout trim right : " + stdout.trimRight());
             if (stdout.trimRight() == "") {
                 console.log("Resolving true ");
                 resolve(true);
+                return;
             }
-            console.log("Resolving with stdout");
+            console.log("Resolving with stdout : " + stdout.trim());
             resolve(stdout.trim());
+            return;
         });
     });
 }
 
 
-function execCode(code, lang, username, id, test_input) {
+function execCode(code, lang, username, id, inputFile) {
     var fileName = username + "_" + id;
     console.log("File Name : " + fileName);
     var result = write_to_file(code, lang, fileName);
     return new Promise((resolve, reject) => {
         if (lang == "cpp") {
             var compilation = "g++ " + result + " -o code/" + fileName + config.cppExecFile;
-            var execution = "code/" + fileName + config.cppExecFile + "<< " + test_input;
+            var execution = "code/" + fileName + config.cppExecFile + "< " + inputFile;
             var compilation_promise = execPromise(compilation);
             compilation_promise.then((result) => {
+                console.log("\n\n");
                 if (result == false) {
                     console.log("Resolving false at compilation from id ", id);
                     resolve(false);
@@ -259,7 +265,7 @@ async function eval(answers, student) {
         } else if (question.type == 'coding') {
             console.log("Coding question");
             if (question.lang == 'cpp') {
-                var executionPromise = execCode(answers[i], question.lang, student.username, i, question.input);
+                var executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
                 console.log("Waiting for execution promise");
                 executionPromise.then((result) => {
                     if (result == false)
@@ -271,6 +277,8 @@ async function eval(answers, student) {
                             console.log("Updated score of student is " + student.score.toString());
                         } else if (config.negativeMarking) {
                             negative = true;
+                        } else {
+                            console.log("Eval complete for code , no change in marks of student : " + student.username + " " + student.score);
                         }
                     }
                 }, (error) => {
@@ -309,8 +317,12 @@ function updateQuestions() {
         COUNT = questionBank.length;
     }
     questionsExist = true;
-    for (var i = 0; i < questionBank.length; i++)
+    for (var i = 0; i < questionBank.length; i++) {
+        if (questionBank[i].type == "coding") {
+            questionBank[i].inputFile = write_to_file(questionBank[i].input, 'txt', "input_" + questionBank[i].id);
+        }
         mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
+    }
 }
 
 function initServer() {
