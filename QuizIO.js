@@ -25,7 +25,7 @@ function fetchCFG(){
 
 function saveCFG(data){
     console.log('writing to config.json');
-    fs.writeFileSync('config.json' , JSON.stringify(data));
+    fs.writeFileSync('config.json' , data);
 }
 
 function addQuestions(data){

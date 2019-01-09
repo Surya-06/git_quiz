@@ -165,7 +165,7 @@ app.get('/cfg',function(req,res){
 app.post('/cfg',function(req,res){
     var cfg = req.body.cfg;
     io.saveCFG(cfg);
-
+    console.log(cfg);
     res.redirect('admin');
 
 });
