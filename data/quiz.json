@@ -13,8 +13,8 @@
         "lang": "cpp",
         "test_input": "00 0 0\r\n0 \r\n0 \r\n0\r\n",
         "test_output": "0 12 10 \r\n0 121",
-        "input": "1 2 3 4 5",
-        "answer": "15",
+        "input": ["2", "3\n1 2 3", "5\n1 2 3 4 5"],
+        "answer": ["6", "15"],
         "id": 2
     }, {
         "type": "coding",
@@ -22,8 +22,8 @@
         "lang": "cpp",
         "test_input": "fdas",
         "test_output": "fdsa",
-        "input": "Hello world",
-        "answer": "Hello world",
+        "input": ["Hello world"],
+        "answer": ["Hello world"],
         "id": 3
     }, {
         "type": "coding",

@@ -208,13 +208,13 @@ function execPromise(command) {
                 resolve(false);
                 return;
             }
-            LOG("stdout trim right : " + stdout.trimRight());
+            LOG("stdout trim right : \n" + stdout.trimRight());
             if (stdout.trimRight() == "") {
                 LOG("Resolving true ");
                 resolve(true);
                 return;
             }
-            LOG("Resolving with stdout : " + stdout.trim());
+            LOG("Resolving with stdout : \n" + stdout.trim());
             resolve(stdout.trim());
             return;
         });
@@ -228,7 +228,7 @@ function execCode(code, lang, username, id, inputFile) {
     var result = write_to_file(code, lang, fileName);
     return new Promise((resolve, reject) => {
         if (lang == "cpp") {
-            var compilation = "g++ " + result + " -o code/" + fileName + config.cppExecFile;
+            var compilation = config.cppCompile + " " + result + " -o code/" + fileName + config.cppExecFile;
             var execution = "code/" + fileName + config.cppExecFile + "< " + inputFile;
             var compilation_promise = execPromise(compilation);
             compilation_promise.then((result) => {
@@ -241,23 +241,43 @@ function execCode(code, lang, username, id, inputFile) {
                     // proceed with execution 
                     var execution_promise = execPromise(execution);
                     execution_promise.then((result) => {
-                        LOG("Execution complete");
+                        LOG("Execution complete -- ");
                         if (result == false) {
                             LOG("Resolving false at execution");
                             resolve(false);
+                            return;
                         }
                         resolve(result);
+                        return;
                     }, (error) => {
                         LOG("Error in process during execution");
                         reject(error);
+                        return;
                     });
                 }
             }, (error) => {
                 LOG("Error during compilation ", id);
                 reject(error);
+                return;
             });
         } else if (lang == 'python') {
             // execute python 
+            var executePython = config.pythonCommand + " " + result + " < " + inputFile;
+            var executionPromise = execPromise(executePython);
+            executionPromise.then((result) => {
+                LOG("Execution complete");
+                if (result == false) {
+                    LOG("Resolving false at execution");
+                    resolve(false);
+                    return;
+                }
+                resolve(result);
+                return;
+            }, (error) => {
+                LOG("Error in process during execution");
+                reject(error);
+                return;
+            });
         } else if (lang == 'java') {
             // execute java
         }
@@ -279,7 +299,30 @@ async function eval(answers, student) {
         } else if (question.type == 'coding') {
             LOG("Coding question");
             if (question.lang == 'cpp') {
-                var executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
+                let executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
+                LOG("Waiting for execution promise");
+                executionPromise.then((result) => {
+                    if (result == false)
+                        LOG('The execution generated error ! ', id);
+                    else {
+                        LOG("Execution complete : ");
+                        LOG("Result : \n", result);
+                        LOG("Expected : \n", question.answer);
+                        if (result == question.answer) {
+                            student.score += config.pointsPerQuestion;
+                            LOG("Updated score of student is " + student.score.toString());
+                        } else if (config.negativeMarking) {
+                            negative = true;
+                        } else {
+                            LOG("Eval complete for code , no change in marks of student : " + student.username + " " + student.score);
+                        }
+                    }
+                }, (error) => {
+                    LOG("Error occured during processing -- HANDLE ADMIN , ", i);
+                });
+            } else if (question.lang == 'python') {
+                // handle python code 
+                let executionPromise = execCode(answers[i], question.lang, student.username, i, question.inputFile);
                 LOG("Waiting for execution promise");
                 executionPromise.then((result) => {
                     if (result == false)
@@ -298,8 +341,6 @@ async function eval(answers, student) {
                 }, (error) => {
                     LOG("Error occured during processing -- HANDLE ADMIN , ", i);
                 });
-            } else if (question.lang == 'python') {
-                // handle python code 
             } else if (question.lang == 'java') {
                 // handle java code 
             }
@@ -333,7 +374,10 @@ function updateQuestions() {
     questionsExist = true;
     for (var i = 0; i < questionBank.length; i++) {
         if (questionBank[i].type == "coding") {
-            questionBank[i].inputFile = write_to_file(questionBank[i].input, 'txt', "input_" + questionBank[i].id);
+            let questionString = questionBank[i].input.join("\r\n");
+            LOG("The value of questionString : \n", questionString);
+            questionBank[i].inputFile = write_to_file(questionString, 'txt', "input_" + questionBank[i].id);
+            questionBank[i].answer = questionBank[i].answer.join("\n");
         }
         mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
     }
