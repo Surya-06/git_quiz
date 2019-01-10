@@ -195,13 +195,13 @@ function execPromise(command) {
                 resolve(false);
                 return;
             }
-            LOG("stdout trim right : " + stdout.trimRight());
+            LOG("stdout trim right : \n" + stdout.trimRight());
             if (stdout.trimRight() == "") {
                 LOG("Resolving true ");
                 resolve(true);
                 return;
             }
-            LOG("Resolving with stdout : " + stdout.trim());
+            LOG("Resolving with stdout : \n" + stdout.trim());
             resolve(stdout.trim());
             return;
         });
@@ -228,7 +228,7 @@ function execCode(code, lang, username, id, inputFile) {
                     // proceed with execution 
                     var execution_promise = execPromise(execution);
                     execution_promise.then((result) => {
-                        LOG("Execution complete");
+                        LOG("Execution complete -- ");
                         if (result == false) {
                             LOG("Resolving false at execution");
                             resolve(false);
@@ -292,7 +292,9 @@ async function eval(answers, student) {
                     if (result == false)
                         LOG('The execution generated error ! ', id);
                     else {
-                        LOG("Execution complete");
+                        LOG("Execution complete : ");
+                        LOG("Result : \n", result);
+                        LOG("Expected : \n", question.answer);
                         if (result == question.answer) {
                             student.score += config.pointsPerQuestion;
                             LOG("Updated score of student is " + student.score.toString());
@@ -359,7 +361,10 @@ function updateQuestions() {
     questionsExist = true;
     for (var i = 0; i < questionBank.length; i++) {
         if (questionBank[i].type == "coding") {
-            questionBank[i].inputFile = write_to_file(questionBank[i].input, 'txt', "input_" + questionBank[i].id);
+            let questionString = questionBank[i].input.join("\r\n");
+            LOG("The value of questionString : \n", questionString);
+            questionBank[i].inputFile = write_to_file(questionString, 'txt', "input_" + questionBank[i].id);
+            questionBank[i].answer = questionBank[i].answer.join("\n");
         }
         mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
     }

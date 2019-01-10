@@ -11,5 +11,5 @@
     "cppCompile": "g++",
     "cppExecFile": ".out",
     "pythonCommand": "python",
-    "debug": false
+    "debug": true
 }
