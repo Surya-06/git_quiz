@@ -43,5 +43,14 @@
         "input": "asd",
         "answer": "asd",
         "id": 5
+    }, {
+        "type": "coding",
+        "question": "",
+        "lang": "cpp",
+        "test_input": "",
+        "test_output": "",
+        "input": ["fdas\r\nf\r\nasdf\r\na\r\nsdf\r\n\r\ndsaf\r\n\r\nads\r\nf\r\nsdaf", ""],
+        "answer": ["", ""],
+        "id": 6
     }]
 }
