@@ -16,6 +16,19 @@ function saveQuestions(data) {
     fs.writeFileSync('data/quiz.json', JSON.stringify(data));
 }
 
+function fetchCFG(){
+    try {
+        var cfg = fs.readFileSync('config.json');
+        return JSON.parse(cfg);
+      } catch (e) {
+        return null;
+      }
+}
+
+function saveCFG(data){
+    console.log('writing to config.json');
+    fs.writeFileSync('config.json' , data);
+}
 
 function addQuestions(data) {
 
@@ -40,6 +53,8 @@ LOG(fetchQuestions());
 
 module.exports = {
     addQuestions,
-    fetchQuestions
+    fetchQuestions,
+    fetchCFG,
+    saveCFG
 
 }

@@ -243,11 +243,18 @@
                         <label for="cq_id">Question</label>
                         <input type="text" id="cq_id" name="question">
                     </div>
-                    <div class="col s12 input-field">
-                        <label for="cl_id">Language</label>
-                        <input type="text" id="cl_id" name="lang">
 
+
+                    <div class="input-field col s12">
+                        <select name="lang">
+
+                            <option value="cpp">C++</option>
+                            <option value="java">Java</option>
+                            <option value="python">Python</option>
+                        </select>
+                        <label>Choose the language</label>
                     </div>
+
 
                     <div class="col s12">
                         <div class=" input-field  col s6">
@@ -278,15 +285,43 @@
                         <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
                 </form>
                 <div class="col s2">
-                    <label for="add_id">+</label>
+
                     <input type="button" value="Add output" class="waves-light btn-large" onclick="addNewIO()">
                 </div>
             </div>
+
+            <div class="divider"></div>
+            <form action="/cfg" method="POST">
+                <div class="col s12">
+                    <h3>
+                        Config
+                    </h3>
+                </div>
+                <div class="col s12">
+
+                    <div class="col s12  input-field ">
+
+
+                        <textarea type="text" id="cfg_id" name="cfg" class="materialize-textarea"></textarea>
+                    </div>
+
+                    <div class="col s2">
+
+                        <input type="button" value="get CFG" class="waves-light btn-large" onclick="getCFG()">
+                    </div>
+                    <div class="col s2">
+
+                        <input type="submit" value="update CFG" class="waves-light btn-large">
+                    </div>
+                </div>
+            </form>
+
         </div>
 
 
     </div>
     <script>
+        M.AutoInit();
         class IOpair {
             constructor(minput, moutput) {
                 this.minput = minput;
@@ -310,6 +345,18 @@
             main.appendChild(innerDiv);
         }
 
+        function getCFG() {
+            console.log('getcfg');
+
+            $.get('/cfg', function (res) {
+                var pretty = JSON.stringify(res, undefined, 4);
+                const cfg_area = document.querySelector('#cfg_id');
+                cfg_area.innerHTML = pretty;
+                M.textareaAutoResize($('#cfg_id'));
+            });
+        }
+
+
         function toggle() {
             var x = document.getElementById("code_id");
             if (x.style.display === "block") {
@@ -318,11 +365,7 @@
                 x.style.display = "block";
             }
         }
-        $(function () {
-            $("#button").click(function () {
-                $("#item").toggle();
-            });
-        });
+
 
         function toggle1() {
             var x = document.getElementById("code_id1");

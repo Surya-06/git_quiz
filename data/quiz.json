@@ -25,5 +25,32 @@
         "input": "Hello world",
         "answer": "Hello world",
         "id": 3
+    }, {
+        "type": "coding",
+        "question": "write a hello world ",
+        "lang": "python",
+        "test_input": "",
+        "test_output": "hello world",
+        "input": "",
+        "answer": "hello world",
+        "id": 4
+    }, {
+        "type": "coding",
+        "question": "dsadasdasd",
+        "lang": "java",
+        "test_input": "dsadasd",
+        "test_output": "adsad",
+        "input": "asd",
+        "answer": "asd",
+        "id": 5
+    }, {
+        "type": "coding",
+        "question": "",
+        "lang": "cpp",
+        "test_input": "",
+        "test_output": "",
+        "input": ["fdas\r\nf\r\nasdf\r\na\r\nsdf\r\n\r\ndsaf\r\n\r\nads\r\nf\r\nsdaf", ""],
+        "answer": ["", ""],
+        "id": 6
     }]
 }

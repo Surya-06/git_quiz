@@ -4,23 +4,20 @@
 
 <div class="col s12">
     <div class="col s6 input-field">
-        <textarea id="textarea2" class="materialize-textarea"> <%= q.test_input%> </textarea>
+        <textarea id="textarea2" class="materialize-textarea" disabled> <%= q.test_input%> </textarea>
         <label for="textarea2" class='active'>Sample Input</label>
     </div>
     <div class="col s6 input-field">
-        <textarea id="textarea3" class="materialize-textarea"> <%= q.test_output%> </textarea>
+        <textarea id="textarea3" class="materialize-textarea" disabled> <%= q.test_output%> </textarea>
         <label for="textarea3" class='active'>Sample Output</label>
     </div>
 
 </div>
 
+
+
 <div class="input-field col s12">
-    <textarea id="textarea1" rows="20" cols="30" class="materialize-textarea" name="<%= q.id %>"></textarea>
-    <label for="textarea1" class='active'>Enter
+    <textarea id="<%= q.id %>" name="<%= q.id %>" rows="20" cols="30" class="materialize-textarea"></textarea>
+    <label for="<%= q.id %>" class='active'>Enter
         <%= q.lang %> code here</label>
 </div>
-
-<!-- Add this button if multiple submissions for code -->
-<!-- <div class="col s12">
-            <input type="button">
-        </div> -->
