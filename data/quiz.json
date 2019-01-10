@@ -31,8 +31,8 @@
         "lang": "python",
         "test_input": "",
         "test_output": "hello world",
-        "input": "",
-        "answer": "hello world",
+        "input": [""],
+        "answer": ["hello world"],
         "id": 4
     }, {
         "type": "coding",
@@ -40,8 +40,8 @@
         "lang": "java",
         "test_input": "dsadasd",
         "test_output": "adsad",
-        "input": "asd",
-        "answer": "asd",
+        "input": ["asd"],
+        "answer": ["asd"],
         "id": 5
     }, {
         "type": "coding",
