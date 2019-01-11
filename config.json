@@ -15,5 +15,10 @@
   "javaPostCompileExtension": "class",
   "os_windows": true,
   "javaExec": "java",
-  "debug": true
+  "debug": true,
+  "username": {
+    "lower": 5,
+    "upper": 10
+  },
+  "password": "pass"
 }
