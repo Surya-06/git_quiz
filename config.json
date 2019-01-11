@@ -1,20 +1,24 @@
 {
-    "admin": {
-        "username": "admin123",
-        "password": "password1234"
-    },
-    "sessionKeyValue": 689852918,
-    "questionCount": 5,
-    "duration": 4,
-    "pointsPerQuestion": 1,
-    "negativeMarking": false,
-    "cppCompile": "g++",
-    "cppExecFile": ".out",
-    "pythonCommand": "python",
-    "debug": true,
-    "username" : {
-        "lower" : 5,
-        "upper" : 10
-    },
-    "password" : "pass"
+  "admin": {
+    "username": "admin123",
+    "password": "password1234"
+  },
+  "sessionKeyValue": 689852918,
+  "questionCount": 5,
+  "duration": 4,
+  "pointsPerQuestion": 1,
+  "negativeMarking": false,
+  "cppCompile": "g++",
+  "cppExecFile": ".out",
+  "pythonCommand": "python",
+  "javaCompile": "javac",
+  "javaPostCompileExtension": "class",
+  "os_windows": true,
+  "javaExec": "java",
+  "debug": true,
+  "username": {
+    "lower": 5,
+    "upper": 10
+  },
+  "password": "pass"
 }

@@ -1,56 +1,34 @@
 {
-    "questions": [{
-        "type": "match",
-        "question": "ques",
-        "left": ["dsa", "dsa", "dsa", "a"],
-        "right": ["f", "r1", "f", "dsa"],
-        "code": "#include <iostream> \r\n#include <vector> // for 2D vector \r\nusing namespace std; \r\n  \r\nint main() \r\n{ \r\n    // Initializing 2D vector \"vect\" with \r\n    // values \r\n    vector<vector<int> > vect{ { 1, 2, 3 }, \r\n                               { 4, 5, 6 }, \r\n                               { 7, 8, 9 } }; \r\n  \r\n    // Displaying the 2D vector \r\n    for (int i = 0; i < vect.size(); i++) { \r\n        for (int j = 0; j < vect[i].size(); j++) \r\n            cout << vect[i][j] << \" \"; \r\n        cout << endl; \r\n    } \r\n  \r\n    return 0; \r\n} ",
-        "answer": ["1", "1", "1", "1"],
-        "id": 1
-    }, {
-        "type": "coding",
-        "question": "ques",
-        "lang": "cpp",
-        "test_input": "00 0 0\r\n0 \r\n0 \r\n0\r\n",
-        "test_output": "0 12 10 \r\n0 121",
-        "input": ["2", "3\n1 2 3", "5\n1 2 3 4 5"],
-        "answer": ["6", "15"],
-        "id": 2
-    }, {
-        "type": "coding",
-        "question": "fdsafasd",
-        "lang": "cpp",
-        "test_input": "fdas",
-        "test_output": "fdsa",
-        "input": ["Hello world"],
-        "answer": ["Hello world"],
-        "id": 3
-    }, {
-        "type": "coding",
-        "question": "write a hello world ",
-        "lang": "python",
-        "test_input": "",
-        "test_output": "hello world",
-        "input": [""],
-        "answer": ["hello world"],
-        "id": 4
-    }, {
-        "type": "coding",
-        "question": "dsadasdasd",
-        "lang": "java",
-        "test_input": "dsadasd",
-        "test_output": "adsad",
-        "input": ["asd"],
-        "answer": ["asd"],
-        "id": 5
-    }, {
-        "type": "coding",
-        "question": "",
-        "lang": "cpp",
-        "test_input": "",
-        "test_output": "",
-        "input": ["fdas\r\nf\r\nasdf\r\na\r\nsdf\r\n\r\ndsaf\r\n\r\nads\r\nf\r\nsdaf", ""],
-        "answer": ["", ""],
-        "id": 6
-    }]
+  "questions": [
+    {
+      "type": "coding",
+      "question": "aaaaaaaaaa",
+      "lang": "cpp",
+      "test_input": "",
+      "test_output": "hello world",
+      "input": [""],
+      "answer": ["hello world"],
+      "id": 1
+    },
+    {
+      "type": "coding",
+      "question": "pppppppp",
+      "lang": "python",
+      "test_input": "",
+      "test_output": "hello world",
+      "input": ["", ""],
+      "answer": ["hello world", "hello world"],
+      "id": 2
+    },
+    {
+      "type": "coding",
+      "question": "pppppppp",
+      "lang": "java",
+      "test_input": "",
+      "test_output": "hello world",
+      "input": ["", ""],
+      "answer": ["hello world", "hello world"],
+      "id": 2
+    }
+  ]
 }
