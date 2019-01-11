@@ -21,3 +21,26 @@
     <label for="<%= q.id %>" class='active'>Enter
         <%= q.lang %> code here</label>
 </div>
+
+<textarea name="code" id="codeArea_id<%= q.id %>" ></textarea>
+
+
+        <script>
+            
+            var EditorMode;
+            if(<%= q.lang %> == 'python'){
+                EditorMode = 'python';
+            }else{
+                EditorMode = 'clike';
+            }
+            
+            var editor = CodeMirror.fromTextArea( document.getElementById('codeArea_id<%= q.id %>'), {
+                
+              lineNumbers: true,
+              mode : EditorMode,
+              smartIndent: true,
+              theme:"paraiso-dark"
+              
+            });
+            editor.setSize("250","150");
+        </script>
