@@ -11,5 +11,10 @@
     "cppCompile": "g++",
     "cppExecFile": ".out",
     "pythonCommand": "python",
-    "debug": true
+    "debug": true,
+    "username" : {
+        "lower" : 5,
+        "upper" : 10
+    },
+    "password" : "pass"
 }

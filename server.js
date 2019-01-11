@@ -32,14 +32,17 @@ var studentMap = new Map(),
 app.post('/login', (req, res) => {
     // getting parameters from login page 
     console.log(req.body);
-    if (req.body.username && req.body.password) {
+    if (req.body.username && req.body.password && !isNaN(req.body.username) && req.body.username>= config.username.lower&&req.body.username<= config.username.upper && req.body.password ==config.password) {
+        
         req.session.username = req.body.username;
         req.session.password = req.body.password;
+        res.statusCode = 200;
+        res.redirect('/');
+        
     } else {
-        res.redirect('/login');
+    res.render('login.ejs');
     }
-    res.statusCode = 200;
-    res.redirect('/');
+   
 });
 app.get('/login', (req, res) => {
     res.render('login.ejs');
