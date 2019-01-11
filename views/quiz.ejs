@@ -49,7 +49,7 @@
 
                     <% if( questions[i].type == 'coding' ) { %>
                     <div class="col s11">
-                        <%- include('partials/coding.ejs',{q:questions[i]}) %>
+                        <%- include('partials/coding.ejs',{q:questions[i],username:username}) %>
                     </div>
                     <% } %>
 
