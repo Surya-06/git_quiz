@@ -1,49 +1,53 @@
-<p class="flow-text"><%= q.question %></p>
+<p class="flow-text">
+    <%= q.question %>
+</p>
 
 <div class="col s12">
-  <div class="col s6 input-field">
-    <textarea id="textarea2" class="materialize-textarea" disabled>
- <%= q.test_input%> </textarea
-    >
-    <label for="textarea2" class="active">Sample Input</label>
-  </div>
-  <div class="col s6 input-field">
-    <textarea id="textarea3" class="materialize-textarea" disabled>
- <%= q.test_output%> </textarea
-    >
-    <label for="textarea3" class="active">Sample Output</label>
-  </div>
+    <div class="col s6 input-field">
+        <textarea id="textarea2" class="materialize-textarea" disabled>
+        <%= q.test_input%> </textarea>
+        <label for="textarea2" class="active">Sample Input</label>
+    </div>
+    <div class="col s6 input-field">
+        <textarea id="textarea3" class="materialize-textarea" disabled>
+        <%= q.test_output%> </textarea>
+        <label for="textarea3" class="active">Sample Output</label>
+    </div>
+</div>
+
+
+<div class="input-field col s12">
+        <label  class="active">Enter
+                <%= q.lang %> code here
+                <% if(q.lang == "java" ) { %> (WARNING : Save
+                public class with name - )
+                <%= username+"_"+q.id %>
+                <% } %>
+            </label>
+        
+        
 </div>
 
 <div class="input-field col s12">
-    <textarea id="<%= q.id %>" name="<%= q.id %>" rows="20" cols="30" class="materialize-textarea"></textarea>
-    <label for="<%= q.id %>" class="active"
-        >Enter <%= q.lang %> code here <% if(q.lang == "java" ) { %> (WARNING : Save
-        public class with name - ) <%= username+"_"+q.id %> <% } %>
-      </label>
+       
+        <textarea name="<%= q.id %>" id="code<%= q.id %>"></textarea>
+        
 </div>
+<div class="divider"></div>
+<script>
+    var EditorMode<%= q.id %>='clike';
+    if ("<%= q.lang %>" == 'python') {
+        EditorMode<%= q.id %> = 'python';
+    } else {
+        EditorMode<%= q.id %> = 'clike';
+    }
+    var editor<%= q.id %> = CodeMirror.fromTextArea(document.getElementById('code<%= q.id %>'), {
 
-<textarea name="code" id="codeArea_id<%= q.id %>" ></textarea>
+        lineNumbers: true,
+        mode: EditorMode<%= q.id %>,
+        smartIndent: true,
+        theme: "monokai"
 
-
-        <script>
-            
-            var EditorMode;
-            if(<%= q.lang %> == 'python'){
-                EditorMode = 'python';
-            }else{
-                EditorMode = 'clike';
-            }
-            
-            var editor = CodeMirror.fromTextArea( document.getElementById('codeArea_id<%= q.id %>'), {
-                
-              lineNumbers: true,
-              mode : EditorMode,
-              smartIndent: true,
-              theme:"paraiso-dark"
-              
-            });
-            editor.setSize("250","150");
-        </script>
-  
-</div>
+    });
+    editor<%= q.id %>.setSize("800", "350");
+</script>
