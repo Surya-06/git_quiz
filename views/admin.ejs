@@ -9,6 +9,7 @@
 
 <body class="lime lighten-5">
     <%- include('partials/style.ejs') %>
+    <%- include('partials/code_highlighter.ejs') %>
     <div class="container">
         <div class="row">
             <div class="col s12">
@@ -299,19 +300,22 @@
                 </div>
                 <div class="col s12">
 
-                    <div class="col s12  input-field ">
+                    
 
+                    <div class="input-field col s12">
 
-                        <textarea type="text" id="cfg_id" name="cfg" class="materialize-textarea"></textarea>
+                        <textarea name="cfg" id="codemirror_cfg"></textarea>
+
                     </div>
 
                     <div class="col s2">
 
                         <input type="button" value="get CFG" class="waves-light btn-large" onclick="getCFG()">
                     </div>
+
                     <div class="col s2">
 
-                        <input type="submit" value="update CFG" class="waves-light btn-large">
+                        <input type="submit" value="update_CFG" class="waves-light btn-large">
                     </div>
                 </div>
             </form>
@@ -321,6 +325,15 @@
 
     </div>
     <script>
+        var codemirror = document.querySelector('#codemirror_cfg');
+            
+        var editor  = CodeMirror.fromTextArea(codemirror, {
+            lineNumbers: true,
+            mode: 'javascript' ,
+            smartIndent: true,
+            theme: "monokai"
+
+        });
         M.AutoInit();
         class IOpair {
             constructor(minput, moutput) {
@@ -350,9 +363,7 @@
 
             $.get('/cfg', function (res) {
                 var pretty = JSON.stringify(res, undefined, 4);
-                const cfg_area = document.querySelector('#cfg_id');
-                cfg_area.innerHTML = pretty;
-                M.textareaAutoResize($('#cfg_id'));
+                editor.setValue(pretty);
             });
         }
 
