@@ -6,9 +6,9 @@ const express = require("express"),
   io = require("./QuizIO"),
   bodyParser = require("body-parser"),
   codeExec = require("./codeIO"),
-  fs = require("fs"),
-  fse = require("fs-extra"),
-  exec = require("child_process").exec;
+  console_functions = require('./console_functions.js'),
+  evaluate = require('./evaluate.js'),
+  code_handling = require('./code_handling.js');
 
 var LOG = config.debug ? console.log.bind(console) : function() {};
 
@@ -30,6 +30,7 @@ var studentMap = new Map(),
   mappedQB = new Map(),
   questionBank = undefined,
   questionsExist = false;
+
 
 app.post("/login", (req, res) => {
   // getting parameters from login page
@@ -126,7 +127,7 @@ app.post("/quiz", async (req, res) => {
     });
   } else {
     var answers = req.body;
-    eval(answers, current_student);
+    evaluate.eval(answers, current_student, mappedQB);
     LOG("\nEval complete , continuing post");
     res.render("error.ejs", {
       context: "Test complete",
@@ -138,6 +139,7 @@ app.post("/quiz", async (req, res) => {
 app.post("/admin", urlencodedParser, function(req, res) {
   // LOG(req.body);
   io.addQuestions(req.body);
+  updateQuestions();
   res.redirect("/admin");
 });
 
@@ -200,301 +202,6 @@ app.post("/cfg", function(req, res) {
   res.redirect("admin");
 });
 
-function compareArray(a, b) {
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] != b[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function write_to_file(code, extension, fileName) {
-  var filePath = "code/" + fileName + "." + extension;
-  fse.ensureFileSync(filePath);
-  fs.writeFileSync(filePath, code, err => {
-    if (err) {
-      return false;
-    }
-  });
-  return filePath;
-}
-
-function execPromise(command) {
-  return new Promise(function(resolve, reject) {
-    exec(command, (error, stdout, stderr) => {
-      LOG("\n\nReturning from call : " + command);
-      if (error) {
-        LOG("Rejection due to error : " + error);
-        reject(error);
-        return;
-      }
-      if (stderr) {
-        LOG("Returning stderr " + stderr);
-        resolve(false);
-        return;
-      }
-      LOG("stdout trim right : \n" + stdout.trimRight());
-      if (stdout.trimRight() == "") {
-        LOG("Resolving true ");
-        resolve(true);
-        return;
-      }
-      LOG("Resolving with stdout : \n" + stdout.trim());
-      resolve(stdout.trim());
-      return;
-    });
-  });
-}
-
-function execCode(code, lang, username, id, inputFile) {
-  var fileName = username + "_" + id;
-  LOG("File Name : " + fileName);
-  var result = write_to_file(code, lang, fileName);
-  return new Promise((resolve, reject) => {
-    if (lang == "cpp") {
-      var compilation =
-        config.cppCompile +
-        " " +
-        result +
-        " -o code/" +
-        fileName +
-        config.cppExecFile;
-      var mainExecCommand = "code/" + fileName + config.cppExecFile;
-      if (config.os_windows) mainExecCommand = '"' + mainExecCommand + '"';
-      var execution = mainExecCommand + "< " + inputFile;
-      var compilation_promise = execPromise(compilation);
-      compilation_promise.then(
-        result => {
-          LOG("\n\n");
-          if (result == false) {
-            LOG("Resolving false at compilation from id ", id);
-            resolve(false);
-          } else {
-            LOG("Compilation complete , proceeding to execution");
-            // proceed with execution
-            var execution_promise = execPromise(execution);
-            execution_promise.then(
-              result => {
-                LOG("Execution complete -- ");
-                if (result == false) {
-                  LOG("Resolving false at execution");
-                  resolve(false);
-                  return;
-                }
-                resolve(result);
-                return;
-              },
-              error => {
-                LOG("Error in process during execution");
-                reject(error);
-                return;
-              }
-            );
-          }
-        },
-        error => {
-          LOG("Error during compilation ", id);
-          reject(error);
-          return;
-        }
-      );
-    } else if (lang == "python") {
-      // execute python
-      var executePython =
-        config.pythonCommand + " " + result + " < " + inputFile;
-      var executionPromise = execPromise(executePython);
-      executionPromise.then(
-        result => {
-          LOG("Execution complete");
-          if (result == false) {
-            LOG("Resolving false at execution");
-            resolve(false);
-            return;
-          }
-          resolve(result);
-          return;
-        },
-        error => {
-          LOG("Error in process during execution");
-          reject(error);
-          return;
-        }
-      );
-    } else if (lang == "java") {
-      // execute java
-      var compilation = config.javaCompile + " " + result;
-      var execution = "java -cp code/ " + fileName + "< " + inputFile;
-      var compilation_promise = execPromise(compilation);
-      compilation_promise.then(
-        result => {
-          LOG("\n\n");
-          if (result == false) {
-            LOG("Resolving false at compilation from id ", id);
-            resolve(false);
-          } else {
-            LOG("Compilation complete , proceeding to execution");
-            // proceed with execution
-            var execution_promise = execPromise(execution);
-            execution_promise.then(
-              result => {
-                LOG("Execution complete -- ");
-                if (result == false) {
-                  LOG("Resolving false at execution");
-                  resolve(false);
-                  return;
-                }
-                resolve(result);
-                return;
-              },
-              error => {
-                LOG("Error in process during execution");
-                reject(error);
-                return;
-              }
-            );
-          }
-        },
-        error => {
-          LOG("Error during compilation ", id);
-          reject(error);
-          return;
-        }
-      );
-    }
-  });
-}
-
-async function eval(answers, student) {
-  student.score = 0;
-  LOG("Evaluating answers");
-  for (var i in answers) {
-    let question = mappedQB.get(i);
-    let negative = false;
-    if (question.type == "match") {
-      if (compareArray(question.answer, answers[i])) {
-        student.score += config.pointsPerQuestion;
-      } else if (config.negativeMarking) negative = true;
-      LOG("Score after matching question : " + student.score);
-    } else if (question.type == "coding") {
-      LOG("Coding question");
-      if (question.lang == "cpp") {
-        let executionPromise = execCode(
-          answers[i],
-          question.lang,
-          student.username,
-          i,
-          question.inputFile
-        );
-        LOG("Waiting for execution promise");
-        executionPromise.then(
-          result => {
-            if (result == false) LOG("The execution generated error ! ", id);
-            else {
-              LOG("Execution complete : ");
-              LOG("Result : \n", result);
-              LOG("Expected : \n", question.answer);
-              if (result == question.answer) {
-                student.score += config.pointsPerQuestion;
-                LOG("Updated score of student is " + student.score.toString());
-              } else if (config.negativeMarking) {
-                negative = true;
-              } else {
-                LOG(
-                  "Eval complete for code , no change in marks of student : " +
-                    student.username +
-                    " " +
-                    student.score
-                );
-              }
-            }
-          },
-          error => {
-            LOG("Error occured during processing -- HANDLE ADMIN , ", i);
-          }
-        );
-      } else if (question.lang == "python") {
-        // handle python code
-        let executionPromise = execCode(
-          answers[i],
-          question.lang,
-          student.username,
-          i,
-          question.inputFile
-        );
-        LOG("Waiting for execution promise");
-        executionPromise.then(
-          result => {
-            if (result == false) LOG("The execution generated error ! ", id);
-            else {
-              LOG("Execution complete");
-              LOG("Result : \n", result);
-              LOG("Expected : \n", question.answer);
-              if (result == question.answer) {
-                student.score += config.pointsPerQuestion;
-                LOG("Updated score of student is " + student.score.toString());
-              } else if (config.negativeMarking) {
-                negative = true;
-              } else {
-                LOG(
-                  "Eval complete for code , no change in marks of student : " +
-                    student.username +
-                    " " +
-                    student.score
-                );
-              }
-            }
-          },
-          error => {
-            LOG("Error occured during processing -- HANDLE ADMIN , ", i);
-          }
-        );
-      } else if (question.lang == "java") {
-        // handle java code
-        let executionPromise = execCode(
-          answers[i],
-          question.lang,
-          student.username,
-          i,
-          question.inputFile
-        );
-        LOG("Waiting for execution promise");
-        executionPromise.then(
-          result => {
-            if (result == false) LOG("The execution generated error ! ", id);
-            else {
-              LOG("Execution complete : ");
-              LOG("Result : \n", result);
-              LOG("Expected : \n", question.answer);
-              if (result == question.answer) {
-                student.score += config.pointsPerQuestion;
-                LOG("Updated score of student is " + student.score.toString());
-              } else if (config.negativeMarking) {
-                negative = true;
-              } else {
-                LOG(
-                  "Eval complete for code , no change in marks of student : " +
-                    student.username +
-                    " " +
-                    student.score
-                );
-              }
-            }
-          },
-          error => {
-            LOG("Error occured during processing -- HANDLE ADMIN , ", i);
-          }
-        );
-      }
-    } else {
-      if (answers[i] === mappedQB.get(i).answer)
-        student.score += config.pointsPerQuestion;
-      else if (config.negativeMarking) negative = true;
-    }
-    if (negative) student.score -= config.pointsPerQuestion;
-  }
-}
-
 function getQuestions(count) {
   var questions = [],
     dupQuestions = JSON.parse(JSON.stringify(questionBank));
@@ -507,25 +214,47 @@ function getQuestions(count) {
 }
 
 function updateQuestions() {
-  questionBank = io.fetchQuestions().questions;
-  if (COUNT > questionBank.length) {
-    COUNT = questionBank.length;
-  }
-  questionsExist = true;
-  for (var i = 0; i < questionBank.length; i++) {
-    if (questionBank[i].type == "coding") {
-      let questionString = questionBank[i].input.join("\r\n");
-      LOG("The value of questionString : \n", questionString);
-      questionBank[i].inputFile = write_to_file(
-        questionString,
-        "txt",
-        "input_" + questionBank[i].id
-      );
-      questionBank[i].answer = questionBank[i].answer.join("\n");
+  let raw_questions = io.fetchQuestions();
+  if ( raw_questions ) {
+    questionBank = raw_questions.questions;
+    questionsExist = true;
+    if (COUNT > questionBank.length) {
+      COUNT = questionBank.length;
     }
-    mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
+    for (var i = 0; i < questionBank.length; i++) {
+      if (questionBank[i].type == "coding") {
+        let questionString = questionBank[i].input.join("\r\n");
+        LOG("The value of questionString : \n", questionString);
+        questionBank[i].inputFile = code_handling.write_to_file(
+          questionString,
+          "txt",
+          "input_" + questionBank[i].id
+        );
+        questionBank[i].answer = questionBank[i].answer.join("\n");
+        questionBank[i].answer = questionBank[i].answer.trim();
+      }
+      mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
+    }
+  }
+  else {
+    // questions not yet set 
+    questionsExist = false;
   }
 }
+
+// Handle admin input to server
+var stdin = process.openStdin();
+
+stdin.addListener("data", function(command) {
+  // convert to usable state
+  command = command.toString().trim();
+  if (command == "results") {
+    console_functions.show_scores(studentMap);
+  } else if (command == "help") {
+    console_functions.help();
+  }
+  process.stdout.write(`COMMAND(Type 'help' for help) : `);
+});
 
 function initServer() {
   LOG("Initializing server : --- ");
@@ -535,40 +264,3 @@ function initServer() {
 }
 
 initServer();
-
-// Handle admin input to server
-var stdin = process.openStdin();
-
-function show_scores() {
-  console.log("Showing results");
-  console.log("------------------------------------\n");
-  var entries = studentMap.entries();
-  for (var val of entries) {
-    console.log("Student : " + val[0] + " || Score : " + val[1].score);
-  }
-  console.log("\n------------------------------------\n");
-  return;
-}
-
-function help() {
-  console.log("------------------------------------\n");
-  console.log(
-    `
-        results ------ 'Display results'
-        help ------ 'Display help'
-        `
-  );
-  console.log("\n------------------------------------\n");
-  return;
-}
-
-stdin.addListener("data", function(command) {
-  // convert to usable state
-  command = command.toString().trim();
-  if (command == "results") {
-    show_scores();
-  } else if (command == "help") {
-    help();
-  }
-  process.stdout.write(`COMMAND(Type 'help' for help) : `);
-});
