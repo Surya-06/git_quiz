@@ -1,3 +1,5 @@
+// PRINT STRING RAW USING : JSON.stringinfy(string_value)
+
 const express = require("express"),
   app = express(),
   session = require("express-session"),
@@ -10,7 +12,7 @@ const express = require("express"),
   evaluate = require('./evaluate.js'),
   code_handling = require('./code_handling.js');
 
-var LOG = config.debug ? console.log.bind(console) : function() {};
+var LOG = config.debug ? console.log.bind(console) : function () {};
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -60,8 +62,7 @@ app.get("/quiz", (req, res) => {
     // No quiz since questions do not exist , admin fault
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Please ask admin to make questions for the Quiz and restart server. :-)"
+      msg: "Please ask admin to make questions for the Quiz and restart server. :-)"
     });
   }
   LOG("Returning quiz page to : ", req.session.username);
@@ -121,8 +122,7 @@ app.post("/quiz", async (req, res) => {
   if (current_student.score != undefined) {
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Test completed earlier , answers cannot be saved. Score : " +
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
         current_student.score.toString()
     });
   } else {
@@ -136,20 +136,20 @@ app.post("/quiz", async (req, res) => {
   }
 });
 
-app.post("/admin", urlencodedParser, function(req, res) {
+app.post("/admin", urlencodedParser, function (req, res) {
   // LOG(req.body);
   io.addQuestions(req.body);
   updateQuestions();
   res.redirect("/admin");
 });
 
-app.get("/admin", function(req, res) {
+app.get("/admin", function (req, res) {
   res.render("admin", {
     cfg: ""
   });
 });
 
-app.post("/code", urlencodedParser, function(req, res) {
+app.post("/code", urlencodedParser, function (req, res) {
   var result = codeExec.exec(req.body);
   updateQuestions();
 });
@@ -166,8 +166,7 @@ app.get("/", (req, res) => {
     }
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Test completed earlier , answers cannot be saved. Score : " +
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
         current_student.score
     });
   } else {
@@ -190,12 +189,12 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/cfg", function(req, res) {
+app.get("/cfg", function (req, res) {
   var cfg = io.fetchCFG();
   res.send(cfg);
 });
 
-app.post("/cfg", function(req, res) {
+app.post("/cfg", function (req, res) {
   var cfg = req.body.cfg;
   io.saveCFG(cfg);
   console.log(cfg);
@@ -215,7 +214,7 @@ function getQuestions(count) {
 
 function updateQuestions() {
   let raw_questions = io.fetchQuestions();
-  if ( raw_questions ) {
+  if (raw_questions) {
     questionBank = raw_questions.questions;
     questionsExist = true;
     if (COUNT > questionBank.length) {
@@ -230,13 +229,12 @@ function updateQuestions() {
           "txt",
           "input_" + questionBank[i].id
         );
-        questionBank[i].answer = questionBank[i].answer.join("\n");
+        questionBank[i].answer = questionBank[i].answer.join("\r\n");
         questionBank[i].answer = questionBank[i].answer.trim();
       }
       mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
     }
-  }
-  else {
+  } else {
     // questions not yet set 
     questionsExist = false;
   }
@@ -245,7 +243,7 @@ function updateQuestions() {
 // Handle admin input to server
 var stdin = process.openStdin();
 
-stdin.addListener("data", function(command) {
+stdin.addListener("data", function (command) {
   // convert to usable state
   command = command.toString().trim();
   if (command == "results") {
