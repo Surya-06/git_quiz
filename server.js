@@ -49,13 +49,29 @@ app.post("/login", (req, res) => {
     req.session.password = req.body.password;
     res.statusCode = 200;
     res.redirect("/");
+  } else if (req.body.username == config.admin.username && req.body.password == config.admin.password) {
+    res.redirect("/admin_main");
+    return;
   } else {
     res.render("login.ejs");
+    return;
   }
 });
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
+
+app.get('/admin_main', (req, res) => {
+  res.render('admin_main.ejs', {
+    studentDetails: studentMap
+  });
+  return;
+});
+
+app.post('/admin_main', (req, res) => {
+  res.redirect('/login');
+  return;
+})
 
 app.get("/quiz", (req, res) => {
   if (questionsExist == false) {
@@ -71,13 +87,6 @@ app.get("/quiz", (req, res) => {
   let current_student = studentMap.get(req.session.username);
   // If this happens, something might be wrong ( TEST )
   if (current_student == undefined) res.redirect("/login");
-  // Adjust code for rendering if there are any problems with < and >
-  /*for ( var i=0 ; i<questions.length ; i++ )
-        if ( questions[i].code.length > 0 ){
-            questions[i].code = questions[i].code.replace("<","&lt;");
-            questions[i].code = questions[i].code.replace(">","&gt;");
-        }
-    */
   // CHECK FOR RELOAD
   LOG("Checks for reload , happen here ");
   if (current_student.submitted == true) {
@@ -136,15 +145,15 @@ app.post("/quiz", async (req, res) => {
   }
 });
 
-app.post("/admin", urlencodedParser, function (req, res) {
+app.post("/admin_question_input", urlencodedParser, function (req, res) {
   // LOG(req.body);
   io.addQuestions(req.body);
   updateQuestions();
-  res.redirect("/admin");
+  res.redirect("/login");
 });
 
-app.get("/admin", function (req, res) {
-  res.render("admin", {
+app.get("/admin_question_input", function (req, res) {
+  res.render("admin_question_input", {
     cfg: ""
   });
 });
@@ -176,7 +185,7 @@ app.get("/", (req, res) => {
       req.session.password == config.admin.password
     ) {
       // redirect to input page
-      res.redirect("/admin");
+      res.redirect("/admin_main");
     } else {
       // registering student details
       studentMap.set(
@@ -198,7 +207,7 @@ app.post("/cfg", function (req, res) {
   var cfg = req.body.cfg;
   io.saveCFG(cfg);
   console.log(cfg);
-  res.redirect("admin");
+  res.redirect("admin_question_input");
 });
 
 function getQuestions(count) {
