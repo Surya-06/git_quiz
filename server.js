@@ -3,15 +3,15 @@
 const express = require("express"),
   app = express(),
   session = require("express-session"),
-  model = require("./model.js"),
+  model = require("./libs/model.js"),
   config = require("./config.json"),
-  io = require("./QuizIO"),
+  io = require("./libs/QuizIO"),
   bodyParser = require("body-parser"),
-  codeExec = require("./codeIO"),
-  console_functions = require('./console_functions.js'),
-  evaluate = require('./evaluate.js'),
-  questionHandler = require('./question_handler.js'),
-  authenticationHandler = require('./authenticationHandler.js');
+  codeExec = require("./libs/codeIO"),
+  console_functions = require('./libs/console_functions.js'),
+  evaluate = require('./libs/evaluate.js'),
+  questionHandler = require('./libs/question_handler.js'),
+  authenticationHandler = require('./libs/authenticationHandler.js');
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 

@@ -1,5 +1,5 @@
 const fs = require('fs'),
-    config = require('./config.json');
+    config = require('../config.json');
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
 function fetchQuestions() {
@@ -16,18 +16,18 @@ function saveQuestions(data) {
     fs.writeFileSync('data/quiz.json', JSON.stringify(data));
 }
 
-function fetchCFG(){
+function fetchCFG() {
     try {
         var cfg = fs.readFileSync('config.json');
         return JSON.parse(cfg);
-      } catch (e) {
+    } catch (e) {
         return null;
-      }
+    }
 }
 
-function saveCFG(data){
+function saveCFG(data) {
     console.log('writing to config.json');
-    fs.writeFileSync('config.json' , data);
+    fs.writeFileSync('config.json', data);
 }
 
 function addQuestions(data) {

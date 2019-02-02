@@ -1,4 +1,4 @@
-const config = require("./config.json");
+const config = require("../config.json");
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 

@@ -1,5 +1,5 @@
 const io = require("./QuizIO"),
-    config = require("./config.json"),
+    config = require("../config.json"),
     code_handling = require('./code_handling.js');
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
