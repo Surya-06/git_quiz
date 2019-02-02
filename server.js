@@ -73,7 +73,11 @@ app.get("/", (req, res) => {
 // POST FROM THE CODE PAGE 
 app.post("/code", urlencodedParser, function (req, res) {
   var result = codeExec.exec(req.body);
-  questionsExist = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
 });
 
 // GET FOR CONFIGURATION PAGE 
@@ -104,7 +108,11 @@ app.get("/admin_question_input", authenticationHandler.checkAuthentication, func
 app.post("/admin_question_input", urlencodedParser, function (req, res) {
   // LOG(req.body);
   io.addQuestions(req.body);
-  questionsExist = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
   res.redirect("/login");
 });
 
@@ -208,6 +216,8 @@ app.post("/login", (req, res) => {
     res.statusCode = 200;
     res.redirect("/");
   } else if (req.body.username == config.admin.username && req.body.password == config.admin.password) {
+    req.session.username = req.body.username;
+    req.session.password = req.body.password;
     res.redirect("/admin_main");
     return;
   } else {
@@ -237,7 +247,11 @@ function initServer() {
   LOG("Initializing server : --- ");
   console.log("Server at port : 3000");
   app.listen(3000);
-  questionsExist = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
   console_functions.activateConsoleFunctions(studentMap);
 }
 

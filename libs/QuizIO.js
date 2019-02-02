@@ -1,10 +1,11 @@
 const fs = require('fs'),
-    config = require('../config.json');
+    config = require('../config.json'),
+    path = require("path");
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
 function fetchQuestions() {
     try {
-        var questions = fs.readFileSync('data/quiz.json');
+        var questions = fs.readFileSync(path.resolve(__dirname + "/../data/quiz.json"));
         return JSON.parse(questions);
     } catch (e) {
         return null;
@@ -13,12 +14,12 @@ function fetchQuestions() {
 
 function saveQuestions(data) {
     LOG('writing to file');
-    fs.writeFileSync('data/quiz.json', JSON.stringify(data));
+    fs.writeFileSync(path.resolve(__dirname + "/../data/quiz.json"), JSON.stringify(data));
 }
 
 function fetchCFG() {
     try {
-        var cfg = fs.readFileSync('config.json');
+        var cfg = fs.readFileSync(path.resolve(__dirname + "/../config.json"));
         return JSON.parse(cfg);
     } catch (e) {
         return null;
@@ -27,7 +28,7 @@ function fetchCFG() {
 
 function saveCFG(data) {
     console.log('writing to config.json');
-    fs.writeFileSync('config.json', data);
+    fs.writeFileSync(path.resolve(__dirname + "/../config.json"), data);
 }
 
 function addQuestions(data) {

@@ -36,11 +36,21 @@ function updateQuestions(COUNT, questionBank, mappedQB) {
             }
             mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
         }
-        return questionsExist;
+        return {
+            questionsExist: questionsExist,
+            questionBank: questionBank,
+            mappedQB: mappedQB,
+            count: COUNT
+        };
     } else {
         // questions not yet set 
         questionsExist = false;
-        return questionsExist;
+        return {
+            questionsExist: questionsExist,
+            questionBank: undefined,
+            mappedQB: undefined,
+            count: COUNT
+        };
     }
 }
 
