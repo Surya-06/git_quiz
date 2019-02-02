@@ -11,7 +11,10 @@
     <%- include('partials/style.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
     <div class="container">
+        
         <div class="row">
+            
+
             <div class="col s12">
                 <h1>Add Questions</h1>
             </div>
@@ -81,7 +84,7 @@
                         <input type="text" id="mans_id" name="answer">
 
                     </div>
-                    <div id="code_id" class="input-field col s12" hidden>
+                    <div id="code_id1" class="input-field col s12" hidden>
                         <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         <label for="codeArea">Code</label>
                     </div>
@@ -93,7 +96,7 @@
                     </div>
                     <div class="col s2">
                         <label>
-                            <input type="checkbox" onclick="toggle()" />
+                            <input type="checkbox" onclick="toggle(this.value)" value="1" />
                             <span>Code</span>
                         </label>
                     </div>
@@ -121,7 +124,7 @@
                         <label for="fans_id">answer</label>
                         <input type="text" id="fans_id" name="answer">
                     </div>
-                    <div id="code_id1" class="input-field col s12" hidden>
+                    <div id="code_id2" class="input-field col s12" hidden>
                         <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         <label for="codeArea">Code</label>
                     </div>
@@ -130,7 +133,7 @@
                     </div>
                     <div class="col s2">
                         <label>
-                            <input type="checkbox" onclick="toggle1()" />
+                            <input type="checkbox" onclick="toggle(this.value)" value="2" />
                             <span>Code</span>
                         </label>
                     </div>
@@ -204,7 +207,7 @@
                         <input id="mr4_id" type="text" name="right">
                     </div>
 
-                    <div id="code_id2" class="input-field col s12" hidden>
+                    <div id="code_id3" class="input-field col s12" hidden>
                         <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         <label for="codeArea">Code</label>
                     </div>
@@ -217,7 +220,7 @@
                         <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button></div>
                     <div class="col s2">
                         <label>
-                            <input type="checkbox" onclick="toggle2()" />
+                            <input type="checkbox" onclick="toggle(this.value)" value="3" />
                             <span>Code</span>
                         </label>
                     </div>
@@ -368,33 +371,16 @@
         }
 
 
-        function toggle() {
-            var x = document.getElementById("code_id");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "block";
+        function toggle(value) {
+                console.log(value);
+                var id = 'code_id' + value;
+                var x = document.getElementById(id);
+                if (x.style.display === "block") {
+                    x.style.display = "none";
+                } else {
+                    x.style.display = "block";
+                }
             }
-        }
-
-
-        function toggle1() {
-            var x = document.getElementById("code_id1");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "block";
-            }
-        }
-
-        function toggle2() {
-            var x = document.getElementById("code_id2");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "block";
-            }
-        }
     </script>
 
 </body>

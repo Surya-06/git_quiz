@@ -1,5 +1,5 @@
 const code_handling = require('./code_handling.js'),
-  config = require("./config.json");
+  config = require("../config.json");
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
