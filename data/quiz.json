@@ -1,101 +1,57 @@
 {
-    "questions": [
-        {
-            "type": "multi",
-            "question": "MULTI",
-            "options": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "answer": "3",
-            "code": "MULTI CODE MULTI CODE MULTI CODE\r\nMULTI CODE\r\nMULTI CODEMULTI CODE\r\nMULTI CODE",
-            "id": 1
-        },
-        {
-            "type": "fill",
-            "question": "FILL IN THE ",
-            "answer": "ANS FILL",
-            "code": "FILL CODE FILL CODE FILL CODE \r\nFILL CODE \r\nFILL CODE \r\nFILL CODE FILL CODE ",
-            "id": 2
-        },
-        {
-            "type": "match",
-            "question": "QUESTION",
-            "left": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "right": [
-                "5",
-                "6",
-                "7",
-                "8"
-            ],
-            "code": "MULTI CODE MULTI CODE MULTI CODE MULTI CODE \r\nMULTI CODE \r\nMULTI CODE MULTI CODE MULTI CODE ",
-            "answer": [
-                "1",
-                "2",
-                "3",
-                "5"
-            ],
-            "id": 3
-        },
-        {
-            "type": "coding",
-            "question": "CODING QUESTION",
-            "lang": "cpp",
-            "test_input": "rwq",
-            "test_output": "ewq",
-            "input": [
-                "ewq",
-                "ewq",
-                "ewq"
-            ],
-            "answer": [
-                "ewq",
-                "ewq",
-                "ewq"
-            ],
-            "id": 4
-        },
-        {
-            "type": "coding",
-            "question": "ewq",
-            "lang": "java",
-            "test_input": "eewqe",
-            "test_output": "eqw",
-            "input": [
-                "eqw",
-                "qweqw",
-                "dfgdf"
-            ],
-            "answer": [
-                "eqweqw",
-                "gfdgdfb",
-                "gdf"
-            ],
-            "id": 5
-        },
-        {
-            "type": "coding",
-            "question": "dasdfda",
-            "lang": "python",
-            "test_input": "fds",
-            "test_output": "gfh",
-            "input": [
-                "hfdghfgh",
-                "hfgdh"
-            ],
-            "answer": [
-                "ewq",
-                "ewq",
-                "ewq"
-            ],
-            "id": 6
-        }
-    ]
+    "questions": [{
+        "type": "multi",
+        "question": "A member function can always access the data in __________ ",
+        "options": ["the class of which it is member", "the object of which it is a member", "the public part of its class", "the private part of its class"],
+        "answer": "the class of which it is member",
+        "code": "",
+        "id": 1
+    }, {
+        "type": "multi",
+        "question": "Which of the following is not correct for virtual function in C++ ?",
+        "options": ["Must be declared in public section of class", "Virtual function can be static", "Virtual function should be accessed using pointers.", "Virtual function is defined in base class"],
+        "answer": "Virtual function can be static",
+        "code": "",
+        "id": 2
+    }, {
+        "type": "multi",
+        "question": "Select the answer",
+        "options": ["Inside P", "Inside Q", "Compiler Error: Ambiguous call to print()", "Runtime error"],
+        "answer": "Inside Q",
+        "code": "#include<iostream>\r\n  \r\nusing namespace std;\r\nclass P {\r\npublic:\r\n   void print()  { cout <<\" Inside P\"; }\r\n};\r\n  \r\nclass Q : public P {\r\npublic:\r\n   void print() { cout <<\" Inside Q\"; }\r\n};\r\n  \r\nclass R: public Q { };\r\n  \r\nint main(void)\r\n{\r\n  R r; \r\n  r.print();\r\n  return 0;\r\n}",
+        "id": 3
+    }, {
+        "type": "fill",
+        "question": "What is the output?",
+        "answer": "55",
+        "code": "        #include <iostream>\r\n\r\n        using namespace std;\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int x = 10;\r\n\r\n        }\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int y = 15;\r\n\r\n        }\r\n\r\n        int main(int argc, char * argv[])\r\n\r\n        {\r\n\r\n            space::x = space::y =5;\r\n\r\n            cout << space::x << space::y;\r\n\r\n        }",
+        "id": 4
+    }, {
+        "type": "coding",
+        "question": "Add 1 to the input number",
+        "lang": "cpp",
+        "test_input": "1",
+        "test_output": "2",
+        "input": ["6", "9", "-2"],
+        "answer": ["7", "10", "-1"],
+        "id": 5
+    }, {
+        "type": "coding",
+        "question": "Check if the entered number is even",
+        "lang": "java",
+        "test_input": "5",
+        "test_output": "FALSE",
+        "input": ["6", "8", "44", "59"],
+        "answer": ["TRUE", "TRUE", "TRUE", "FALSE"],
+        "id": 6
+    }, {
+        "type": "coding",
+        "question": "Given n as input , Print \"Hello world\" n number of times in new lines.",
+        "lang": "python",
+        "test_input": "2",
+        "test_output": "Hello world\r\nHello world",
+        "input": ["4", "1"],
+        "answer": ["Hello world\r\nHello world\r\nHello world\r\nHello world", "Hello world"],
+        "id": 7
+    }]
 }
