@@ -1,3 +1,5 @@
+// PRINT STRING RAW USING : JSON.stringinfy(string_value)
+
 const express = require("express"),
   app = express(),
   session = require("express-session"),
@@ -10,7 +12,7 @@ const express = require("express"),
   evaluate = require('./evaluate.js'),
   code_handling = require('./code_handling.js');
 
-var LOG = config.debug ? console.log.bind(console) : function() {};
+var LOG = config.debug ? console.log.bind(console) : function () {};
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -47,21 +49,36 @@ app.post("/login", (req, res) => {
     req.session.password = req.body.password;
     res.statusCode = 200;
     res.redirect("/");
+  } else if (req.body.username == config.admin.username && req.body.password == config.admin.password) {
+    res.redirect("/admin_main");
+    return;
   } else {
     res.render("login.ejs");
+    return;
   }
 });
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
 
+app.get('/admin_main', (req, res) => {
+  res.render('admin_main.ejs', {
+    studentDetails: studentMap
+  });
+  return;
+});
+
+app.post('/admin_main', (req, res) => {
+  res.redirect('/login');
+  return;
+})
+
 app.get("/quiz", (req, res) => {
   if (questionsExist == false) {
     // No quiz since questions do not exist , admin fault
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Please ask admin to make questions for the Quiz and restart server. :-)"
+      msg: "Please ask admin to make questions for the Quiz and restart server. :-)"
     });
   }
   LOG("Returning quiz page to : ", req.session.username);
@@ -70,13 +87,6 @@ app.get("/quiz", (req, res) => {
   let current_student = studentMap.get(req.session.username);
   // If this happens, something might be wrong ( TEST )
   if (current_student == undefined) res.redirect("/login");
-  // Adjust code for rendering if there are any problems with < and >
-  /*for ( var i=0 ; i<questions.length ; i++ )
-        if ( questions[i].code.length > 0 ){
-            questions[i].code = questions[i].code.replace("<","&lt;");
-            questions[i].code = questions[i].code.replace(">","&gt;");
-        }
-    */
   // CHECK FOR RELOAD
   LOG("Checks for reload , happen here ");
   if (current_student.submitted == true) {
@@ -121,8 +131,7 @@ app.post("/quiz", async (req, res) => {
   if (current_student.score != undefined) {
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Test completed earlier , answers cannot be saved. Score : " +
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
         current_student.score.toString()
     });
   } else {
@@ -136,20 +145,20 @@ app.post("/quiz", async (req, res) => {
   }
 });
 
-app.post("/admin", urlencodedParser, function(req, res) {
+app.post("/admin_question_input", urlencodedParser, function (req, res) {
   // LOG(req.body);
   io.addQuestions(req.body);
   updateQuestions();
-  res.redirect("/admin");
+  res.redirect("/login");
 });
 
-app.get("/admin", function(req, res) {
-  res.render("admin", {
+app.get("/admin_question_input", function (req, res) {
+  res.render("admin_question_input", {
     cfg: ""
   });
 });
 
-app.post("/code", urlencodedParser, function(req, res) {
+app.post("/code", urlencodedParser, function (req, res) {
   var result = codeExec.exec(req.body);
   updateQuestions();
 });
@@ -166,8 +175,7 @@ app.get("/", (req, res) => {
     }
     res.render("error.ejs", {
       context: "Error",
-      msg:
-        "Test completed earlier , answers cannot be saved. Score : " +
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
         current_student.score
     });
   } else {
@@ -177,7 +185,7 @@ app.get("/", (req, res) => {
       req.session.password == config.admin.password
     ) {
       // redirect to input page
-      res.redirect("/admin");
+      res.redirect("/admin_main");
     } else {
       // registering student details
       studentMap.set(
@@ -190,16 +198,16 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/cfg", function(req, res) {
+app.get("/cfg", function (req, res) {
   var cfg = io.fetchCFG();
   res.send(cfg);
 });
 
-app.post("/cfg", function(req, res) {
+app.post("/cfg", function (req, res) {
   var cfg = req.body.cfg;
   io.saveCFG(cfg);
   console.log(cfg);
-  res.redirect("admin");
+  res.redirect("admin_question_input");
 });
 
 function getQuestions(count) {
@@ -215,7 +223,7 @@ function getQuestions(count) {
 
 function updateQuestions() {
   let raw_questions = io.fetchQuestions();
-  if ( raw_questions ) {
+  if (raw_questions) {
     questionBank = raw_questions.questions;
     questionsExist = true;
     if (COUNT > questionBank.length) {
@@ -230,13 +238,12 @@ function updateQuestions() {
           "txt",
           "input_" + questionBank[i].id
         );
-        questionBank[i].answer = questionBank[i].answer.join("\n");
+        questionBank[i].answer = questionBank[i].answer.join("\r\n");
         questionBank[i].answer = questionBank[i].answer.trim();
       }
       mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
     }
-  }
-  else {
+  } else {
     // questions not yet set 
     questionsExist = false;
   }
@@ -245,7 +252,7 @@ function updateQuestions() {
 // Handle admin input to server
 var stdin = process.openStdin();
 
-stdin.addListener("data", function(command) {
+stdin.addListener("data", function (command) {
   // convert to usable state
   command = command.toString().trim();
   if (command == "results") {

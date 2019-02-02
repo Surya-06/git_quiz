@@ -1,0 +1,47 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+
+<head>
+    <title> QUIZ PAGE </title>
+</head>
+
+<body>
+    <%- include('partials/style.ejs') %>
+    <%- include('partials/header.ejs') %>
+
+    <a href="/admin_question_input"> Enter questions </a>
+
+    <h3> Details of students currently accessing test </h3>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Score</th>
+            <th>Test Complete</th>
+        </tr>
+
+        <% for(var keys of studentDetails.keys()){ %>
+        <tr>
+            <td>
+                <%= studentDetails.get(keys).username %>
+            </td>
+            <td>
+                <%= new Date(studentDetails.get(keys).testStartTime) %>
+            </td>
+            <td>
+                <%= new Date(studentDetails.get(keys).testEndTime) %>
+            </td>
+            <td>
+                <%= studentDetails.get(keys).score %>
+            </td>
+            <td>
+                <%= studentDetails.get(keys).submitted %>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+
+</body>
+
+</html>

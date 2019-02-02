@@ -25,7 +25,7 @@
 
             <div class="col s12">
 
-                <form name='question_list' action='quiz' method='POST'>
+                <form id='question_list' name='question_list' action='quiz' method='POST'>
                     <% for (var i=0 ; i<questions.length ; i++ ) { %>
                     <div class="divider"></div>
 
@@ -83,6 +83,9 @@
                 document.forms["question_list"].submit();
             }
         }, 1000);
+        window.onblur = () => {
+            document.getElementById('question_list').submit();
+        }
     </script>
 
 </body>
