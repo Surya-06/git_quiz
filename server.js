@@ -192,25 +192,8 @@ app.post("/quiz", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-app.post("/admin_question_input", urlencodedParser, function (req, res) {
-  // LOG(req.body);
-  io.addQuestions(req.body);
-  updateQuestions();
-  res.redirect("/login");
-});
-
-app.get("/admin_question_input", function (req, res) {
-  
-  res.render("admin_question_input", {
-    cfg: "",
-    questions :questionBank
-  });
-});
-=======
 // INVALID AUTHENTICATION
 app.use("/quiz", authenticationHandler.errorRedirect);
->>>>>>> 6d96e12e414a5af365bf5e4c2d9f54da4a1ac6a2
 
 // GET FOR LOGIN PAGE
 app.get("/login", (req, res) => {
