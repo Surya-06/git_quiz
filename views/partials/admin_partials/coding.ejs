@@ -42,11 +42,11 @@
 
         <div class="col s6  input-field ">
             <p >Input</p>
-            <textarea type="text"  name="questions[<%= q.id %>][input]" class="materialize-textarea"><%= q.input[i] %></textarea>
+            <textarea type="text"  name="questions[<%= q.id %>][input][]" class="materialize-textarea"><%= q.input[i] %></textarea>
         </div>
         <div class="col s6  input-field ">
             <p >Answer</p>
-            <textarea type="text"  name="questions[<%= q.id %>][answer]" class="materialize-textarea"> <%= q.answer[i] %></textarea>
+            <textarea type="text"  name="questions[<%= q.id %>][answer][]" class="materialize-textarea"> <%= q.answer[i] %></textarea>
         </div>
     </div>
     <% } %>
