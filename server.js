@@ -99,8 +99,10 @@ app.use("/cfg", authenticationHandler.errorRedirect);
 
 // GET FROM THE ADMIN QUESTION PAGE 
 app.get("/admin_question_input", authenticationHandler.checkAuthentication, function (req, res) {
+  var q = io.fetchQuestions(); 
   res.render("admin_question_input", {
-    cfg: ""
+    cfg: "",
+    questions:q.questions
   });
 });
 
@@ -113,7 +115,7 @@ app.post("/admin_question_input", urlencodedParser, function (req, res) {
     questionBank = question_return_values.questionBank,
     mappedQB = question_return_values.mappedQB,
     COUNT = question_return_values.count;
-  res.redirect("/login");
+  res.redirect("/admin_question_input");
 });
 
 // HANDLE INVALID AUTHENTICATION
@@ -238,6 +240,16 @@ app.get('/admin_main', authenticationHandler.checkAuthentication, (req, res) => 
 app.post('/admin_main', (req, res) => {
   res.redirect('/login');
   return;
+});
+
+app.post('/updateQuestions',(req,res)=>{
+  io.saveQuestions(req.body);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
+    res.redirect('/admin_question_input');
 });
 
 // HANDLE INVALID AUTHENTICATION

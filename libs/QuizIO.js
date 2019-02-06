@@ -56,6 +56,7 @@ module.exports = {
     addQuestions,
     fetchQuestions,
     fetchCFG,
-    saveCFG
+    saveCFG,
+    saveQuestions
 
 }

@@ -1,0 +1,80 @@
+<input type="text" value="coding" name="questions[<%= q.id %>][type]" hidden>
+
+
+<div class="input-field col s2">
+    <p >ID</p>
+    <input type="text"  name="questions[<%= q.id %>][id]" value="<%= q.id %>">
+</div>
+
+<div class="input-field col s10">
+    <p >Question</p>
+    <input type="text"  name="questions[<%= q.id %>][question]" value="<%= q.question %>">
+</div>
+
+
+<div class="input-field col s12">
+    <p>Choose the language</p>
+    <select name="questions[<%= q.id %>][lang]">
+
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+        <option value="python">Python</option>
+    </select>
+</div>
+
+
+<div class=" input-field col s12">
+    
+    <div class=" input-field  col s6">
+        <p >Test Input</p>
+        <textarea type="text" class="materialize-textarea"  name="questions[<%= q.id %>][test_input]"><%= q.test_input %></textarea>
+    </div>
+    <div class=" input-field  col s6">
+        <p >Test Output</p>
+
+        <textarea type="text"  name="questions[<%= q.id %>][test_output]" class="materialize-textarea"><%= q.test_output %></textarea>
+    </div>
+</div>
+
+<div id="TestCases<%= q.id %>Root" class="input-field col s12">
+    <% for (var i=0 ; i<q.input.length ; i++ ) { %>
+    <div>
+
+        <div class="col s6  input-field ">
+            <p >Input</p>
+            <textarea type="text"  name="questions[<%= q.id %>][input]" class="materialize-textarea"><%= q.input[i] %></textarea>
+        </div>
+        <div class="col s6  input-field ">
+            <p >Answer</p>
+            <textarea type="text"  name="questions[<%= q.id %>][answer]" class="materialize-textarea"> <%= q.answer[i] %></textarea>
+        </div>
+    </div>
+    <% } %>
+
+</div>
+
+<div class="col s12 input-field">
+    <input type="button" value="Add test case" id="<%= q.id %>" class="waves-light btn-large" onclick="addNewTestCases(this.id)">
+</div>
+
+<script>
+    function addNewTestCases(value) {
+        var id =  '#TestCases'+value+'Root' ;
+        var head = document.querySelector(id);
+        const innerDiv = document.createElement('div');
+        console.log(id);
+        console.log(head);
+
+        innerDiv.innerHTML =
+            `<div class="col s6  input-field ">
+                <p >Input</p>
+                <textarea type="text"  name="questions[${value}][input]" class="materialize-textarea"></textarea>
+            </div>
+            <div class="col s6  input-field ">
+                <p for="ca_id">Answer</p>
+                <textarea type="text" id="ca_id" name="questions[${value}][answer]" class="materialize-textarea"></textarea>
+            </div>`;
+        head.appendChild(innerDiv);
+
+    }
+</script>

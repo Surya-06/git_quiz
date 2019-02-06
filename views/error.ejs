@@ -1,23 +1,24 @@
+<meta charset="UTF-8">
 <html>
 
-<head>
+<head >
     <%- include('partials/disable_back.ejs') %>
 </head>
 
-<body>
+<body class="blue-grey lighten-5" >
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
 
 
     <div class="row">
         <div class="col s12 m8 offset-m2 ">
-            <fieldset class="card-panel">
+            <div class="card-panel blue-grey lighten-4">
                 <h4 class="flow-text center">
                     <%= context %>
                 </h4>
-            </fieldset>
+            </div>
             <div class="divider"></div>
-            <h3 class="flow-text">
+            <h3 class="flow-text center">
                 <%= msg %>
             </h3>
         </div>
