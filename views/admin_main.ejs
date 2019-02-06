@@ -12,6 +12,8 @@
 
     <a href="/admin_question_input"> Enter questions </a>
 
+    <button id="downloadScores" onclick="downloadScores()">Download Scores</button>
+
     <h3> Details of students currently accessing test </h3>
     <table>
         <tr>
@@ -42,6 +44,13 @@
         </tr>
         <% } %>
     </table>
+
+    <script>
+        function downloadScores() {
+            window.open('http://localhost:3000/downloadResult');
+            console.log("Opening for download");
+        }
+    </script>
 
 </body>
 
