@@ -55,7 +55,12 @@ font-size: 16px;
                 <div id="editModal" class="modal modal-fixed-footer">
                     <div class="modal-content">
                         <h4>Guidelines</h4>
-                        <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                        <ul>
+
+                            <li>These are the questions currently existing in Quiz. </li>
+                            <li>You can edit them and submit them to update. </li>
+                            <li>Note : MAKE SURE THE ID OF EACH QUESTION IS UNIQUE.</li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -118,10 +123,14 @@ font-size: 16px;
                 <div id="AddModal" class="modal modal-fixed-footer">
                     <div class="modal-content flow-text">
                         <h4>Guidelines</h4>
-                        <p> Multiple :</p>
-                        <p> -Enter the text of correct answer not the option like a,b,c,d.</p>
-                        <p> Matching :</p>
-                        <p> -Enter the answer in ',' delimiter list; 2 means 2nd in right; ONLY 1 to 4</p>
+                        <ul>
+                            <li>You can add questions of 4 types.</li>
+                            <br>
+                            <li>Multiple choice question</li>
+                            <li>Fill in the blank</li>
+                            <li>Match the following</li>
+                            <li>Coding</li>
+                        </ul>
 
                     </div>
                     <div class="modal-footer">
@@ -159,7 +168,12 @@ font-size: 16px;
                         <div id="mcqModal" class="modal modal-fixed-footer">
                             <div class="modal-content flow-text">
                                 <h4>Guidelines</h4>
-                                <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                                <ul>
+                                    <li>A question with 4 option and 1 right answer.</li>
+                                    <li>Enter the text of correct answer, not the option like a,b,c,d.</li>
+                                    <li>Enable code if you want to add a program to the question</li>
+
+                                </ul>
                             </div>
                             <div class="modal-footer">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -209,8 +223,8 @@ font-size: 16px;
 
                         </div>
                         <div id="code_id1" class="input-field col s12" hidden>
-                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                             <p for="codeArea">Code</p>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         </div>
                         <div class="input-field col s10 ">
 
@@ -219,10 +233,11 @@ font-size: 16px;
 
                         </div>
                         <div class="col s2">
-                            <p>
-                                <input type="checkbox" onclick="toggle(this.value)" value="1" />
+                            <label>
+                               
+                                <input type="checkbox" onclick="toggleByVal(this.value)" value="1" />
                                 <span>Code</span>
-                            </p>
+                            </label>
                         </div>
                     </form>
 
@@ -255,7 +270,10 @@ font-size: 16px;
                         <div id="fillModal" class="modal modal-fixed-footer">
                             <div class="modal-content">
                                 <h4>Guidelines</h4>
-                                <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                                <ul>
+                                    <li>A question and one answer entered in text</li>
+                                    <li>Enable code if you want to add a program to the question</li>
+                                </ul>
                             </div>
                             <div class="modal-footer">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -278,17 +296,17 @@ font-size: 16px;
                             <input type="text" name="answer">
                         </div>
                         <div id="code_id2" class="input-field col s12" hidden>
-                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                             <p for="codeArea">Code</p>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         </div>
                         <div class="input-field  col s10">
                             <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
                         </div>
                         <div class=" input-field col s2">
-                            <p>
-                                <input type="checkbox" onclick="toggle(this.value)" value="2" />
+                            <label>
+                                <input type="checkbox" onclick="toggleByVal(this.value)" value="2" />
                                 <span>Code</span>
-                            </p>
+                        </label>
                         </div>
 
                     </form>
@@ -319,7 +337,13 @@ font-size: 16px;
                         <div id="matchModal" class="modal modal-fixed-footer">
                             <div class="modal-content">
                                 <h4>Guidelines</h4>
-                                <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                                <ul>
+                                    <li>Match the following question.</li>
+                                    <li>Enter left and right coloumn of question. </li>
+                                    <li>The answer must be in this format '1,2,3,4' without quotes.</li>
+                                    <li>Enable code if you want to add a program to the question</li>
+
+                                </ul>
                             </div>
                             <div class="modal-footer">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -391,8 +415,8 @@ font-size: 16px;
                         </div>
 
                         <div id="code_id3" class="input-field col s12" hidden>
-                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                             <p for="codeArea">Code</p>
+                            <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         </div>
 
                         <div class="input-field col s12">
@@ -405,10 +429,10 @@ font-size: 16px;
                         </div>
 
                         <div class="col s2 input-field">
-                            <p>
-                                <input type="checkbox" onclick="toggle(this.value)" value="3" />
+                            <label>
+                                <input type="checkbox" onclick="toggleByVal(this.value)" value="3" />
                                 <span>Code</span>
-                            </p>
+                            </label>
                         </div>
 
 
@@ -441,7 +465,15 @@ font-size: 16px;
                         <div id="codingModal" class="modal modal-fixed-footer">
                             <div class="modal-content">
                                 <h4>Guidelines</h4>
-                                <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                                <ul>
+                                    <li>Enter question and language.</li>
+                                    <li>Test input and output are for understanding purpose only and not executed</li>
+                                    <li>Input,Answer are the test cases that are executed and you can add more by
+                                        clicking the button </li>
+                                    <li>Note : Don't have test cases with no input, it is good to have an input
+                                        parameter to maintain consistency. Otherwise the student must be informed that
+                                        all answer must be printed in one program. </li>
+                                </ul>
                             </div>
                             <div class="modal-footer">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -536,7 +568,12 @@ font-size: 16px;
                             <div id="cfgModal" class="modal modal-fixed-footer">
                                 <div class="modal-content">
                                     <h4>Guidelines</h4>
-                                    <p>A bunch of textfdasffdasfdsfsdaffhkadshfk\nfdas</p>
+                                    <ul>
+                                        <li>This is the config file editor.</li>
+                                        <li>After getting the data, you can edit the file in json.</li>
+                                        <li>The main attributes to edit are admin and username for authentication.</li>
+                                        <li>Save before you exit to update the file.</li>
+                                    </ul>
                                 </div>
                                 <div class="modal-footer">
                                     <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
@@ -605,6 +642,15 @@ font-size: 16px;
                 });
             }
 
+            function toggleByVal(value) {
+                var id = 'code_id' + value;
+                var x = document.getElementById(id);
+                if (x.hidden === true) {
+                    x.hidden = false;
+                } else {
+                    x.hidden = true;
+                }
+            }
 
             //Toggles the Code field in add question section
             function toggle(value) {

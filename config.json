@@ -1,7 +1,7 @@
 {
     "admin": {
-        "username": "admin123",
-        "password": "password1234"
+        "username": "admin",
+        "password": "pass"
     },
     "sessionKeyValue": 689852918,
     "questionCount": 5,
@@ -17,8 +17,8 @@
     "javaExec": "java",
     "debug": true,
     "username": {
-        "lower": 5,
-        "upper": 10
+        "lower": 1210315401,
+        "upper": 1210315470
     },
     "password": "pass"
 }

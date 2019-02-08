@@ -42,6 +42,13 @@
         </div>
 
         <div class="col s12">
+            <% if( studentDetails.size == 0 ) { %>
+            <div class="col s12 center">
+                <p>There are no students that completed the exam.</p>
+            </div>
+            <% } %>
+            <% if(studentDetails.size!=0){ %>
+
             <table class="striped highlight centered responsive-table">
                 <thead>
                     <tr>
@@ -75,6 +82,10 @@
                     <% } %>
                 </tbody>
             </table>
+            <% } %>
+
+
+
         </div>
     </div>
     <script>
