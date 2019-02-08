@@ -41,6 +41,18 @@ font-size: 16px;
                 </ul>
             </div>
 
+            <div class="col s12 section">
+                <form action="/deleteQuestion" method="POST">
+                    <div class=" input-field col s12">
+                        <p >Question ID</p>
+                        <input type="text" name="id" class="input-field" placeholder="Get ID from below editor">
+                    </div>
+                    <div class="col s12 ">
+                        <button class="waves-effect left waves-light btn-large light-green" type="submit">Delete</button>
+                    </div>
+                </form>
+            </div>
+       
             <!-- Heading-->
             <div class="col s10">
                 <h2>
@@ -106,6 +118,8 @@ font-size: 16px;
                     </div>
                 </form>
             </div>
+
+
 
         </div>
 
@@ -642,6 +656,7 @@ font-size: 16px;
                 });
             }
 
+            //Toggles the Code field in add question section
             function toggleByVal(value) {
                 var id = 'code_id' + value;
                 var x = document.getElementById(id);
@@ -652,7 +667,7 @@ font-size: 16px;
                 }
             }
 
-            //Toggles the Code field in add question section
+            //Toggles the Code field in edit question section
             function toggle(value) {
                 console.log(value.parentNode.parentNode.childNodes);
                 var x = value.parentNode.parentNode.parentNode.childNodes[1];

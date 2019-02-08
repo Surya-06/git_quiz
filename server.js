@@ -269,6 +269,21 @@ app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res)
   res.download(__dirname + '\\' + filePath);
 });
 
+app.post('/deleteQuestion',(req,res)=>{
+  var id = req.body.id;
+  var data  = io.fetchQuestions();
+  io.adjustIds(data);
+  
+  for(var i =0 ; i<data.questions.length ;i++){
+    if(id==data.questions[i].id){
+        data.questions.splice(i,1);
+        break;
+    }
+ }
+ io.saveQuestions(data);
+ res.redirect('/admin_question_input');
+});
+
 // HANDLE INVALID AUTHENTICATION
 app.use('/downloadResult', authenticationHandler.errorRedirect);
 

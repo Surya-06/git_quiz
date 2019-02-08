@@ -3,6 +3,12 @@ const fs = require('fs'),
     path = require("path");
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
+function adjustIds(data){
+    for(var i = 0 ; i < data.questions.length;i++){
+        data.questions[i].id = i+1;
+    }
+}
+
 function fetchQuestions() {
     try {
         var questions = fs.readFileSync(path.resolve(__dirname + "/../data/quiz.json"));
@@ -57,6 +63,7 @@ module.exports = {
     fetchQuestions,
     fetchCFG,
     saveCFG,
-    saveQuestions
+    saveQuestions,
+    adjustIds
 
 }
