@@ -42,6 +42,28 @@ font-size: 16px;
             </div>
 
             <div class="col s12 section">
+                    <div class="col s10">
+                            <h2>
+                                Delete Question.
+                            </h2>
+                        </div>
+                        <div class="col s2">
+                                <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#editModal"><i class="fas fa-info-circle"></i></a>
+                
+                                <div id="editModal" class="modal modal-fixed-footer">
+                                    <div class="modal-content">
+                                        <h4>Guidelines</h4>
+                                        <ul>
+                                            <li>This section is to delete an existing question</li>
+                                            <li>Enter the ID of the question to delete it</li>
+                                            <li>Check questions below to see the IDs</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                                    </div>
+                                </div>
+                            </div>
                 <form action="/deleteQuestion" method="POST">
                     <div class=" input-field col s12">
                         <p >Question ID</p>
