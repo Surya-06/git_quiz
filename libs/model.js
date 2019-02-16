@@ -1,7 +1,11 @@
 class questionResponse {
-    constructor(question, answer) {
+    constructor(question, answer, code = undefined) {
         this.question = question;
         this.answer = answer;
+        this.code = code;
+    }
+    addCode(code) {
+        this.code = code
     }
 };
 class student {

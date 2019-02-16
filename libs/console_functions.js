@@ -1,5 +1,7 @@
 const config = require("../config.json"),
-  code_handling = require('./code_handling.js');
+  code_handling = require('./code_handling.js'),
+  xlsx = require('xlsx'),
+  path = require('path');
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
@@ -43,23 +45,38 @@ function activateConsoleFunctions(studentMap) {
 }
 
 function writeToExcel(data, questionCount) {
-  let final_data = '';
-  final_data = final_data + 'Username\tTest Start Time\tTest End Time\tScore\tSubmitted\t';
-  for (let i = 1; i <= questionCount; i++)
-    final_data = final_data + 'Question ' + i + '\t' + 'Answer ' + i + '\t';
-  final_data = final_data + '\n';
-  final_data = final_data + ' \t \t \t \t ';
-  for (let i = 1; i <= questionCount; i++)
-    final_data = final_data + '\t ';
-  final_data = final_data + '\n';
-  for (var keys of data.keys()) {
-    final_data = final_data + data.get(keys).username + '\t' + new Date(data.get(keys).testStartTime) + '\t' + new Date(data.get(keys).testEndTime) + '\t' + data.get(keys).score + '\t' + data.get(keys).submitted + '\t';
-    let answers = data.get(keys).answers;
-    for (var i in answers)
-      final_data = final_data + answers[i].question + '\t' + JSON.stringify(answers[i].answer) + '\t';
-    final_data = final_data + '\n';
+  LOG('Starting to write data');
+  let final_data = [];
+  let headers = ['Username', 'Test Start Time', 'Test End Time', 'Score', 'Submitted'];
+  for (let i = 1; i <= questionCount; i++) {
+    headers.push('Question ' + i);
+    headers.push('Answer ' + i);
   }
-  let filePath = code_handling.write_to_file(final_data, 'xls', 'Results');
+  final_data.push(headers);
+  for (var keys of data.keys()) {
+    var user_data = [];
+    user_data.push(data.get(keys).username);
+    user_data.push(new Date(data.get(keys).testStartTime));
+    user_data.push(new Date(data.get(keys).testEndTime));
+    user_data.push(data.get(keys).score);
+    user_data.push(data.get(keys).submitted);
+    let answers = data.get(keys).answers;
+    for (let i in answers) {
+      let question_value = answers[i].question;
+      if (answers[i].code) question_value = question_value + '\n' + answers[i].code;
+      user_data.push(JSON.stringify(question_value));
+      user_data.push(JSON.stringify(answers[i].answer));
+    }
+    final_data.push(user_data);
+    LOG('Pushing user data : ', user_data);
+  }
+  let ws_name = "Results",
+    wb = xlsx.utils.book_new(),
+    ws = xlsx.utils.aoa_to_sheet(final_data);
+  xlsx.utils.book_append_sheet(wb, ws, ws_name);
+  let filePath = '/data/Results.xlsx';
+  xlsx.writeFile(wb, path.resolve(__dirname + '/..' + filePath));
+  LOG('Completed writing to file');
   return filePath;
 }
 

@@ -18,7 +18,10 @@ async function eval(answers, student, mappedQB) {
   LOG("Evaluating answers");
   for (var i in answers) {
     let question = mappedQB.get(i);
-    student.answers.push(new model.questionResponse(question.question, answers[i]));
+    let responseList = new model.questionResponse(question.question, answers[i]);
+    if (question.type == 'multi' || question.type == 'fill' || question.type == 'match')
+      responseList.addCode(question.code);
+    student.answers.push(responseList);
     let negative = false;
     if (question.type == "match") {
       if (compareArray(question.answer, answers[i])) {
