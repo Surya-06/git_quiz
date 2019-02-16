@@ -34,7 +34,7 @@
         "test_output": "2",
         "input": ["6", "9", "-2"],
         "answer": ["7", "10", "-1"],
-        
+
         "id": 5
     }, {
         "type": "coding",

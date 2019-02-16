@@ -2,37 +2,41 @@
 
 
 <div class="input-field col s2">
-    <p >ID</p>
-    <input type="text"  name="questions[<%= q.id %>][id]" value="<%= q.id %>">
+    <p>ID</p>
+    <input type="text" name="questions[<%= q.id %>][id]" value="<%= q.id %>">
 </div>
 
 <div class="input-field col s10">
-    <p >Question</p>
-    <input type="text"  name="questions[<%= q.id %>][question]" value="<%= q.question %>">
+    <p>Question</p>
+    <input type="text" name="questions[<%= q.id %>][question]" value="<%= q.question %>">
 </div>
 
 
 <div class="input-field col s12">
     <p>Choose the language</p>
     <select name="questions[<%= q.id %>][lang]">
-
-        <option value="cpp">C++</option>
-        <option value="java">Java</option>
-        <option value="python">Python</option>
+        <option value="cpp" id="<%=q.id%>_cpp">C++</option>
+        <option value="java" id="<%=q.id%>_java">Java</option>
+        <option value="python" id="<%=q.id%>_python">Python</option>
+        <% if(true) { %>
+        <script>
+            document.getElementById( "<%=q.id%>"+"_"+"<%=q.lang%>").selected = true
+            </script>
+        <% } %>
     </select>
 </div>
 
 
 <div class=" input-field col s12">
-    
+
     <div class=" input-field  col s6">
-        <p >Test Input</p>
-        <textarea type="text" class="materialize-textarea"  name="questions[<%= q.id %>][test_input]"><%= q.test_input %></textarea>
+        <p>Test Input</p>
+        <textarea type="text" class="materialize-textarea" name="questions[<%= q.id %>][test_input]"><%=q.test_input %></textarea>
     </div>
     <div class=" input-field  col s6">
-        <p >Test Output</p>
+        <p>Test Output</p>
 
-        <textarea type="text"  name="questions[<%= q.id %>][test_output]" class="materialize-textarea"><%= q.test_output %></textarea>
+        <textarea type="text" name="questions[<%= q.id %>][test_output]" class="materialize-textarea"><%=q.test_output %></textarea>
     </div>
 </div>
 
@@ -41,12 +45,12 @@
     <div>
 
         <div class="col s6  input-field ">
-            <p >Input</p>
-            <textarea type="text"  name="questions[<%= q.id %>][input][]" class="materialize-textarea"><%= q.input[i] %></textarea>
+            <p>Input</p>
+            <textarea type="text" name="questions[<%= q.id %>][input][]" class="materialize-textarea"><%=q.input[i] %></textarea>
         </div>
         <div class="col s6  input-field ">
-            <p >Answer</p>
-            <textarea type="text"  name="questions[<%= q.id %>][answer][]" class="materialize-textarea"> <%= q.answer[i] %></textarea>
+            <p>Answer</p>
+            <textarea type="text" name="questions[<%= q.id %>][answer][]" class="materialize-textarea"><%=q.answer[i] %></textarea>
         </div>
     </div>
     <% } %>
@@ -59,7 +63,7 @@
 
 <script>
     function addNewTestCases(value) {
-        var id =  '#TestCases'+value+'Root' ;
+        var id = '#TestCases' + value + 'Root';
         var head = document.querySelector(id);
         const innerDiv = document.createElement('div');
         console.log(id);
