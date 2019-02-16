@@ -269,11 +269,14 @@ app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res)
   res.download(__dirname + '\\' + filePath);
 });
 
-app.post('/deleteQuestion', (req, res) => {
+// HANDLE INVALID AUTHENTICATION
+app.use('/downloadResult', authenticationHandler.errorRedirect);
+
+// POST HANDLING FOR DELETE QUESTION PAGE 
+app.post('/deleteQuestion', authenticationHandler.checkAuthentication, (req, res) => {
   var id = req.body.id;
   var data = io.fetchQuestions();
   io.adjustIds(data);
-
   for (var i = 0; i < data.questions.length; i++) {
     if (id == data.questions[i].id) {
       data.questions.splice(i, 1);
@@ -285,7 +288,7 @@ app.post('/deleteQuestion', (req, res) => {
 });
 
 // HANDLE INVALID AUTHENTICATION
-app.use('/downloadResult', authenticationHandler.errorRedirect);
+app.use('deleteQuestion', authenticationHandler.errorRedirect);
 
 function initServer() {
   LOG("Initializing server : --- ");
@@ -297,6 +300,8 @@ function initServer() {
     mappedQB = question_return_values.mappedQB,
     COUNT = question_return_values.count;
   console_functions.activateConsoleFunctions(studentMap);
+  // Activate periodic save to excel file 
+  setInterval(console_functions.writeToExcel(studentMap, COUNT), Number.parseInt(config.saveInterval) * 60000);
 }
 
 initServer();

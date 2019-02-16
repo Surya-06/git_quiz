@@ -20,5 +20,7 @@
         "lower": 1210315401,
         "upper": 1210315470
     },
-    "password": "pass"
+    "password": "pass",
+    "saveInterval": "3",
+    "_commentSaveInterval": "Save interval parameter should be given in Minutes"
 }
