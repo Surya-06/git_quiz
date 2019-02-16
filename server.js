@@ -32,7 +32,8 @@ var urlencodedParser = bodyParser.urlencoded({
 var studentMap = new Map(),
   mappedQB = new Map(),
   questionBank = undefined,
-  questionsExist = false;
+  questionsExist = false,
+  namesMap = new Map();
 
 // MAIN PAGE ACCESS 
 app.get("/", (req, res) => {
@@ -60,9 +61,10 @@ app.get("/", (req, res) => {
       res.redirect("/admin_main");
     } else {
       // registering student details
+      let name = namesMap.get(req.session.username) ? namesMap.get(req.session.username) : 'No name';
       studentMap.set(
         req.session.username,
-        new model.student(req.session.username)
+        new model.student(req.session.username,name)
       );
       // req.session.destroy() after logout
       res.redirect("/quiz");
@@ -154,7 +156,8 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
     res.render("quiz.ejs", {
       questions: questions,
       endTime: current_student.testEndTime,
-      username: current_student.username
+      username: current_student.username,
+      name : current_student.name
     });
   }
   // see if the current time is ok for the student to continue his test
@@ -295,6 +298,7 @@ function initServer() {
   console.log("Server at port : 3000");
   app.listen(3000);
   let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  namesMap = console_functions.getNamesFromExcel();
   questionsExist = question_return_values.questionsExist,
     questionBank = question_return_values.questionBank,
     mappedQB = question_return_values.mappedQB,

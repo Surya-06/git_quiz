@@ -9,9 +9,9 @@ class questionResponse {
     }
 };
 class student {
-    constructor(username) {
+    constructor(username,name) {
         this.username = username;
-        this.name = undefined;
+        this.name = name;
         this.login = true;
         this.testStartTime = undefined;
         this.testEndTime = undefined;

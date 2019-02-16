@@ -12,6 +12,8 @@
             padding: 50px;
 
         }
+
+        
     </style>
 </head>
 
@@ -20,13 +22,19 @@
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
     <div class="row sticky">
-         <div class="col s12 ">
-            <p class="flow-text left ">
-                Logged in as : <br>
-                <%=username%>
-            </p>
-            <p id='timer' class="flow-text right "> </p>
-        </div>
+        
+            <div class="col left s2">
+                <p class="left flow-text">
+                    Logged in as : <br>
+                    <%=username%> <br>
+                    <%=name%>
+                </p>
+            </div>
+            <div class="col s2 right offset-s10">
+                <p id='timer' class="flow-text right "> </p>
+            </div>
+        
+
     </div>
 
     <div class="container ">
@@ -41,14 +49,14 @@
             </div> -->
 
 
-            
+
 
             <div class="col s12">
 
                 <form id='question_list' name='question_list' action='quiz' method='POST'>
                     <div class="col s12">
                         <% for (var i=0 ; i<questions.length ; i++ ) { %>
-                       
+
 
                         <p class="flow-text col s1">
                             <%= i+1 +")"%>
@@ -65,26 +73,29 @@
                         <% if( questions[i].type == 'fill' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
-                            
-                            <%- include('partials/fill.ejs',{q:questions[i]}) %>
 
-                            </div>                        </div>
+                                <%- include('partials/fill.ejs',{q:questions[i]}) %>
+
+                            </div>
+                        </div>
                         <% } %>
 
                         <% if( questions[i].type == 'match' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
                                 <%- include('partials/match.ejs',{q:questions[i]}) %>
-                            </div>                        </div>
+                            </div>
+                        </div>
                         <% } %>
 
                         <% if( questions[i].type == 'coding' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
                                 <%- include('partials/coding.ejs',{q:questions[i],username:username}) %>
-                            </div>                        </div>
+                            </div>
+                        </div>
                         <% } %>
-                        
+
                         <% } %>
                     </div>
                     <div class="divider"></div>

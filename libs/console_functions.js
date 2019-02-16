@@ -80,7 +80,29 @@ function writeToExcel(data, questionCount) {
   return filePath;
 }
 
+
+//Returns map of (id,name) from Excel file
+function getNamesFromExcel(){
+  let filePath = path.resolve(__dirname +'/../data/Names.xlsx');
+  var wb = xlsx.readFile(filePath);
+  var firstSheet = wb.SheetNames[0];
+  var ws = wb.Sheets[firstSheet];
+  var d = xlsx.utils.sheet_to_json(ws); //Array of objects
+
+  var namesMap = new Map();
+
+  d.forEach((row)=>{
+    var id = row.ID.toString();
+    var Name = row.Names;
+    namesMap.set(id,Name);
+  });
+  
+  
+  return namesMap;
+}
+
 module.exports = {
   activateConsoleFunctions,
-  writeToExcel
+  writeToExcel,
+  getNamesFromExcel
 };
