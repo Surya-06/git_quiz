@@ -42,12 +42,22 @@ function activateConsoleFunctions(studentMap) {
   });
 }
 
-function writeToExcel(data) {
+function writeToExcel(data, questionCount) {
   let final_data = '';
-  final_data = final_data + 'Username\tTest Start Time\tTest End Time\tScore\tSubmitted\n';
-  final_data = final_data + ' \t \t \t \t \n';
+  final_data = final_data + 'Username\tTest Start Time\tTest End Time\tScore\tSubmitted\t';
+  for (let i = 1; i <= questionCount; i++)
+    final_data = final_data + 'Question ' + i + '\t' + 'Answer ' + i + '\t';
+  final_data = final_data + '\n';
+  final_data = final_data + ' \t \t \t \t ';
+  for (let i = 1; i <= questionCount; i++)
+    final_data = final_data + '\t ';
+  final_data = final_data + '\n';
   for (var keys of data.keys()) {
-    final_data = final_data + data.get(keys).username + '\t' + new Date(data.get(keys).testStartTime) + '\t' + new Date(data.get(keys).testEndTime) + '\t' + data.get(keys).score + '\t' + data.get(keys).submitted + '\n';
+    final_data = final_data + data.get(keys).username + '\t' + new Date(data.get(keys).testStartTime) + '\t' + new Date(data.get(keys).testEndTime) + '\t' + data.get(keys).score + '\t' + data.get(keys).submitted + '\t';
+    let answers = data.get(keys).answers;
+    for (var i in answers)
+      final_data = final_data + answers[i].question + '\t' + answers[i].answer + '\t';
+    final_data = final_data + '\n';
   }
   let filePath = code_handling.write_to_file(final_data, 'xls', 'Results');
   return filePath;

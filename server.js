@@ -265,23 +265,23 @@ app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res)
   );
   */
   LOG('Request received');
-  let filePath = console_functions.writeToExcel(studentMap);
+  let filePath = console_functions.writeToExcel(studentMap, COUNT);
   res.download(__dirname + '\\' + filePath);
 });
 
-app.post('/deleteQuestion',(req,res)=>{
+app.post('/deleteQuestion', (req, res) => {
   var id = req.body.id;
-  var data  = io.fetchQuestions();
+  var data = io.fetchQuestions();
   io.adjustIds(data);
-  
-  for(var i =0 ; i<data.questions.length ;i++){
-    if(id==data.questions[i].id){
-        data.questions.splice(i,1);
-        break;
+
+  for (var i = 0; i < data.questions.length; i++) {
+    if (id == data.questions[i].id) {
+      data.questions.splice(i, 1);
+      break;
     }
- }
- io.saveQuestions(data);
- res.redirect('/admin_question_input');
+  }
+  io.saveQuestions(data);
+  res.redirect('/admin_question_input');
 });
 
 // HANDLE INVALID AUTHENTICATION

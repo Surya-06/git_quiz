@@ -1,5 +1,6 @@
 const code_handling = require('./code_handling.js'),
-  config = require("../config.json");
+  config = require("../config.json"),
+  model = require('./model.js');
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
@@ -12,12 +13,12 @@ function compareArray(a, b) {
   return true;
 }
 
-
 async function eval(answers, student, mappedQB) {
   student.score = 0;
   LOG("Evaluating answers");
   for (var i in answers) {
     let question = mappedQB.get(i);
+    student.answers.push(new model.questionResponse(question.question, answers[i]));
     let negative = false;
     if (question.type == "match") {
       if (compareArray(question.answer, answers[i])) {
