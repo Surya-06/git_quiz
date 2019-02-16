@@ -56,7 +56,7 @@ function writeToExcel(data, questionCount) {
     final_data = final_data + data.get(keys).username + '\t' + new Date(data.get(keys).testStartTime) + '\t' + new Date(data.get(keys).testEndTime) + '\t' + data.get(keys).score + '\t' + data.get(keys).submitted + '\t';
     let answers = data.get(keys).answers;
     for (var i in answers)
-      final_data = final_data + answers[i].question + '\t' + answers[i].answer + '\t';
+      final_data = final_data + answers[i].question + '\t' + JSON.stringify(answers[i].answer) + '\t';
     final_data = final_data + '\n';
   }
   let filePath = code_handling.write_to_file(final_data, 'xls', 'Results');
