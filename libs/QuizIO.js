@@ -19,6 +19,7 @@ function fetchQuestions() {
 }
 
 function saveQuestions(data) {
+    adjustIds(data);
     LOG('writing to file');
     fs.writeFileSync(path.resolve(__dirname + "/../data/quiz.json"), JSON.stringify(data));
 }
@@ -64,6 +65,6 @@ module.exports = {
     fetchCFG,
     saveCFG,
     saveQuestions,
-    adjustIds
+   
 
 }

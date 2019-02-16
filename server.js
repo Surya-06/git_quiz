@@ -247,6 +247,7 @@ app.post('/admin_main', (req, res) => {
 
 // POST FOR UPDATE QUESTIONS
 app.post('/updateQuestions', (req, res) => {
+  
   io.saveQuestions(req.body);
   let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
   questionsExist = question_return_values.questionsExist,
@@ -279,13 +280,14 @@ app.use('/downloadResult', authenticationHandler.errorRedirect);
 app.post('/deleteQuestion', authenticationHandler.checkAuthentication, (req, res) => {
   var id = req.body.id;
   var data = io.fetchQuestions();
-  io.adjustIds(data);
+  
   for (var i = 0; i < data.questions.length; i++) {
     if (id == data.questions[i].id) {
       data.questions.splice(i, 1);
       break;
     }
   }
+  
   io.saveQuestions(data);
   res.redirect('/admin_question_input');
 });
