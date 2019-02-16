@@ -1,0 +1,86 @@
+<input type="text" value="match" name="questions[<%= q.id %>][type]" hidden>
+
+<div class="input-field col s2">
+        <p >ID</p>
+        <input type="text"  name="questions[<%= q.id %>][id]" value="<%= q.id %>">
+</div>
+    
+
+<div class="input-field col s10">
+    <p >Question</p>
+    <input type="text"  name="questions[<%= q.id %>][question]" value="<%= q.question %>">
+</div>
+
+
+
+<div class="input-field col s12">
+    <p >Left 1</p>
+    <input  type="text" name="questions[<%= q.id %>][left]" value="<%= q.left[0] %>">
+</div>
+
+
+
+<div class="input-field col s12">
+
+    <p >Left 2</p>
+    <input  type="text" name="questions[<%= q.id %>][left]" value="<%= q.left[1] %>">
+</div>
+
+
+<div class="input-field col s12"> 
+    <p >Left 3</p>
+    <input  type="text" name="questions[<%= q.id %>][left]" value="<%= q.left[2] %>">
+</div>
+
+
+<div class="input-field col s12">
+     <p >Left 4</p>
+    <input  type="text" name="questions[<%= q.id %>][left]" value="<%= q.left[3] %>">
+</div>
+
+
+
+<div class="input-field col s12">
+    <p >Right 1</p>
+    <input  type="text" name="questions[<%= q.id %>][right]" value="<%= q.right[0] %>">
+</div>
+
+
+<div class="input-field col s12">
+    <p >Right 2</p>
+    <input  type="text" name="questions[<%= q.id %>][right]" value="<%= q.right[1] %>">
+</div>
+
+
+<div class="input-field col s12">
+    <p >Right 3</p>
+    <input  type="text" name="questions[<%= q.id %>][right]" value="<%= q.right[2] %>">
+</div>
+
+
+<div class="input-field col s12">
+    <p >Right 4</p>
+    <input  type="text" name="questions[<%= q.id %>][right]" value="<%= q.right[3] %>">
+</div>
+
+
+<div class="input-field col s12">
+
+    <p>Answer</p>
+    <input type="text" name="questions[<%= q.id %>][answer]" value="<%= q.answer %>">
+</div>
+
+<div id="" class="input-field col s12 ">
+
+    <div class="col s12 ">
+        <p >Code</p>
+        <textarea  name="questions[<%= q.id %>][code]" class="materialize-textarea"><%= q.code %></textarea>
+    </div>
+
+    <div class="col s12">
+        <label>
+            <input type="checkbox" onclick="toggle(this)" checked />
+            <span>Code</span>
+        </label>
+    </div>
+</div>

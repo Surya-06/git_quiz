@@ -4,17 +4,48 @@
 <body>
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
+    
 
-    <div class="container ">
-        <div class="row">
+    <!-- <div class="row section">
+        <div class="col s12">
             <div class="col s12">
-                <form action="login" method="POST">
-                    <h2> User Login </h2>
-                    <input type="text" name="username" placeholder="Username" />
-                    <input type="password" name="password" placeholder="Password" />
-                    <button class="waves-effect waves-light btn-large" onclick="validate()" type="submit">Submit</button>
-                </form>
+                <img class="brand-logo" src="images/logo.png" alt="Gitam Logo" width="300" height="100">
             </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="divider"></div> -->
+    <div class="container">
+        <div class="row">
+            <form action="login" method="POST">
+
+                <div class="col s6  offset-s3 center">
+                    <div class="section">
+                        <h2> User Login </h2>
+                    </div>
+                </div>
+
+                <div class="col s6  offset-s3 ">
+                    <div class="section ">
+                        <p>Username : </p>
+                        <input type="text" name="username" />
+                    </div>
+                </div>
+
+
+                <div class="col s6 offset-s3 ">
+                    <div class="section ">
+                        <p>Password : </p>
+                        <input type="password" name="password" />
+                    </div>
+                </div>
+
+                <div class="col s6 offset-s3 center-align">
+                    <div class="section">
+                        <button class="waves-effect waves-light btn-large grey darken-2" onclick="validate()" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </body>

@@ -1,56 +1,95 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
 <html>
 
 <head>
     <title> QUIZ PAGE </title>
+    <style>
+        .sticky{
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            padding: 50px;
+
+        }
+    </style>
 </head>
 
-<body onload="laodTimers()">
+<body class="white">
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-    <div class="container">
+    <div class="row sticky">
+         <div class="col s12 ">
+            <p class="flow-text left ">
+                Logged in as : <br>
+                <%=username%>
+            </p>
+            <p id='timer' class="flow-text right "> </p>
+        </div>
+    </div>
+
+    <div class="container ">
 
         <div class="row">
-            <div class="col s12 ">
-                <fieldset class="card-panel">
-                    <p id='timer' class="flow-text center"> </p>
-                </fieldset>
-            </div>
-            <div class="divider"></div>
+            <!-- <div class="col s12 sticky" >
+                <p id='timer' class="flow-text left "> </p>
+                <p class="flow-text right ">
+                    Logged in as :
+                    <%=username%>
+                </p>
+            </div> -->
+
+
+            
 
             <div class="col s12">
 
-                <form name='question_list' action='quiz' method='POST'>
-                    <% for (var i=0 ; i<questions.length ; i++ ) { %>
+                <form id='question_list' name='question_list' action='quiz' method='POST'>
+                    <div class="col s12">
+                        <% for (var i=0 ; i<questions.length ; i++ ) { %>
+                       
+
+                        <p class="flow-text col s1">
+                            <%= i+1 +")"%>
+                        </p>
+
+                        <% if( questions[i].type == 'multi' ) { %>
+                        <div class="col s11 card">
+                            <div class="col s12 card-content">
+                                <%- include('partials/mcq.ejs',{q:questions[i]}) %>
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <% if( questions[i].type == 'fill' ) { %>
+                        <div class="col s11 card">
+                            <div class="col s12 card-content">
+                            
+                            <%- include('partials/fill.ejs',{q:questions[i]}) %>
+
+                            </div>                        </div>
+                        <% } %>
+
+                        <% if( questions[i].type == 'match' ) { %>
+                        <div class="col s11 card">
+                            <div class="col s12 card-content">
+                                <%- include('partials/match.ejs',{q:questions[i]}) %>
+                            </div>                        </div>
+                        <% } %>
+
+                        <% if( questions[i].type == 'coding' ) { %>
+                        <div class="col s11 card">
+                            <div class="col s12 card-content">
+                                <%- include('partials/coding.ejs',{q:questions[i],username:username}) %>
+                            </div>                        </div>
+                        <% } %>
+                        
+                        <% } %>
+                    </div>
                     <div class="divider"></div>
-
-                    <p class="flow-text col s1">
-                        <%= i +")"%>
-                    </p>
-
-                    <% if( questions[i].type == 'multi' ) { %>
-                    <div class="col s11">
-                        <%- include('partials/mcq.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-
-                    <% if( questions[i].type == 'fill' ) { %>
-                    <div class="col s11">
-                        <%- include('partials/fill.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-                    
-                    <% if( questions[i].type == 'match' ) { %>
-                    <div class="col s11">
-                        <%- include('partials/match.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-
-                    <% } %>
-                    <div class="divider"></div>
-                    <div class="col s11 offset-s1">
-                        <button class="waves-effect waves-light btn-large" type="submit">Submit</button>
+                    <div class="col s12 center-align section">
+                        <button class="waves-effect center-align waves-light btn-large light-green" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -73,6 +112,11 @@
                 document.forms["question_list"].submit();
             }
         }, 1000);
+        window.onblur = () => {
+            document.getElementById('question_list').submit();
+        }
     </script>
 
 </body>
+
+</html>

@@ -1,11 +1,26 @@
 {
-    "admin" : {
-        "username" : "admin123",
-        "password" : "password1234"
+    "admin": {
+        "username": "admin",
+        "password": "pass"
     },
-    "sessionKeyValue" : 689852918 ,
-    "questionCount" : 5 ,
-    "duration" : 1 ,
-    "pointsPerQuestion" : 1 ,
-    "negativeMarking" : false 
+    "sessionKeyValue": 689852918,
+    "questionCount": 5,
+    "duration": 4,
+    "pointsPerQuestion": 1,
+    "negativeMarking": false,
+    "cppCompile": "g++",
+    "cppExecFile": ".out",
+    "pythonCommand": "python",
+    "javaCompile": "javac",
+    "javaPostCompileExtension": "class",
+    "os_windows": true,
+    "javaExec": "java",
+    "debug": true,
+    "username": {
+        "lower": 1210315401,
+        "upper": 1210315470
+    },
+    "password": "pass",
+    "saveInterval": "3",
+    "_commentSaveInterval": "Save interval parameter should be given in Minutes"
 }

@@ -1,218 +1,307 @@
-const express = require('express'),
-    app = express(),
-    session = require('express-session'),
-    model = require('./model.js'),
-    config = require('./config.json'),
-    io = require('./QuizIO'),
-    bodyParser = require('body-parser'),
-    codeExec = require('./codeIO');
+// PRINT STRING RAW USING : JSON.stringinfy(string_value)
+
+const express = require("express"),
+  app = express(),
+  session = require("express-session"),
+  model = require("./libs/model.js"),
+  config = require("./config.json"),
+  io = require("./libs/QuizIO"),
+  bodyParser = require("body-parser"),
+  codeExec = require("./libs/codeIO"),
+  console_functions = require('./libs/console_functions.js'),
+  evaluate = require('./libs/evaluate.js'),
+  questionHandler = require('./libs/question_handler.js'),
+  authenticationHandler = require('./libs/authenticationHandler.js');
+
+var LOG = config.debug ? console.log.bind(console) : function () {};
+
+app.set("view engine", "ejs");
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.static("public"));
+app.use(
+  session({
+    secret: (new Date().getTime() + config.sessionKeyValue).toString()
+  })
+);
 
 var COUNT = config.questionCount;
 var urlencodedParser = bodyParser.urlencoded({
-    extended: false
+  extended: false
 });
 var studentMap = new Map(),
-    mappedQB = new Map(),
-    questionBank = undefined,
-    questionsExist = false;
+  mappedQB = new Map(),
+  questionBank = undefined,
+  questionsExist = false;
 
-app.set('view engine', 'ejs');
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.static('public'));
-app.use(session({
-    secret: (new Date().getTime() + config.sessionKeyValue).toString()
-}));
-
-app.post('/login', (req, res) => {
-    // getting parameters from login page 
-    console.log(req.body);
-    if (req.body.username && req.body.password) {
-        req.session.username = req.body.username;
-        req.session.password = req.body.password;
-    } else {
-        res.redirect('/login');
+// MAIN PAGE ACCESS 
+app.get("/", (req, res) => {
+  if (req.session.username == undefined || req.session.password == undefined) {
+    // if username does not exist in the cookies
+    res.redirect("/login");
+  } else if (studentMap.has(req.session.username)) {
+    var current_student = studentMap.get(req.session.username);
+    if (current_student.score == undefined) {
+      LOG("Making score 0 since previous attempt unsuccessful");
+      current_student.score = 0;
     }
+    res.render("error.ejs", {
+      context: "Error",
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
+        current_student.score
+    });
+  } else {
+    // user authenticated
+    if (
+      req.session.username == config.admin.username &&
+      req.session.password == config.admin.password
+    ) {
+      // redirect to input page
+      res.redirect("/admin_main");
+    } else {
+      // registering student details
+      studentMap.set(
+        req.session.username,
+        new model.student(req.session.username)
+      );
+      // req.session.destroy() after logout
+      res.redirect("/quiz");
+    }
+  }
+});
+
+// POST FROM THE CODE PAGE 
+app.post("/code", urlencodedParser, function (req, res) {
+  var result = codeExec.exec(req.body);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
+});
+
+// GET FOR CONFIGURATION PAGE 
+app.get("/cfg", authenticationHandler.checkAuthentication, function (req, res) {
+  var cfg = io.fetchCFG();
+  res.send(cfg);
+});
+
+// POST FOR CONFIGURATION PAGE 
+app.post("/cfg", function (req, res) {
+  var cfg = req.body.cfg;
+  io.saveCFG(cfg);
+  console.log(cfg);
+  res.redirect("admin_question_input");
+});
+
+// HANDLE INVALID AUTHENTICATION 
+app.use("/cfg", authenticationHandler.errorRedirect);
+
+// GET FROM THE ADMIN QUESTION PAGE 
+app.get("/admin_question_input", authenticationHandler.checkAuthentication, function (req, res) {
+  var q = io.fetchQuestions();
+  res.render("admin_question_input", {
+    cfg: "",
+    questions: q.questions
+  });
+});
+
+// POST FROM THE ADMIN QUESTION PAGE 
+app.post("/admin_question_input", urlencodedParser, function (req, res) {
+  // LOG(req.body);
+  io.addQuestions(req.body);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
+  res.redirect("/admin_question_input");
+});
+
+// HANDLE INVALID AUTHENTICATION
+app.use("/admin_question_input", authenticationHandler.errorRedirect);
+
+// GET FOR QUIZ DATA PAGE 
+app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
+  if (questionsExist == false) {
+    // No quiz since questions do not exist , admin fault
+    res.render("error.ejs", {
+      context: "Error",
+      msg: "Please ask admin to make questions for the Quiz and restart server. :-)"
+    });
+  }
+  LOG("Returning quiz page to : ", req.session.username);
+  var questions = questionHandler.getQuestions(COUNT, questionBank);
+  LOG("Starting quiz with questions : ", questions.length);
+  let current_student = studentMap.get(req.session.username);
+  // If this happens, something might be wrong ( TEST )
+  if (current_student == undefined) res.redirect("/login");
+  // CHECK FOR RELOAD
+  LOG("Checks for reload , happen here ");
+  if (current_student.submitted == true) {
+    res.render("error.ejs", {
+      context: "Test completed earlier",
+      msg: "Your score = " + current_student.score
+    });
+  } else if (
+    current_student.testStartTime == undefined &&
+    current_student.testEndTime == undefined
+  ) {
+    LOG("Setting start and end times for fresh attempt ");
+    current_student.testStartTime = new Date().getTime();
+    current_student.testEndTime =
+      current_student.testStartTime + config.duration * 60 * 1000;
+    res.render("quiz.ejs", {
+      questions: questions,
+      endTime: current_student.testEndTime,
+      username: current_student.username
+    });
+  }
+  // see if the current time is ok for the student to continue his test
+  else if (new Date().getTime() < current_student.testEndTime) {
+    res.render("quiz.ejs", {
+      questions: questions,
+      endTime: current_student.testEndTime,
+      username: current_student.username
+    });
+  } else {
+    res.render("error.ejs", {
+      context: "Test completed earlier",
+      msg: "Your score = " + current_student.score
+    });
+  }
+});
+
+// POST FROM THE QUIZ DATA PAGE 
+app.post("/quiz", async (req, res) => {
+  LOG("Received answers");
+  let current_student = studentMap.get(req.session.username);
+  current_student.submitted = true;
+  if (current_student.score != undefined) {
+    res.render("error.ejs", {
+      context: "Error",
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
+        current_student.score.toString()
+    });
+  } else {
+    var answers = req.body;
+    evaluate.eval(answers, current_student, mappedQB);
+    LOG("\nEval complete , continuing post");
+    res.render("error.ejs", {
+      context: "Test complete",
+      msg: "Answers saved successfully"
+    });
+  }
+});
+
+// INVALID AUTHENTICATION
+app.use("/quiz", authenticationHandler.errorRedirect);
+
+// GET FOR LOGIN PAGE
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+
+// POST AFTER LOGIN 
+app.post("/login", (req, res) => {
+  LOG(req.body);
+  if (
+    req.body.username &&
+    req.body.password &&
+    !isNaN(req.body.username) &&
+    req.body.username >= config.username.lower &&
+    req.body.username <= config.username.upper &&
+    req.body.password == config.password
+  ) {
+    req.session.username = req.body.username;
+    req.session.password = req.body.password;
     res.statusCode = 200;
-    res.redirect('/');
-});
-app.get('/login', (req, res) => {
-    res.render('login.ejs');
-});
-
-app.get('/quiz', (req, res) => {
-    if (questionsExist == false) {
-        // No quiz since questions do not exist , admin fault
-        res.render('error.ejs', {
-            context: 'Error',
-            msg: 'Please ask admin to make questions for the Quiz and restart server. :-)'
-        });
-    }
-    console.log('Returning quiz page to : ', req.session.username);
-    var questions = getQuestions(COUNT);
-    console.log('Starting quiz with questions : ', questions.length);
-    let current_student = studentMap.get(req.session.username);
-    // If this happens, something might be wrong ( TEST )
-    if (current_student == undefined)
-        res.redirect('/login');
-    // Adjust code for rendering if there are any problems with < and > 
-    /*for ( var i=0 ; i<questions.length ; i++ )
-        if ( questions[i].code.length > 0 ){
-            questions[i].code = questions[i].code.replace("<","&lt;");
-            questions[i].code = questions[i].code.replace(">","&gt;");
-        }
-    */
-    // CHECK FOR RELOAD
-    console.log('Checks for reload , happen here ');
-    if (current_student.submitted == true) {
-        res.render('error.ejs', {
-            context: 'Test completed earlier',
-            msg: 'Your score = ' + current_student.score
-        });
-    } else if (current_student.testStartTime == undefined && current_student.testEndTime == undefined) {
-        console.log('Setting start and end times for fresh attempt ');
-        current_student.testStartTime = new Date().getTime();
-        // Since duration is in minutes , calculating the end time by adding the required amount 
-        current_student.testEndTime = current_student.testStartTime + config.duration * 60 * 1000;
-        res.render('quiz.ejs', {
-            questions: questions,
-            endTime: current_student.testEndTime
-        });
-    }
-    // see if the current time is ok for the student to continue his test 
-    else if (new Date().getTime() < current_student.testEndTime) {
-        res.render('quiz.ejs', {
-            questions: questions,
-            endTime: current_student.testEndTime
-        });
-    } else {
-        res.render('error.ejs', {
-            context: 'Test completed earlier',
-            msg: 'Your score = ' + current_student.score
-        });
-    }
+    res.redirect("/");
+  } else if (req.body.username == config.admin.username && req.body.password == config.admin.password) {
+    req.session.username = req.body.username;
+    req.session.password = req.body.password;
+    res.redirect("/admin_main");
+    return;
+  } else {
+    res.render("login.ejs");
+    return;
+  }
 });
 
-app.post('/quiz', (req, res) => {
-    console.log('Received answers');
-    let current_student = studentMap.get(req.session.username);
-    current_student.submitted = true;
-    if (current_student.score != undefined) {
-        res.render('error.ejs', {
-            context: 'Error',
-            msg: 'Test completed earlier , answers cannot be saved. Score : ' + current_student.score.toString()
-        });
-    } else {
-        var answers = req.body,
-            score = eval(answers);
-        console.log(answers);
-        current_student.score = score;
-        res.render('error.ejs', {
-            context: 'Test complete',
-            msg: 'Answers saved successfully , score = ' + score
-        });
-    }
+// GET FOR ADMIN PAGE 
+app.get('/admin_main', authenticationHandler.checkAuthentication, (req, res) => {
+  res.render('admin_main.ejs', {
+    studentDetails: studentMap
+  });
+  return;
 });
 
-app.post('/admin', urlencodedParser, function (req, res) {
-    // console.log(req.body);
-    io.addQuestions(req.body);
-    res.redirect('/admin');
+// POST FOR ADMIN PAGE 
+app.post('/admin_main', (req, res) => {
+  res.redirect('/login');
+  return;
 });
 
-app.get('/admin', function (req, res) {
-    res.render('admin');
+// POST FOR UPDATE QUESTIONS
+app.post('/updateQuestions', (req, res) => {
+  io.saveQuestions(req.body);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
+  res.redirect('/admin_question_input');
 });
 
-app.post('/code', urlencodedParser, function (req, res) {
-    var result = codeExec.exec(req.body);
-    updateQuestions();
+// HANDLE INVALID AUTHENTICATION
+app.use("/admin_main", authenticationHandler.errorRedirect);
+
+// GET FOR DOWNLOAD RESULTS PAGE 
+app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res) => {
+  /* REMOVE AFTER TESTING - CAUSES FAKE STUDENT 6 
+  studentMap.set(
+    req.session.username,
+    new model.student(req.session.username)
+  );
+  */
+  LOG('Request received');
+  let filePath = console_functions.writeToExcel(studentMap, COUNT);
+  res.download(__dirname + '\\' + filePath);
 });
 
-app.get('/', (req, res) => {
-    if (req.session.username == undefined || req.session.password == undefined) {
-        // if username does not exist in the cookies
-        res.redirect('/login');
-    } else if (studentMap.has(req.session.username)) {
-        var current_student = studentMap.get(req.session.username);
-        if (current_student.score == undefined) {
-            console.log('Making score 0 since previous attempt unsuccessful');
-            current_student.score = 0;
-        }
-        res.render('error.ejs', {
-            context: 'Error',
-            msg: 'Test completed earlier , answers cannot be saved. Score : ' + current_student.score
-        });
-    } else {
-        // user authenticated 
-        if (req.session.username == config.admin.username && req.session.password == config.admin.password) {
-            // redirect to input page 
-            res.redirect('/admin');
-        } else {
-            // registering student details 
-            studentMap.set(req.session.username, new model.student(req.session.username));
-            // req.session.destroy() after logout
-            res.redirect('/quiz');
-        }
+// HANDLE INVALID AUTHENTICATION
+app.use('/downloadResult', authenticationHandler.errorRedirect);
+
+// POST HANDLING FOR DELETE QUESTION PAGE 
+app.post('/deleteQuestion', authenticationHandler.checkAuthentication, (req, res) => {
+  var id = req.body.id;
+  var data = io.fetchQuestions();
+  io.adjustIds(data);
+  for (var i = 0; i < data.questions.length; i++) {
+    if (id == data.questions[i].id) {
+      data.questions.splice(i, 1);
+      break;
     }
+  }
+  io.saveQuestions(data);
+  res.redirect('/admin_question_input');
 });
 
-function compareArray(a, b) {
-    for (var i = 0; i < a.length; i++) {
-        if (a[i] != b[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function eval(answers) {
-    let score = 0;
-    console.log('Answers received are : ');
-    // console.log(answers);
-    for (var i in answers) {
-        console.log(mappedQB.get(i).type);
-        console.log(answers[i]);
-        if (mappedQB.get(i).type == 'match') {
-            if (compareArray(mappedQB.get(i).answer, answers[i])) {
-                score += config.pointsPerQuestion;
-            }
-        } else if (answers[i] === mappedQB.get(i).answer)
-            score += config.pointsPerQuestion;
-        else {
-            if (config.negativeMarking)
-                score -= config.pointsPerQuestion;
-        }
-    }
-    return score;
-}
-
-function getQuestions(count) {
-    var questions = [],
-        dupQuestions = JSON.parse(JSON.stringify(questionBank));
-    for (var i = 0; i < count; i++) {
-        var randomIndex = Math.floor(Math.random() * dupQuestions.length);
-        questions.push(dupQuestions[randomIndex]);
-        dupQuestions.splice(randomIndex, 1);
-    }
-    return questions;
-}
-
-function updateQuestions() {
-    questionBank = io.fetchQuestions().questions;
-    if (COUNT > questionBank.length) {
-        COUNT = questionBank.length;
-    }
-    questionsExist = true;
-    for (var i = 0; i < questionBank.length; i++)
-        mappedQB.set(questionBank[i].id.toString(), questionBank[i]);
-}
+// HANDLE INVALID AUTHENTICATION
+app.use('deleteQuestion', authenticationHandler.errorRedirect);
 
 function initServer() {
-    console.log('Initializing server : --- ');
-    console.log('Server at port : 3000');
-    app.listen(3000);
-    updateQuestions();
+  LOG("Initializing server : --- ");
+  console.log("Server at port : 3000");
+  app.listen(3000);
+  let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
+  questionsExist = question_return_values.questionsExist,
+    questionBank = question_return_values.questionBank,
+    mappedQB = question_return_values.mappedQB,
+    COUNT = question_return_values.count;
+  console_functions.activateConsoleFunctions(studentMap);
+  // Activate periodic save to excel file 
+  setInterval(() => console_functions.writeToExcel(studentMap, COUNT), Number.parseInt(config.saveInterval) * 60000);
 }
 
 initServer();
