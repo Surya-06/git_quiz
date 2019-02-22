@@ -17,6 +17,10 @@ async function eval(answers, student, mappedQB) {
   student.score = 0;
   LOG("Evaluating answers");
   for (var i in answers) {
+    if (i == 'flag') {
+      student.flag = student.flagValues[i];
+      continue;
+    }
     let question = mappedQB.get(i);
     let responseList = new model.questionResponse(question.question, answers[i]);
     if (question.type == 'multi' || question.type == 'fill' || question.type == 'match')

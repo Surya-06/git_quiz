@@ -78,6 +78,10 @@
                         <td>
                             <%= studentDetails.get(keys).submitted %>
                         </td>
+                        <td>
+                            <button onclick="restartAttempt(this.value)" value="<%= studentDetails.get(keys).username %>">
+                                Re-attempt </button>
+                        </td>
                     </tr>
                     <% } %>
                 </tbody>
@@ -92,6 +96,10 @@
         function downloadScores() {
             window.open('/downloadResult');
             console.log("Opening for download");
+        }
+
+        function restartAttempt(user_name) {
+            window.open('/restartAttempt?id=' + user_name);
         }
     </script>
 

@@ -39,18 +39,11 @@ var studentMap = new Map(),
 app.get("/", (req, res) => {
   if (req.session.username == undefined || req.session.password == undefined) {
     // if username does not exist in the cookies
+    req.session.loginComplete = false;
     res.redirect("/login");
   } else if (studentMap.has(req.session.username)) {
-    var current_student = studentMap.get(req.session.username);
-    if (current_student.score == undefined) {
-      LOG("Making score 0 since previous attempt unsuccessful");
-      current_student.score = 0;
-    }
-    res.render("error.ejs", {
-      context: "Error",
-      msg: "Test completed earlier , answers cannot be saved. Score : " +
-        current_student.score
-    });
+    res.redirect('/quiz');
+    return;
   } else {
     // user authenticated
     if (
@@ -64,7 +57,7 @@ app.get("/", (req, res) => {
       let name = namesMap.get(req.session.username) ? namesMap.get(req.session.username) : 'No name';
       studentMap.set(
         req.session.username,
-        new model.student(req.session.username,name)
+        new model.student(req.session.username, name)
       );
       // req.session.destroy() after logout
       res.redirect("/quiz");
@@ -89,7 +82,7 @@ app.get("/cfg", authenticationHandler.checkAuthentication, function (req, res) {
 });
 
 // POST FOR CONFIGURATION PAGE 
-app.post("/cfg", function (req, res) {
+app.post("/cfg", authenticationHandler.checkAuthentication, function (req, res) {
   var cfg = req.body.cfg;
   io.saveCFG(cfg);
   console.log(cfg);
@@ -136,43 +129,33 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
   var questions = questionHandler.getQuestions(COUNT, questionBank);
   LOG("Starting quiz with questions : ", questions.length);
   let current_student = studentMap.get(req.session.username);
-  // If this happens, something might be wrong ( TEST )
-  if (current_student == undefined) res.redirect("/login");
-  // CHECK FOR RELOAD
   LOG("Checks for reload , happen here ");
-  if (current_student.submitted == true) {
+  if (current_student.testAttempted == true) {
+    if (current_student.score == undefined) {
+      //TODO : SUBMIT SCORE BEFORE RELOAD HANDLING 
+      current_student.score = 0;
+      current_student.flag = current_student.flagValues['reload'];
+    }
+    if (current_student.testEndTime == undefined) {
+      // RELOAD CASE
+      current_student.flag = current_student.flagValues['reload'];
+      current_student.testEndTime = new Date();
+    }
+
     res.render("error.ejs", {
       context: "Test completed earlier",
       msg: "Your score = " + current_student.score
     });
-  } else if (
-    current_student.testStartTime == undefined && current_student.testEndTime == undefined  
-  ) {
-    console.log ( "New attempt ");
-    LOG("Setting start and end times for fresh attempt ");
-    current_student.testStartTime = new Date().getTime();
-    current_student.testEndTime =
-      current_student.testStartTime + config.duration * 60 * 1000;
-    // DEBUG
-    /*  if ( current_student.testStartTime ){
-      console.log ( "This value exists" );
-      console.log ( current_student.testStartTime );
-      console.log ( current_student.testEndTime ); 
-    }*/
+  } else if (current_student.testAttempted == false) {
+    LOG("Setting quiz up for new attempt");
+    current_student.testDuration = config.duration;
+    current_student.testAttempted = true;
+    current_student.testStartTime = new Date();
     res.render("quiz.ejs", {
       questions: questions,
       endTime: config.duration,
       username: current_student.username,
-      name : current_student.name
-    });
-  }
-  // see if the current time is ok for the student to continue his test
-  else if (new Date().getTime() < current_student.testEndTime) {
-    console.log ( "ATTEMPT EXISTS : " , current_student.testEndTime );
-    res.render("quiz.ejs", {
-      questions: questions,
-      endTime: current_student.testEndTime,
-      username: current_student.username
+      name: current_student.name
     });
   } else {
     res.render("error.ejs", {
@@ -186,7 +169,10 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
 app.post("/quiz", async (req, res) => {
   LOG("Received answers");
   let current_student = studentMap.get(req.session.username);
-  current_student.submitted = true;
+  current_student.testAttempted = true;
+  current_student.testEndTime = new Date();
+  LOG('Student : ', current_student.username);
+  LOG('End Time : ', current_student.testEndTime);
   if (current_student.score != undefined) {
     res.render("error.ejs", {
       context: "Error",
@@ -209,7 +195,14 @@ app.use("/quiz", authenticationHandler.errorRedirect);
 
 // GET FOR LOGIN PAGE
 app.get("/login", (req, res) => {
-  res.render("login.ejs");
+  if (req.session.loginComplete == false) {
+    LOG('first time login');
+    res.render("login.ejs");
+  } else {
+    LOG('PREV LOGIN COMPLETE');
+    res.redirect('/');
+  }
+  return;
 });
 
 // POST AFTER LOGIN 
@@ -226,6 +219,7 @@ app.post("/login", (req, res) => {
     req.session.username = req.body.username;
     req.session.password = req.body.password;
     res.statusCode = 200;
+    req.session.loginComplete = true;
     res.redirect("/");
   } else if (req.body.username == config.admin.username && req.body.password == config.admin.password) {
     req.session.username = req.body.username;
@@ -239,22 +233,30 @@ app.post("/login", (req, res) => {
 });
 
 // GET FOR ADMIN PAGE 
-app.get('/admin_main', authenticationHandler.checkAuthentication, (req, res) => {
-  res.render('admin_main.ejs', {
-    studentDetails: studentMap
-  });
-  return;
+app.get('/admin_main', authenticationHandler.checkAdminAuthentication, (req, res) => {
+  if (req.session.username == config.admin.username && req.session.password == config.admin.password) {
+    res.render('admin_main.ejs', {
+      studentDetails: studentMap
+    });
+    return;
+  } else {
+    res.render("error.ejs", {
+      context: 'Invalid authentication',
+      msg: "Please use valid authentication to access page"
+    });
+    return;
+  }
 });
 
 // POST FOR ADMIN PAGE 
-app.post('/admin_main', (req, res) => {
+app.post('/admin_main', authenticationHandler.checkAdminAuthentication, (req, res) => {
   res.redirect('/login');
   return;
 });
 
 // POST FOR UPDATE QUESTIONS
-app.post('/updateQuestions', (req, res) => {
-  
+app.post('/updateQuestions', authenticationHandler.checkAdminAuthentication, (req, res) => {
+
   io.saveQuestions(req.body);
   let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
   questionsExist = question_return_values.questionsExist,
@@ -266,15 +268,10 @@ app.post('/updateQuestions', (req, res) => {
 
 // HANDLE INVALID AUTHENTICATION
 app.use("/admin_main", authenticationHandler.errorRedirect);
+app.use('/updateQuestions', authenticationHandler.errorRedirect);
 
 // GET FOR DOWNLOAD RESULTS PAGE 
-app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res) => {
-  /* REMOVE AFTER TESTING - CAUSES FAKE STUDENT 6 
-  studentMap.set(
-    req.session.username,
-    new model.student(req.session.username)
-  );
-  */
+app.get('/downloadResult', authenticationHandler.checkAdminAuthentication, (req, res) => {
   LOG('Request received');
   let filePath = console_functions.writeToExcel(studentMap, COUNT);
   res.download(__dirname + '\\' + filePath);
@@ -284,23 +281,36 @@ app.get('/downloadResult', authenticationHandler.checkAuthentication, (req, res)
 app.use('/downloadResult', authenticationHandler.errorRedirect);
 
 // POST HANDLING FOR DELETE QUESTION PAGE 
-app.post('/deleteQuestion', authenticationHandler.checkAuthentication, (req, res) => {
+app.post('/deleteQuestion', authenticationHandler.checkAdminAuthentication, (req, res) => {
   var id = req.body.id;
   var data = io.fetchQuestions();
-  
+
   for (var i = 0; i < data.questions.length; i++) {
     if (id == data.questions[i].id) {
       data.questions.splice(i, 1);
       break;
     }
   }
-  
+
   io.saveQuestions(data);
   res.redirect('/admin_question_input');
 });
 
 // HANDLE INVALID AUTHENTICATION
 app.use('deleteQuestion', authenticationHandler.errorRedirect);
+
+// Restart attempt handling 
+app.get('/restartAttempt', authenticationHandler.checkAdminAuthentication, (req, res) => {
+  let current_student = studentMap.get(req.query.id);
+  current_student.resetStats();
+  res.render('error.ejs', {
+    context: 'Setting changed',
+    msg: 'Re-attempt activated'
+  });
+  return;
+});
+
+app.use('/restartAttempt', authenticationHandler.errorRedirect);
 
 function initServer() {
   LOG("Initializing server : --- ");

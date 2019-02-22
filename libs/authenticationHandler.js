@@ -11,6 +11,15 @@ function checkAuthentication(req, res, next) {
     return;
 }
 
+function checkAdminAuthentication(req, res, next) {
+    if (req.session.username == config.admin.username && req.session.password == config.admin.password)
+        next();
+    else {
+        next(new Error('Invalid authentication for admin'));
+    }
+    return;
+}
+
 function errorRedirect(err, req, res, next) {
     LOG(err);
     res.render("error.ejs", {
@@ -22,5 +31,6 @@ function errorRedirect(err, req, res, next) {
 
 module.exports = {
     checkAuthentication,
+    checkAdminAuthentication,
     errorRedirect
 }
