@@ -146,22 +146,29 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
       msg: "Your score = " + current_student.score
     });
   } else if (
-    current_student.testStartTime == undefined &&
-    current_student.testEndTime == undefined
+    current_student.testStartTime == undefined && current_student.testEndTime == undefined  
   ) {
+    console.log ( "New attempt ");
     LOG("Setting start and end times for fresh attempt ");
     current_student.testStartTime = new Date().getTime();
     current_student.testEndTime =
       current_student.testStartTime + config.duration * 60 * 1000;
+    // DEBUG
+    /*  if ( current_student.testStartTime ){
+      console.log ( "This value exists" );
+      console.log ( current_student.testStartTime );
+      console.log ( current_student.testEndTime ); 
+    }*/
     res.render("quiz.ejs", {
       questions: questions,
-      endTime: current_student.testEndTime,
+      endTime: config.duration,
       username: current_student.username,
       name : current_student.name
     });
   }
   // see if the current time is ok for the student to continue his test
   else if (new Date().getTime() < current_student.testEndTime) {
+    console.log ( "ATTEMPT EXISTS : " , current_student.testEndTime );
     res.render("quiz.ejs", {
       questions: questions,
       endTime: current_student.testEndTime,

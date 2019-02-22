@@ -1,58 +1,104 @@
 {
-    "questions": [{
-        "type": "multi",
-        "question": "A member function can always access the data in __________ ",
-        "options": ["the class of which it is member", "the object of which it is a member", "the public part of its class", "the private part of its class"],
-        "answer": "the class of which it is member",
-        "code": "",
-        "id": 1
-    }, {
-        "type": "multi",
-        "question": "Which of the following is not correct for virtual function in C++ ?",
-        "options": ["Must be declared in public section of class", "Virtual function can be static", "Virtual function should be accessed using pointers.", "Virtual function is defined in base class"],
-        "answer": "Virtual function can be static",
-        "code": "",
-        "id": 2
-    }, {
-        "type": "multi",
-        "question": "Select the answer",
-        "options": ["Inside P", "Inside Q", "Compiler Error: Ambiguous call to print()", "Runtime error"],
-        "answer": "Inside Q",
-        "code": "#include<iostream>\r\n  \r\nusing namespace std;\r\nclass P {\r\npublic:\r\n   void print()  { cout <<\" Inside P\"; }\r\n};\r\n  \r\nclass Q : public P {\r\npublic:\r\n   void print() { cout <<\" Inside Q\"; }\r\n};\r\n  \r\nclass R: public Q { };\r\n  \r\nint main(void)\r\n{\r\n  R r; \r\n  r.print();\r\n  return 0;\r\n}",
-        "id": 3
-    }, {
-        "type": "fill",
-        "question": "What is the output?",
-        "answer": "55",
-        "code": "        #include <iostream>\r\n\r\n        using namespace std;\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int x = 10;\r\n\r\n        }\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int y = 15;\r\n\r\n        }\r\n\r\n        int main(int argc, char * argv[])\r\n\r\n        {\r\n\r\n            space::x = space::y =5;\r\n\r\n            cout << space::x << space::y;\r\n\r\n        }",
-        "id": 4
-    }, {
-        "type": "coding",
-        "question": "Add 1 to the input number",
-        "lang": "cpp",
-        "test_input": "1",
-        "test_output": "2",
-        "input": ["6", "9", "-2"],
-        "answer": ["7", "10", "-1"],
-
-        "id": 5
-    }, {
-        "type": "coding",
-        "question": "Check if the entered number is even",
-        "lang": "java",
-        "test_input": "5",
-        "test_output": "FALSE",
-        "input": ["6", "8", "44", "59"],
-        "answer": ["TRUE", "TRUE", "TRUE", "FALSE"],
-        "id": 6
-    }, {
-        "type": "coding",
-        "question": "Given n as input , Print \"Hello world\" n number of times in new lines.",
-        "lang": "python",
-        "test_input": "2",
-        "test_output": "Hello world\r\nHello world",
-        "input": ["4", "1"],
-        "answer": ["Hello world\r\nHello world\r\nHello world\r\nHello world", "Hello world"],
-        "id": 7
-    }]
+    "questions": [
+        {
+            "type": "multi",
+            "id": 1,
+            "question": "A member function can always access the data in __________ ",
+            "options": [
+                "the class of which it is member",
+                "the object of which it is a member",
+                "the public part of its class",
+                "the private part of its class"
+            ],
+            "answer": "the class of which it is member",
+            "code": ""
+        },
+        {
+            "type": "multi",
+            "id": 2,
+            "question": "Which of the following is not correct for virtual function in C++ ?",
+            "options": [
+                "Must be declared in public section of class",
+                "Virtual function can be static",
+                "Virtual function should be accessed using pointers.",
+                "Virtual function is defined in base class"
+            ],
+            "answer": "Virtual function can be static",
+            "code": ""
+        },
+        {
+            "type": "multi",
+            "id": 3,
+            "question": "Select the answer",
+            "options": [
+                "Inside P",
+                "Inside Q",
+                "Compiler Error: Ambiguous call to print()",
+                "Runtime error"
+            ],
+            "answer": "Inside Q",
+            "code": "#include<iostream>\r\n  \r\nusing namespace std;\r\nclass P {\r\npublic:\r\n   void print()  { cout <<\" Inside P\"; }\r\n};\r\n  \r\nclass Q : public P {\r\npublic:\r\n   void print() { cout <<\" Inside Q\"; }\r\n};\r\n  \r\nclass R: public Q { };\r\n  \r\nint main(void)\r\n{\r\n  R r; \r\n  r.print();\r\n  return 0;\r\n}"
+        },
+        {
+            "type": "fill",
+            "id": 4,
+            "question": "What is the output?",
+            "answer": "55",
+            "code": "        #include <iostream>\r\n\r\n        using namespace std;\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int x = 10;\r\n\r\n        }\r\n\r\n        namespace space\r\n\r\n        {\r\n\r\n            int y = 15;\r\n\r\n        }\r\n\r\n        int main(int argc, char * argv[])\r\n\r\n        {\r\n\r\n            space::x = space::y =5;\r\n\r\n            cout << space::x << space::y;\r\n\r\n        }"
+        },
+        {
+            "type": "coding",
+            "id": 5,
+            "question": "Add 1 to the input number.First input is the number of test cases.",
+            "lang": "cpp",
+            "test_input": "1",
+            "test_output": "2",
+            "input": [
+                "3 6",
+                "9",
+                "-2"
+            ],
+            "answer": [
+                "7",
+                "10",
+                "-1"
+            ]
+        },
+        {
+            "type": "coding",
+            "id": 6,
+            "question": "Check if the entered number is even.First input is the number of test cases.",
+            "lang": "cpp",
+            "test_input": "5",
+            "test_output": "FALSE",
+            "input": [
+                "4 6",
+                "8",
+                "44",
+                "59"
+            ],
+            "answer": [
+                "TRUE",
+                "TRUE",
+                "TRUE",
+                "FALSE"
+            ]
+        },
+        {
+            "type": "coding",
+            "id": 7,
+            "question": "Given n as input , Print \"Hello world\" n number of times in new lines.First input is the number of test cases.",
+            "lang": "cpp",
+            "test_input": "2",
+            "test_output": "Hello world\r\nHello world",
+            "input": [
+                "2 4",
+                "1"
+            ],
+            "answer": [
+                "Hello world\r\nHello world\r\nHello world\r\nHello world",
+                "Hello world"
+            ]
+        }
+    ]
 }

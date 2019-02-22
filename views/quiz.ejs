@@ -109,22 +109,43 @@
     <script src="js/Cookies.js" type="text/javascript"></script>
     <script>
         var endTime = <%= endTime %>;
-        var countDown = setInterval(() => {
-            let distance = endTime - (new Date().getTime());
+        console.log(typeof endTime);
+        console.log(endTime);
+        console.log(new Date(endTime));
+        endTime = endTime * 60 * 1000 ;
+        let distance  =endTime;
+        var countDown = setInterval( () => {
+        /*    let distance = endTime - (new Date().getTime());
+            console.log ( new Date() )
+            console.log ( new Date(endTime) );
+            console.log(distance);
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            seconds = Math.floor((distance % (1000 * 60)) / 1000);
             document.getElementById("timer").innerHTML = "TIME : " + minutes + "m " + seconds + "s ";
 
             // If the count down is finished, write some text 
             if (distance < 0) {
+                console.log(distance);
                 clearInterval(countDown);
                 document.getElementById("timer").innerHTML = "EXPIRED";
                 alert('Time up');
                 document.forms["question_list"].submit();
             }
+        */
+            if ( distance < 0 ) {
+                clearInterval(countDown);
+                document.getElementById("timer").innerHTML = "EXPIRED";
+                alert('Time up');
+                document.forms["question_list"].submit();
+            }
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("timer").innerHTML = "TIME : " + minutes + "m " + seconds + "s ";
+
+            distance = distance - 1000 ;
         }, 1000);
         window.onblur = () => {
-            document.getElementById('question_list').submit();
+           document.getElementById('question_list').submit();
         }
     </script>
 
