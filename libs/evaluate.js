@@ -22,9 +22,10 @@ async function eval(answers, student, mappedQB) {
       continue;
     }
     let question = mappedQB.get(i);
-    let responseList = new model.questionResponse(question.question, answers[i]);
-    if (question.type == 'multi' || question.type == 'fill' || question.type == 'match')
+    let responseList = new model.questionResponse(question.question, answers[i], question.answer);
+    if (question.type == 'multi' || question.type == 'fill' || question.type == 'match') {
       responseList.addCode(question.code);
+    }
     student.answers.push(responseList);
     let negative = false;
     if (question.type == "match") {

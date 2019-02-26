@@ -46,10 +46,7 @@ app.get("/", (req, res) => {
     return;
   } else {
     // user authenticated
-    if (
-      req.session.username == config.admin.username &&
-      req.session.password == config.admin.password
-    ) {
+    if (req.session.username == config.admin.username && req.session.password == config.admin.password) {
       // redirect to input page
       res.redirect("/admin_main");
     } else {
@@ -209,11 +206,8 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   LOG(req.body);
   if (
-    req.body.username &&
-    req.body.password &&
-    !isNaN(req.body.username) &&
-    req.body.username >= config.username.lower &&
-    req.body.username <= config.username.upper &&
+    req.body.username && req.body.password && !isNaN(req.body.username) &&
+    req.body.username >= config.username.lower && req.body.username <= config.username.upper &&
     req.body.password == config.password
   ) {
     req.session.username = req.body.username;
