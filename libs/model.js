@@ -43,5 +43,4 @@ class student {
 module.exports = {
     student: student,
     questionResponse: questionResponse
-
 }
