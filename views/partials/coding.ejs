@@ -2,6 +2,7 @@
     <%= q.question %>
 </p>
 
+<% if ( q.Studentanswer == undefined || q.Studentanswer.length == 0 ) { %>
 <div class="col s12">
     <div class="col s6 input-field">
         <textarea id="textarea2" class="materialize-textarea" disabled><%=q.test_input%> </textarea>
@@ -12,6 +13,7 @@
         <label for="textarea3" class="active">Sample Output</label>
     </div>
 </div>
+
 
 
 <div class="input-field col s12">
@@ -28,7 +30,7 @@
 
 <div class="input-field col s12">
        
-        <textarea name="<%= q.id %>" id="code<%= q.id %>"></textarea>
+        <textarea name="<%= q.id %>" id="code<%= q.id %>">//enter code</textarea>
         
 </div>
 <div class="divider"></div>
@@ -49,3 +51,20 @@
     });
     editor<%= q.id %>.setSize("800", "350");
 </script>
+<%}%>
+
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+    <div class="col s12">
+        <p> ANSWER IS
+            <%=q.Studentanswer%>
+        </p>
+    </div>
+    <%}%>
+    
+    <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+    <div class="col s12">
+        <p> CORRECT ANSWER :
+            <%=q.solution%>
+        </p>
+    </div>
+    <%}%>

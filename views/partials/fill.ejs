@@ -4,7 +4,7 @@
 
 <div class="col s12">
     <% if ( q.code != undefined && q.code.length > 0 ) { %>
-<pre>
+    <pre>
 <code>
 <%= q.code %>
 </code>
@@ -12,9 +12,24 @@
     <% } %>
 </div>
 
+<% if ( q.Studentanswer == undefined || q.Studentanswer.length == 0 ) { %>
 <div class="col s12">
     <label for="<%= q.id %>">Answer :</label>
     <input id="<%= q.id %>" type="text" name="<%= q.id %>" />
 </div>
+<%}%>
 
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+<div class="col s12">
+    <p class="flow-text"> Your answer : <%=q.Studentanswer%>
+    </p>
+</div>
+<%}%>
+
+<% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+<div class="col s12">
+    <p class="flow-text"> Correct answer : <%=q.solution%>
+    </p>
+</div>
+<%}%>
 <div class="divider"></div>

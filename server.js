@@ -304,6 +304,27 @@ app.get('/restartAttempt', authenticationHandler.checkAdminAuthentication, (req,
   return;
 });
 
+app.get('/results', (req, res) => {
+
+  var id = req.query.id;
+
+
+  var studentData = studentMap.get(id);
+
+
+  if (studentData != undefined) {
+    res.render("results.ejs", {
+      questions: studentData.answers,
+      id: id
+    });
+  } else {
+    res.render('admin_main.ejs', {
+      studentDetails: studentMap
+    });
+  }
+
+});
+
 app.use('/restartAttempt', authenticationHandler.errorRedirect);
 
 function initServer() {

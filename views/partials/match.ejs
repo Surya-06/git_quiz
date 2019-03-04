@@ -11,7 +11,7 @@
 <% } %>
 
 
-
+<% if ( q.left != undefined && q.left.length > 0 ) { %>
 <div class="col s12">
     <% for (var i=0 ; i<q.left.length ; i++ ) { %>
             <div class="col s12">
@@ -33,4 +33,17 @@
     <% } %>
 
 </div>
+<%}%>
+
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+    <div class="col s12">
+        <p class="flow-text"> Your answer : <%=q.Studentanswer%></p>
+    </div>
+    <%}%>
+
+    <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+        <div class="col s12">
+            <p class="flow-text"> Correct answer : <%=q.solution%></p>
+        </div>
+        <%}%>
 <div class="divider"></div>

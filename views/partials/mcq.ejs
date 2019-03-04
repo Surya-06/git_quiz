@@ -9,6 +9,7 @@
 </code>
 </pre>
 <% } %>
+<% if ( q.options != undefined && q.options.length > 0 ) { %>
 
     <div class="col s12">
         <label>
@@ -37,8 +38,19 @@
                 <%= q.options[3] %></span>
         </label>
     </div>
+<%}%>
 
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+    <div class="col s12 ">
+        <p class="flow-text"> Your answer : <%=q.Studentanswer%></p>
+    </div>
+    <%}%>
 
+    <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+        <div class="col s12">
+            <p class="flow-text"> Correct answer : <%=q.solution%></p>
+        </div>
+        <%}%>
 
 
 <div class="divider"></div>
