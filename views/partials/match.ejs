@@ -2,6 +2,12 @@
     <%= q.question %>
 </p>
 
+<% if ( q.img != undefined && q.img.length > 0 ) { %>
+    <div class="col s12">
+        <img src="images/<%= q.img %>" alt="No image found" id="quizImg">
+    </div>
+    <% } %>
+
 <% if ( q.code != undefined && q.code.length > 0 ) { %>
 <pre>
 <code>

@@ -10,6 +10,10 @@
     <input type="text" name="questions[<%= q.id %>][question]"  value="<%= q.question %>">
 </div>
 
+<div class="col s12">
+    <label>Image : </label>
+    <img src="images/<%=q.img %>" alt="No image found" id="quizImg">
+</div>
 
 <div class="input-field col s12">
     <input type="text" name="questions[<%= q.id %>][options]" value="<%= q.options[0] %>">
