@@ -20,19 +20,20 @@
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-    <div class="row sticky">
-
-        <div class="col left s2">
-            <p class="left flow-text">
-                Logged in as : <br>
-                <%=username%> <br>
-                <%=name%>
+    
+    <div class="blue-grey darken-4">
+        <div  >
+            <p class="flow-text white-text">
+                 <%=username%> - <%=name%>
             </p>
         </div>
-        <div class="col s2 right">
-            <p id='timer' class="flow-text right "> </p>
-        </div>
+
+        
     </div>
+    <div class="right sticky">
+        <p id='timer' class="flow-text right blue-grey lighten-4"> </p>
+    </div>
+
     <div class="container ">
 
         <div class="row">
@@ -51,7 +52,7 @@
 
 
                         <p class="flow-text col s1">
-                            <%= i+1 +")"%>
+                            <%= i+1 +"."%>
                         </p>
 
                         <% if( questions[i].type == 'multi' ) { %>
@@ -91,9 +92,9 @@
                         <% } %>
                     </div>
                     <input type="text" value="normal" name="flag" id="flag" style="visibility:hidden;"> </input>
-                    <div class="divider"></div>
+                    
                     <div class="col s12 center-align section">
-                        <button class="waves-effect center-align waves-light btn-large light-green" type="submit">Submit</button>
+                        <button class="center-align btn-large green" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -117,7 +118,7 @@
             }
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
                 seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = "TIME : " + minutes + "m " + seconds + "s ";
+            document.getElementById("timer").innerHTML = "Time : " + minutes + "m " + seconds + "s ";
 
             distance = distance - 1000;
         }, 1000);

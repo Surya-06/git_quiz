@@ -1,10 +1,10 @@
-<p class="flow-text">
+<p class="flow-text question">
     <%= q.question %> 
 </p>
 
 <% if ( q.img != undefined && q.img.length > 0 ) { %>
-<div class="col s12">
-    <img src="images/<%= q.img %>" alt="No image found" id="quizImg">
+<div class="col s12 center">
+    <img src="images/<%= q.img %>" alt="No image found" id="quizImg" >
 </div>
 <% } %>
 
@@ -20,27 +20,27 @@
 
     <div class="col s12">
         <label>
-            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[0] %>" />
+            <input  name="<%= q.id %>" type="radio" value="<%= q.options[0] %>" />
             <span>
                 <%= q.options[0] %></span>
         </label>
     </div>
     <div class="col s12">
         <label>
-            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[1] %>" />
+            <input  name="<%= q.id %>" type="radio" value="<%= q.options[1] %>" />
             <span>
                 <%= q.options[1] %></span>
         </label>
     </div>
     <div class="col s12">
         <label>
-            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[2] %>" />
+            <input  name="<%= q.id %>" type="radio" value="<%= q.options[2] %>" />
             <span>
                 <%= q.options[2] %></span>
         </label></div>
     <div class="col s12">
         <label>
-            <input class="with-gap" name="<%= q.id %>" type="radio" value="<%= q.options[3] %>" />
+            <input  name="<%= q.id %>" type="radio" value="<%= q.options[3] %>" />
             <span>
                 <%= q.options[3] %></span>
         </label>
