@@ -9,7 +9,7 @@
     </style>
 </head>
 
-<body class="white">
+<body class="white grey lighten-4">
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
@@ -18,7 +18,7 @@
     </div>
     <div class="container ">
 
-        <div class="row">
+        <div class="row ">
           
             <div class="col s12">
                 <h3 class="center">
@@ -33,11 +33,11 @@
 
 
                         <p class="flow-text col s1">
-                            <%= i+1 +")"%>
+                            <%= i+1 +"."%>
                         </p>
 
                         <% if( questions[i].type == 'multi' ) { %>
-                        <div class="col s11 card">
+                        <div class="col s11 ">
                             <div class="col s12 card-content">
                                 <%- include('partials/mcq.ejs',{q:questions[i]}) %>
                             </div>
@@ -45,7 +45,7 @@
                         <% } %>
 
                         <% if( questions[i].type == 'fill' ) { %>
-                        <div class="col s11 card">
+                        <div class="col s11 ">
                             <div class="col s12 card-content">
 
                                 <%- include('partials/fill.ejs',{q:questions[i]}) %>
@@ -55,7 +55,7 @@
                         <% } %>
 
                         <% if( questions[i].type == 'match' ) { %>
-                        <div class="col s11 card">
+                        <div class="col s11 ">
                             <div class="col s12 card-content">
                                 <%- include('partials/match.ejs',{q:questions[i]}) %>
                             </div>
@@ -63,7 +63,7 @@
                         <% } %>
 
                         <% if( questions[i].type == 'coding' ) { %>
-                        <div class="col s11 card">
+                        <div class="col s11 ">
                             <div class="col s12 card-content">
                                 <p class ="flow-text">Coding question</p>
                             </div>

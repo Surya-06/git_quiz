@@ -48,13 +48,13 @@
 <%}%>
 
 <% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
-    <div class="col s12 ">
+    <div class="col s12  amber lighten-5">
         <p class="flow-text"> Your answer : <%=q.Studentanswer%></p>
     </div>
     <%}%>
 
     <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
-        <div class="col s12">
+        <div class="col s12 green lighten-4">
             <p class="flow-text"> Correct answer : <%=q.solution%></p>
         </div>
         <%}%>
