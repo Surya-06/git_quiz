@@ -1,6 +1,8 @@
 <p class="flow-text question">
     <%= q.question %>
+    <p class="flow-text"> No.of Test cases : <%= q.input.length %> </p>
 </p>
+<br>
 
 
 <% if ( q.img != undefined && q.img.length > 0 ) { %>
@@ -36,7 +38,7 @@
 
 <div class="input-field col s12">
        
-        <textarea name="<%= q.id %>" id="code<%= q.id %>">//Enter code</textarea>
+        <textarea name="<%= q.id %>" id="code<%= q.id %>">//The first input is no.of test cases. </textarea>
         
 </div>
 <div class="divider"></div>
@@ -70,7 +72,7 @@
     <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
     <div class="col s12">
         <p> CORRECT ANSWER :
-            <%=q.solution%>
+            <%=q.solution %>
         </p>
     </div>
     <%}%>
