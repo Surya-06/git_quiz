@@ -13,22 +13,23 @@
 
         }
     </style>
-   
+
 </head>
 
 <body class="white">
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-    
+
     <div class="blue-grey darken-4">
-        <div  >
+        <div>
             <p class="flow-text white-text">
-                 <%=username%> - <%=name%>
+                <%=username%> -
+                <%=name%>
             </p>
         </div>
 
-        
+
     </div>
     <div class="right sticky">
         <p id='timer' class="flow-text right blue-grey lighten-4"> </p>
@@ -92,7 +93,7 @@
                         <% } %>
                     </div>
                     <input type="text" value="normal" name="flag" id="flag" style="visibility:hidden;"> </input>
-                    
+
                     <div class="col s12 center-align section">
                         <button class="center-align btn-large green" type="submit">Submit</button>
                     </div>
@@ -101,7 +102,6 @@
         </div>
     </div>
     <script>
-  
         var endTime = <%= endTime %>;
         console.log(typeof endTime);
         console.log(endTime);
@@ -122,17 +122,16 @@
 
             distance = distance - 1000;
         }, 1000);
-        // window.onblur = () => {
-        //     document.getElementById('flag').value = 'cheat';
-        //     document.getElementById('question_list').submit();
-        // }
+        window.onblur = () => {
+            document.getElementById('flag').value = 'cheat';
+            document.getElementById('question_list').submit();
+        }
+
         // SUBMIT ON RELOAD , NOT WORKING CURRENTLY
         window.onbeforeunload = () => {
             alert('Submitting data due to page reload');
             document.getElementById('question_list').submit();
         }
-
-  
     </script>
 
 </body>

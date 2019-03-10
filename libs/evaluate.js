@@ -19,7 +19,7 @@ async function eval(answers, student, mappedQB) {
   LOG("Evaluating answers");
   for (var i in answers) {
     if (i == 'flag') {
-      student.flag = student.flagValues[i];
+      student.flag = student.flagValues[answers[i]];
       continue;
     }
     let question = mappedQB.get(i);

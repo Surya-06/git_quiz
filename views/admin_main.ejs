@@ -27,11 +27,10 @@
                 <a href="/admin_question_input" id="link"> Editor </a>
                 <i class="fas fa-edit"></i>
             </div>
-        
 
-        
-            <button id="downloadScores" class="btn center  input-field green darken-4 col s12 right" id="link"
-                onclick="downloadScores()">
+
+
+            <button id="downloadScores" class="btn center  input-field green darken-4 col s12 right" id="link" onclick="downloadScores()">
                 Download Scores
                 <i class="fas fa-file-download"></i>
             </button>
@@ -53,12 +52,12 @@
 
             <table class="striped highlight centered responsive-table">
                 <thead>
-                    <tr >
+                    <tr>
                         <th>Username</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Score</th>
-                        <th >Test Complete</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
 
@@ -78,11 +77,12 @@
                             <%= studentDetails.get(keys).score %>
                         </td>
                         <td>
-                            <%= studentDetails.get(keys).submitted %>
+                            <%= studentDetails.get(keys).flag %>
                         </td>
                         <td>
-                            <button onclick="restartAttempt(this.value)" value="<%=studentDetails.get(keys).username %>" class="btn red accent-2">
-                                Re-attempt </button>
+                            <button onclick="restartAttempt(this.value)" value="<%=studentDetails.get(keys).username %>"
+                                class="btn red accent-2">
+                                Restart </button>
                         </td>
                     </tr>
                     <% } %>
@@ -105,7 +105,7 @@
                         <input id="result" type="text" name="id">
                     </div>
                     <div class="col s12 center input-field">
-                        <input type="submit" class="btn light-blue darken-4 center" value="Results" >
+                        <input type="submit" class="btn light-blue darken-4 center" value="Results">
                     </div>
                 </form>
             </div>
