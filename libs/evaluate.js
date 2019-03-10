@@ -15,7 +15,7 @@ function compareArray(a, b) {
 
 async function eval(answers, student, mappedQB) {
   student.score = 0;
-  
+
   LOG("Evaluating answers");
   for (var i in answers) {
     if (i == 'flag') {
@@ -23,8 +23,8 @@ async function eval(answers, student, mappedQB) {
       continue;
     }
     let question = mappedQB.get(i);
-    let responseList = new model.questionResponse(question.question, question.type,answers[i], question.answer);
-    console.log('ans : ' + answers[i]  );
+    let responseList = new model.questionResponse(question.question, question.type, answers[i], question.answer);
+    LOG('ans : ' + answers[i]);
     if (question.type == 'multi' || question.type == 'fill' || question.type == 'match') {
       responseList.addCode(question.code);
     }

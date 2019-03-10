@@ -65,7 +65,7 @@ function writeToExcel(data, questionCount) {
       let question_value = answers[i].question;
       if (answers[i].code) question_value = question_value + '\n' + answers[i].code;
       user_data.push(JSON.stringify(question_value));
-      user_data.push(JSON.stringify(answers[i].answer));
+      user_data.push(JSON.stringify(answers[i].Studentanswer));
     }
     final_data.push(user_data);
     LOG('Pushing user data : ', user_data);
@@ -82,8 +82,8 @@ function writeToExcel(data, questionCount) {
 
 
 //Returns map of (id,name) from Excel file
-function getNamesFromExcel(){
-  let filePath = path.resolve(__dirname +'/../data/Names.xlsx');
+function getNamesFromExcel() {
+  let filePath = path.resolve(__dirname + '/../data/Names.xlsx');
   var wb = xlsx.readFile(filePath);
   var firstSheet = wb.SheetNames[0];
   var ws = wb.Sheets[firstSheet];
@@ -91,13 +91,13 @@ function getNamesFromExcel(){
 
   var namesMap = new Map();
 
-  d.forEach((row)=>{
+  d.forEach((row) => {
     var id = row.ID.toString();
     var Name = row.Names;
-    namesMap.set(id,Name);
+    namesMap.set(id, Name);
   });
-  
-  
+
+
   return namesMap;
 }
 
