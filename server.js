@@ -11,7 +11,21 @@ const express = require("express"),
   console_functions = require('./libs/console_functions.js'),
   evaluate = require('./libs/evaluate.js'),
   questionHandler = require('./libs/question_handler.js'),
-  authenticationHandler = require('./libs/authenticationHandler.js');
+  authenticationHandler = require('./libs/authenticationHandler.js'),
+  multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname + '/public/images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+const upload = multer({
+  storage: storage
+});
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
@@ -99,15 +113,20 @@ app.get("/admin_question_input", authenticationHandler.checkAuthentication, func
 });
 
 // POST FROM THE ADMIN QUESTION PAGE 
-app.post("/admin_question_input", urlencodedParser, function (req, res) {
+app.post("/admin_question_input", upload.single('img'),authenticationHandler.checkAdminAuthentication , urlencodedParser, function (req, res) {
   // LOG(req.body);
-  io.addQuestions(req.body);
+  var questionJson = req.body;
+  if (req.file) {
+    questionJson.img = req.file.originalname;
+  }
+  io.addQuestions(questionJson);
   let question_return_values = questionHandler.updateQuestions(COUNT, questionBank, mappedQB);
   questionsExist = question_return_values.questionsExist,
     questionBank = question_return_values.questionBank,
     mappedQB = question_return_values.mappedQB,
     COUNT = question_return_values.count;
   res.redirect("/admin_question_input");
+
 });
 
 // HANDLE INVALID AUTHENTICATION
@@ -302,6 +321,27 @@ app.get('/restartAttempt', authenticationHandler.checkAdminAuthentication, (req,
     msg: 'Re-attempt activated'
   });
   return;
+});
+
+app.get('/results',authenticationHandler.checkAdminAuthentication ,  (req, res) => {
+
+  var id = req.query.id;
+
+
+  var studentData = studentMap.get(id);
+
+
+  if (studentData != undefined) {
+    res.render("results.ejs", {
+      questions: studentData.answers,
+      id: id
+    });
+  } else {
+    res.render('admin_main.ejs', {
+      studentDetails: studentMap
+    });
+  }
+
 });
 
 app.use('/restartAttempt', authenticationHandler.errorRedirect);

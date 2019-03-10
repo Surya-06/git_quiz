@@ -1,6 +1,12 @@
-<p class="flow-text">
+<p class="flow-text question">
     <%= q.question %>
 </p>
+
+<% if ( q.img != undefined && q.img.length > 0 ) { %>
+    <div class="col s12 center">
+        <img src="images/<%= q.img %>" alt="No image found" id="quizImg">
+    </div>
+    <% } %>
 
 <% if ( q.code != undefined && q.code.length > 0 ) { %>
 <pre>
@@ -11,7 +17,7 @@
 <% } %>
 
 
-
+<% if ( q.left != undefined && q.left.length > 0 ) { %>
 <div class="col s12">
     <% for (var i=0 ; i<q.left.length ; i++ ) { %>
             <div class="col s12">
@@ -33,4 +39,17 @@
     <% } %>
 
 </div>
+<%}%>
+
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+    <div class="col s12 amber lighten-5">
+        <p class="flow-text"> Your answer : <%=q.Studentanswer%></p>
+    </div>
+    <%}%>
+
+    <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+        <div class="col s12 green lighten-4">
+            <p class="flow-text"> Correct answer : <%=q.solution%></p>
+        </div>
+        <%}%>
 <div class="divider"></div>

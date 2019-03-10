@@ -11,7 +11,11 @@
                 font-family: Arial, monospace;
                 font-size: 16px;
             }
-          
+            #quizImg{
+      max-width: 700;
+      max-height: 500;
+      margin: 5%;
+    }
         
         </style>
     <title>
@@ -40,6 +44,8 @@
                     <li class="tab col s2"><a href="#cfg">Edit CFG</a></li>
                 </ul>
             </div>
+
+
             <div id="Edit" class="col s12">
                 <div class="col s12">
                     <!-- Heading-->
@@ -111,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
             <div id="mcq" class="col s12">
                 <div class="col s12 ">
 
@@ -145,7 +152,7 @@
                     <!-- mcq Form -->
 
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="multi" name="type" hidden>
 
                         <div class="input-field col s12">
@@ -153,6 +160,17 @@
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <p>Option 1</p>
@@ -205,6 +223,7 @@
 
                 </div>
             </div>
+
             <div id="fill" class="col s12">
                 <div class="col s12 ">
 
@@ -238,14 +257,25 @@
                     </div>
 
                     <!--Fill Form -->
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="fill" name="type" hidden>
 
                         <div class="input-field col s12">
-                            <p>Question 1</p>
+                            <p>Question</p>
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
                         <div class="input-field col s12">
 
                             <p>answer</p>
@@ -268,6 +298,7 @@
                     </form>
                 </div>
             </div>
+
             <div id="match" class="col s12">
                 <div class="col s12 ">
 
@@ -305,7 +336,7 @@
 
                     <!--Match Form -->
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="match" name="type" hidden>
 
 
@@ -314,7 +345,17 @@
                             <input type="text" name="question">
                         </div>
 
-
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <p>Left 1</p>
@@ -392,6 +433,7 @@
 
                 </div>
             </div>
+
             <div id="coding" class="col s12">
                 <div class="col s12">
 
@@ -432,7 +474,7 @@
 
                     <!-- Coding form-->
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="coding" name="type" hidden>
 
 
@@ -441,6 +483,17 @@
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <select name="lang">
@@ -493,6 +546,7 @@
 
                 </div>
             </div>
+            
             <div id="cfg" class="col s12">
                 <div class="col s12">
 
