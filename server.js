@@ -354,7 +354,11 @@ function initServer() {
     COUNT = question_return_values.count;
   console_functions.activateConsoleFunctions(studentMap);
   // Activate periodic save to excel file 
-  setInterval(() => console_functions.writeToExcel(studentMap, COUNT), Number.parseInt(config.saveInterval) * 60000);
+  setInterval(() => {
+    console_functions.writeToExcel(studentMap, COUNT);
+    for (let student of studentMap.getKeys())
+      console_functions.generatePDF(studentMap.get(student));
+  }, Number.parseInt(config.saveInterval) * 60000);
 }
 
 initServer();
