@@ -15,7 +15,7 @@
     "javaPostCompileExtension": "class",
     "os_windows": true,
     "javaExec": "java",
-    "debug": false,
+    "debug": true,
     "username": {
         "lower": 1,
         "upper": 25

@@ -1,9 +1,23 @@
 const config = require("../config.json"),
   code_handling = require('./code_handling.js'),
   xlsx = require('xlsx'),
-  path = require('path');
+  path = require('path'),
+  PdfPrinter = require('pdfmake'),
+  fs = require('fs'),
+  fse = require('fs-extra');
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
+
+const FILE_PATH = 'Results/',
+  PDF_EXTENSION = '.pdf',
+  FONTS = {
+    Roboto: {
+      normal: "fonts/Roboto-Regular.ttf",
+      bold: "fonts/Roboto-Medium.ttf",
+      italics: "fonts/Roboto-Italic.ttf",
+      bolditalics: "fonts/Roboto-MediumItalic.ttf"
+    }
+  };;
 
 function show_scores(studentMap) {
   console.log("Showing results");
@@ -47,7 +61,7 @@ function activateConsoleFunctions(studentMap) {
 function writeToExcel(data, questionCount) {
   LOG('Starting to write data');
   let final_data = [];
-  let headers = ['Username', 'Test Start Time', 'Test End Time', 'Score', 'Submitted'];
+  let headers = ['Username', 'Test Start Time', 'Test End Time', 'Score', 'Remarks'];
   for (let i = 1; i <= questionCount; i++) {
     headers.push('Question ' + i);
     headers.push('Answer ' + i);
@@ -59,7 +73,7 @@ function writeToExcel(data, questionCount) {
     user_data.push(new Date(data.get(keys).testStartTime));
     user_data.push(new Date(data.get(keys).testEndTime));
     user_data.push(data.get(keys).score);
-    user_data.push(data.get(keys).submitted);
+    user_data.push(data.get(keys).flag);
     let answers = data.get(keys).answers;
     for (let i in answers) {
       let question_value = answers[i].question;
@@ -101,8 +115,66 @@ function getNamesFromExcel() {
   return namesMap;
 }
 
+function insertData(tag, value, content, size = 15) {
+  content.push({
+    text: [{
+      text: tag,
+      fontSize: size
+    }, value]
+  });
+  // return content;
+}
+
+function generatePDF(studentData) {
+  var filePath = FILE_PATH + studentData.username + PDF_EXTENSION;
+  fse.ensureFileSync(filePath);
+
+  LOG("Generating pdf file at : ", filePath);
+
+  var printer = new PdfPrinter(FONTS);
+  var docDefinition = {
+    content: []
+  };
+
+  let distance = new Date(studentData.testEndTime).getTime() - new Date(studentData.testStartTime).getTime(),
+    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds = Math.floor((distance % (1000 * 60)) / 1000),
+    duration = minutes + "min " + seconds + "sec ";
+
+  insertData("TEST SUMMARY FOR : ", studentData.name, docDefinition.content, 20);
+  insertData("Username : ", studentData.username, docDefinition.content);
+  insertData("Name : ", studentData.name, docDefinition.content);
+  insertData("Test Start Time : ", studentData.testStartTime, docDefinition.content);
+  insertData("Test End Time : ", studentData.testEndTime, docDefinition.content);
+  insertData("Test Duration : ", duration, docDefinition.content);
+  insertData("Score : ", studentData.score, docDefinition.content);
+  insertData("Remark : ", studentData.flag, docDefinition.content);
+  insertData("\n", "", docDefinition.content);
+  let answers = studentData.answers;
+  for (let i = 0; i < answers.length; i++) {
+    insertData("Question " + (i + 1) + ": ", "", docDefinition.content);
+    insertData("", answers[i].question, docDefinition.content);
+    if (answers[i].code)
+      insertData("", answers[i].code, docDefinition.content);
+    insertData("Student answer : ", "", docDefinition.content);
+    insertData("", answers[i].Studentanswer, docDefinition.content);
+    insertData("Solution : ", "", docDefinition.content);
+    insertData("", answers[i].solution, docDefinition.content);
+    insertData("\n---------------------------------------------------\n", "", docDefinition.content);
+  }
+
+  LOG('Content in PDF : ', docDefinition.content);
+
+  var pdfDoc = printer.createPdfKitDocument(docDefinition);
+  pdfDoc.pipe(fs.createWriteStream(filePath));
+  pdfDoc.end();
+
+  LOG('Completed writing to document');
+}
+
 module.exports = {
   activateConsoleFunctions,
   writeToExcel,
-  getNamesFromExcel
+  getNamesFromExcel,
+  generatePDF
 };

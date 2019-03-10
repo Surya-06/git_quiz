@@ -1,4 +1,5 @@
-// PRINT STRING RAW USING : JSON.stringinfy(string_value)
+// START WITH  COMMAND : node server.js
+// Type : studentMap : Map ( username , Model.student )
 
 const express = require("express"),
   app = express(),
@@ -12,16 +13,15 @@ const express = require("express"),
   evaluate = require('./libs/evaluate.js'),
   questionHandler = require('./libs/question_handler.js'),
   authenticationHandler = require('./libs/authenticationHandler.js'),
-  multer = require('multer');
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, __dirname + '/public/images')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-});
+  multer = require('multer'),
+  storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, __dirname + '/public/images')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+  });
 
 const upload = multer({
   storage: storage
@@ -113,7 +113,7 @@ app.get("/admin_question_input", authenticationHandler.checkAuthentication, func
 });
 
 // POST FROM THE ADMIN QUESTION PAGE 
-app.post("/admin_question_input", upload.single('img'),authenticationHandler.checkAdminAuthentication , urlencodedParser, function (req, res) {
+app.post("/admin_question_input", upload.single('img'), authenticationHandler.checkAdminAuthentication, urlencodedParser, function (req, res) {
   // LOG(req.body);
   var questionJson = req.body;
   if (req.file) {
@@ -182,7 +182,7 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
 });
 
 // POST FROM THE QUIZ DATA PAGE 
-app.post("/quiz", async (req, res) => {
+app.post("/quiz", authenticationHandler.checkAuthentication, async (req, res) => {
   LOG("Received answers");
   let current_student = studentMap.get(req.session.username);
   current_student.testAttempted = true;
@@ -323,14 +323,10 @@ app.get('/restartAttempt', authenticationHandler.checkAdminAuthentication, (req,
   return;
 });
 
-app.get('/results',authenticationHandler.checkAdminAuthentication ,  (req, res) => {
-
+app.get('/results', authenticationHandler.checkAdminAuthentication, (req, res) => {
   var id = req.query.id;
-
-
   var studentData = studentMap.get(id);
-
-
+  console_functions.generatePDF(studentData);
   if (studentData != undefined) {
     res.render("results.ejs", {
       questions: studentData.answers,
