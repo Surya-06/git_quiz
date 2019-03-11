@@ -420,7 +420,7 @@ function initServer() {
   // Activate periodic save to excel file
   setInterval(() => {
     console_functions.writeToExcel(studentMap, COUNT);
-    for (let student of studentMap.getKeys())
+    for (let student of studentMap.keys())
       console_functions.generatePDF(studentMap.get(student));
   }, Number.parseInt(config.saveInterval) * 60000);
 }
