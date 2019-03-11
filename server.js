@@ -326,7 +326,8 @@ app.get('/restartAttempt', authenticationHandler.checkAdminAuthentication, (req,
 app.get('/results', authenticationHandler.checkAdminAuthentication, (req, res) => {
   var id = req.query.id;
   var studentData = studentMap.get(id);
-  console_functions.generatePDF(studentData);
+  
+  
   if (studentData != undefined) {
     res.render("results.ejs", {
       questions: studentData.answers,
@@ -337,7 +338,7 @@ app.get('/results', authenticationHandler.checkAdminAuthentication, (req, res) =
       studentDetails: studentMap
     });
   }
-
+ console_functions.generatePDF(studentData);
 });
 
 app.use('/restartAttempt', authenticationHandler.errorRedirect);

@@ -17,20 +17,20 @@
     <% } %>
 </div>
 
-<% if ( q.Studentanswer == undefined || q.Studentanswer.length == 0 ) { %>
+<% if ( q.answer != undefined  ) { %>
 <div class="col s12">
     <label for="<%= q.id %>">Answer :</label>
     <input id="<%= q.id %>" type="text" name="<%= q.id %>" />
 </div>
 <%}%>
 
-<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+<% if ( q.Studentanswer != undefined  ) { %>
 <div class="col s12 amber lighten-5">
     <p class="flow-text"> Your answer : <%=q.Studentanswer%></p>
 </div>
 <%}%>
 
-<% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+<% if ( q.solution != undefined ) { %>
 <div class="col s12 green lighten-4">
     <p class="flow-text"> Correct answer : <%=q.solution%></p>
 </div>
