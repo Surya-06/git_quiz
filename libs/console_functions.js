@@ -170,6 +170,8 @@ function generatePDF(studentData) {
   pdfDoc.end();
 
   LOG('Completed writing to document');
+
+  return "/" + filePath;
 }
 
 module.exports = {

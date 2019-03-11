@@ -28,6 +28,9 @@
                 <i class="fas fa-edit"></i>
             </div>
 
+            <button id="endTest" class="btn center input-field red darken-3 col s12 center" onclick="endTest()">
+                End Test
+            </button>
 
 
             <button id="downloadScores" class="btn center  input-field green darken-4 col s12 right" id="link" onclick="downloadScores()">
@@ -62,7 +65,8 @@
                 </thead>
 
                 <tbody>
-                    <% for(var keys of studentDetails.keys()){ %>
+                    <% for(var keys of studentDetails.keys()) %>
+                    <% if ( studentDetails.get(keys).testAttempted) { %>
                     <tr>
                         <td>
                             <%= studentDetails.get(keys).username %>
@@ -118,7 +122,13 @@
         }
 
         function restartAttempt(user_name) {
-            window.open('/restartAttempt?id=' + user_name);
+            window.open('/restartAttempt?id=' + user_name, "_self");
+        }
+
+        function endTest() {
+            let consent = confirm("Do you really wish to end the test?");
+            if (consent)
+                window.open('/endTest');
         }
     </script>
 
