@@ -110,8 +110,6 @@ function getNamesFromExcel() {
     var Name = row.Names;
     namesMap.set(id, Name);
   });
-
-
   return namesMap;
 }
 
@@ -159,7 +157,7 @@ function generatePDF(studentData) {
     insertData("Student answer : ", "", docDefinition.content);
     insertData("", answers[i].Studentanswer, docDefinition.content);
     insertData("Solution : ", "", docDefinition.content);
-    insertData("", answers[i].solution, docDefinition.content);
+    insertData("", JSON.stringify(answers[i].solution), docDefinition.content);
     insertData("\n---------------------------------------------------\n", "", docDefinition.content);
   }
 

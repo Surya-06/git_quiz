@@ -40,11 +40,11 @@ app.use(
   })
 );
 
-var COUNT = config.questionCount;
-var urlencodedParser = bodyParser.urlencoded({
-  extended: false
-});
-var studentMap = new Map(),
+var COUNT = config.questionCount,
+  urlencodedParser = bodyParser.urlencoded({
+    extended: false
+  }),
+  studentMap = new Map(),
   mappedQB = new Map(),
   questionBank = undefined,
   questionsExist = false,
@@ -118,43 +118,33 @@ app.post("/cfg", authenticationHandler.checkAuthentication, (req, res) => {
 app.use("/cfg", authenticationHandler.errorRedirect);
 
 // GET FROM THE ADMIN QUESTION PAGE
-app.get(
-  "/admin_question_input",
-  authenticationHandler.checkAuthentication,
-  (req, res) => {
-    var q = io.fetchQuestions();
-    res.render("admin_question_input", {
-      cfg: "",
-      questions: q.questions
-    });
-  }
-);
+app.get("/admin_question_input", authenticationHandler.checkAuthentication, (req, res) => {
+  var q = io.fetchQuestions();
+  res.render("admin_question_input", {
+    cfg: "",
+    questions: q.questions
+  });
+});
 
 // POST FROM THE ADMIN QUESTION PAGE
-app.post(
-  "/admin_question_input",
-  upload.single("img"),
-  authenticationHandler.checkAdminAuthentication,
-  urlencodedParser,
-  (req, res) => {
-    // LOG(req.body);
-    var questionJson = req.body;
-    if (req.file) {
-      questionJson.img = req.file.originalname;
-    }
-    io.addQuestions(questionJson);
-    let question_return_values = questionHandler.updateQuestions(
-      COUNT,
-      questionBank,
-      mappedQB
-    );
-    (questionsExist = question_return_values.questionsExist),
-    (questionBank = question_return_values.questionBank),
-    (mappedQB = question_return_values.mappedQB),
-    (COUNT = question_return_values.count);
-    res.redirect("/admin_question_input");
+app.post("/admin_question_input", upload.single("img"), authenticationHandler.checkAdminAuthentication, urlencodedParser, (req, res) => {
+  // LOG(req.body);
+  var questionJson = req.body;
+  if (req.file) {
+    questionJson.img = req.file.originalname;
   }
-);
+  io.addQuestions(questionJson);
+  let question_return_values = questionHandler.updateQuestions(
+    COUNT,
+    questionBank,
+    mappedQB
+  );
+  (questionsExist = question_return_values.questionsExist),
+  (questionBank = question_return_values.questionBank),
+  (mappedQB = question_return_values.mappedQB),
+  (COUNT = question_return_values.count);
+  res.redirect("/admin_question_input");
+});
 
 // HANDLE INVALID AUTHENTICATION
 app.use("/admin_question_input", authenticationHandler.errorRedirect);
@@ -186,7 +176,7 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         current_student.flag = current_student.flagValues["reload"];
         current_student.testEndTime = new Date();
       }
-      res.render("resultEnd.ejs", {
+      res.render("error.ejs", {
         context: "Test completed earlier",
         msg: "Your score = " + current_student.score
       });
@@ -202,7 +192,7 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         name: current_student.name
       });
     } else {
-      res.render("resultEnd.ejs", {
+      res.render("error.ejs", {
         context: "Test completed earlier",
         msg: "Your score = " + current_student.score
       });
@@ -227,33 +217,29 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
 });
 
 // POST FROM THE QUIZ DATA PAGE
-app.post(
-  "/quiz",
-  authenticationHandler.checkAuthentication,
-  async (req, res) => {
-    LOG("Received answers");
-    let current_student = studentMap.get(req.session.username);
-    current_student.testAttempted = true;
-    current_student.testEndTime = new Date();
-    LOG("Student : ", current_student.username);
-    LOG("End Time : ", current_student.testEndTime);
-    if (current_student.score != undefined) {
-      res.render("error.ejs", {
-        context: "Error",
-        msg: "Test completed earlier , answers cannot be saved. Score : " +
-          current_student.score.toString()
-      });
-    } else {
-      var answers = req.body;
-      evaluate.eval(answers, current_student, mappedQB);
-      LOG("\nEval complete , continuing post");
-      res.render("error.ejs", {
-        context: "Test complete",
-        msg: "Answers saved successfully"
-      });
-    }
+app.post("/quiz", authenticationHandler.checkAuthentication, async (req, res) => {
+  LOG("Received answers");
+  let current_student = studentMap.get(req.session.username);
+  current_student.testAttempted = true;
+  current_student.testEndTime = new Date();
+  LOG("Student : ", current_student.username);
+  LOG("End Time : ", current_student.testEndTime);
+  if (current_student.score != undefined) {
+    res.render("error.ejs", {
+      context: "Error",
+      msg: "Test completed earlier , answers cannot be saved. Score : " +
+        current_student.score.toString()
+    });
+  } else {
+    var answers = req.body;
+    evaluate.eval(answers, current_student, mappedQB);
+    LOG("\nEval complete , continuing post");
+    res.render("error.ejs", {
+      context: "Test complete",
+      msg: "Answers saved successfully"
+    });
   }
-);
+});
 
 // INVALID AUTHENTICATION
 app.use("/quiz", authenticationHandler.errorRedirect);
@@ -301,56 +287,44 @@ app.post("/login", (req, res) => {
 });
 
 // GET FOR ADMIN PAGE
-app.get(
-  "/admin_main",
-  authenticationHandler.checkAdminAuthentication,
-  (req, res) => {
-    if (
-      req.session.username == config.admin.username &&
-      req.session.password == config.admin.password
-    ) {
-      res.render("admin_main.ejs", {
-        studentDetails: studentMap
-      });
-      return;
-    } else {
-      res.render("error.ejs", {
-        context: "Invalid authentication",
-        msg: "Please use valid authentication to access page"
-      });
-      return;
-    }
-  }
-);
-
-// POST FOR ADMIN PAGE
-app.post(
-  "/admin_main",
-  authenticationHandler.checkAdminAuthentication,
-  (req, res) => {
-    res.redirect("/login");
+app.get("/admin_main", authenticationHandler.checkAdminAuthentication, (req, res) => {
+  if (
+    req.session.username == config.admin.username &&
+    req.session.password == config.admin.password
+  ) {
+    res.render("admin_main.ejs", {
+      studentDetails: studentMap
+    });
+    return;
+  } else {
+    res.render("error.ejs", {
+      context: "Invalid authentication",
+      msg: "Please use valid authentication to access page"
+    });
     return;
   }
-);
+});
+
+// POST FOR ADMIN PAGE
+app.post("/admin_main", authenticationHandler.checkAdminAuthentication, (req, res) => {
+  res.redirect("/login");
+  return;
+});
 
 // POST FOR UPDATE QUESTIONS
-app.post(
-  "/updateQuestions",
-  authenticationHandler.checkAdminAuthentication,
-  (req, res) => {
-    io.saveQuestions(req.body);
-    let question_return_values = questionHandler.updateQuestions(
-      COUNT,
-      questionBank,
-      mappedQB
-    );
-    (questionsExist = question_return_values.questionsExist),
-    (questionBank = question_return_values.questionBank),
-    (mappedQB = question_return_values.mappedQB),
-    (COUNT = question_return_values.count);
-    res.redirect("/admin_question_input");
-  }
-);
+app.post("/updateQuestions", authenticationHandler.checkAdminAuthentication, (req, res) => {
+  io.saveQuestions(req.body);
+  let question_return_values = questionHandler.updateQuestions(
+    COUNT,
+    questionBank,
+    mappedQB
+  );
+  (questionsExist = question_return_values.questionsExist),
+  (questionBank = question_return_values.questionBank),
+  (mappedQB = question_return_values.mappedQB),
+  (COUNT = question_return_values.count);
+  res.redirect("/admin_question_input");
+});
 
 // HANDLE INVALID AUTHENTICATION
 app.use("/admin_main", authenticationHandler.errorRedirect);
@@ -379,24 +353,20 @@ app.get("/endTest", authenticationHandler.checkAdminAuthentication, (req, res) =
 app.use('/endTest', authenticationHandler.errorRedirect);
 
 // POST HANDLING FOR DELETE QUESTION PAGE
-app.post(
-  "/deleteQuestion",
-  authenticationHandler.checkAdminAuthentication,
-  (req, res) => {
-    var id = req.body.id;
-    var data = io.fetchQuestions();
+app.post("/deleteQuestion", authenticationHandler.checkAdminAuthentication, (req, res) => {
+  var id = req.body.id;
+  var data = io.fetchQuestions();
 
-    for (var i = 0; i < data.questions.length; i++) {
-      if (id == data.questions[i].id) {
-        data.questions.splice(i, 1);
-        break;
-      }
+  for (var i = 0; i < data.questions.length; i++) {
+    if (id == data.questions[i].id) {
+      data.questions.splice(i, 1);
+      break;
     }
-
-    io.saveQuestions(data);
-    res.redirect("/admin_question_input");
   }
-);
+
+  io.saveQuestions(data);
+  res.redirect("/admin_question_input");
+});
 
 // HANDLE INVALID AUTHENTICATION
 app.use('deleteQuestion', authenticationHandler.errorRedirect);
