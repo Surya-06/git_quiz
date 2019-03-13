@@ -110,8 +110,6 @@ function getNamesFromExcel() {
     var Name = row.Names;
     namesMap.set(id, Name);
   });
-
-
   return namesMap;
 }
 
@@ -150,16 +148,16 @@ function generatePDF(studentData) {
   insertData("Score : ", studentData.score, docDefinition.content);
   insertData("Remark : ", studentData.flag, docDefinition.content);
   insertData("\n", "", docDefinition.content);
-  let answers = studentData.answers;
+  let answers = studentData.answers.slice();
   for (let i = 0; i < answers.length; i++) {
     insertData("Question " + (i + 1) + ": ", "", docDefinition.content);
     insertData("", answers[i].question, docDefinition.content);
     if (answers[i].code)
       insertData("", answers[i].code, docDefinition.content);
     insertData("Student answer : ", "", docDefinition.content);
-    insertData("", answers[i].Studentanswer, docDefinition.content);
+    insertData("", JSON.stringify(answers[i].Studentanswer), docDefinition.content);
     insertData("Solution : ", "", docDefinition.content);
-    insertData("", answers[i].solution, docDefinition.content);
+    insertData("", JSON.stringify(answers[i].solution), docDefinition.content);
     insertData("\n---------------------------------------------------\n", "", docDefinition.content);
   }
 
@@ -170,6 +168,8 @@ function generatePDF(studentData) {
   pdfDoc.end();
 
   LOG('Completed writing to document');
+
+  return "/" + filePath;
 }
 
 module.exports = {

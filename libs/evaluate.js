@@ -31,7 +31,10 @@ async function eval(answers, student, mappedQB) {
     student.answers.push(responseList);
     let negative = false;
     if (question.type == "match") {
-      if (compareArray(question.answer, answers[i])) {
+      // if (compareArray(question.answer, answers[i])) {
+      LOG ( JSON.stringify(answers[i]));
+      LOG ( question.answer );      
+      if ( question.answer == answers[i].toString() ){
         student.score += config.pointsPerQuestion;
       } else if (config.negativeMarking) negative = true;
       LOG("Score after matching question : " + student.score);

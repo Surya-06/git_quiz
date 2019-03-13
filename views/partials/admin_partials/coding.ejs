@@ -13,7 +13,9 @@
 
 <div class="col s12">
     <label>Image : </label>
-    <img src="images/<%=q.img %>" alt="No image found" id="quizImg">
+    <input name="questions[<%= q.id %>][img]" value="<%= q.img %>" >
+        <img src="images/<%=q.img %>" alt="No image found" id="quizImg" >
+    </input>
 </div>
 
 <div class="input-field col s12">
