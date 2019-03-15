@@ -21,6 +21,22 @@
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
 
+    <div class="blue-grey darken-2">
+        <div class="row">
+            <p class="col flow-text white-text l4 m3 s6 center">
+                Subject :
+                <%= subject %>
+            </p>
+            <p class="col flow-text white-text l4 m3 s0 center">
+                <span id='date_tag'></span>
+            </p>
+            <p class="col flow-text white-text l4 m3 s6 center">
+                Section :
+                <%= section %>
+            </p>
+        </div>
+    </div>
+
     <div class="blue-grey darken-4">
         <div>
             <p class="flow-text white-text">
@@ -28,8 +44,6 @@
                 <%=name%>
             </p>
         </div>
-
-
     </div>
     <div class="right sticky">
         <p id='timer' class="flow-text right blue-grey lighten-4"> </p>
@@ -106,6 +120,9 @@
         console.log(typeof endTime);
         console.log(endTime);
         console.log(new Date(endTime));
+
+        document.getElementById('date_tag').innerHTML = new Date();
+
         endTime = endTime * 60 * 1000;
         let distance = endTime;
         var countDown = setInterval(() => {

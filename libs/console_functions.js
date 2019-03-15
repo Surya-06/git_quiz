@@ -3,13 +3,15 @@ const config = require("../config.json"),
   xlsx = require('xlsx'),
   path = require('path'),
   PdfPrinter = require('pdfmake'),
+  readline = require('readline'),
   fs = require('fs'),
   fse = require('fs-extra');
 
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
-const FILE_PATH = 'Results/',
-  PDF_EXTENSION = '.pdf',
+var FILE_PATH = 'Results/';
+
+const PDF_EXTENSION = '.pdf',
   FONTS = {
     Roboto: {
       normal: "fonts/Roboto-Regular.ttf",
@@ -18,6 +20,11 @@ const FILE_PATH = 'Results/',
       bolditalics: "fonts/Roboto-MediumItalic.ttf"
     }
   };;
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 function show_scores(studentMap) {
   console.log("Showing results");
@@ -123,6 +130,11 @@ function insertData(tag, value, content, size = 15) {
   // return content;
 }
 
+function modPDFPath(path) {
+  FILE_PATH = FILE_PATH + path + '/';
+  return;
+}
+
 function generatePDF(studentData) {
   var filePath = FILE_PATH + studentData.username + PDF_EXTENSION;
   fse.ensureFileSync(filePath);
@@ -172,9 +184,21 @@ function generatePDF(studentData) {
   return "/" + filePath;
 }
 
+function takeUserInput(questionText, readlineClose = false) {
+  return new Promise(resolve => rl.question(questionText, answer => {
+    resolve(answer);
+    if (readlineClose)
+      rl.close();
+    LOG("Resolved answer returning from method");
+    return;
+  }))
+};
+
 module.exports = {
   activateConsoleFunctions,
   writeToExcel,
   getNamesFromExcel,
-  generatePDF
+  generatePDF,
+  takeUserInput,
+  modPDFPath
 };

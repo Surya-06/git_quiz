@@ -29,6 +29,8 @@ const express = require("express"),
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
 var MASTER_RESPONSE_CONTROL_TAKE_INPUTS = true;
+var section = "",
+  subject = "";
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -189,7 +191,9 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         questions: questions,
         endTime: config.duration,
         username: current_student.username,
-        name: current_student.name
+        name: current_student.name,
+        section: section,
+        subject: subject
       });
     } else {
       res.render("error.ejs", {
@@ -446,9 +450,18 @@ app.use('/downloadPdf', authenticationHandler.errorRedirect);
 
 app.use("/restartAttempt", authenticationHandler.errorRedirect);
 
-function initServer() {
+async function initServer() {
   LOG("Initializing server : --- ");
   console.log("Server at port : 3000");
+
+  quiz_name = await console_functions.takeUserInput('Please enter QUIZ NAME :');
+  console_functions.modPDFPath(quiz_name);
+  console.log('Quiz name configured');
+  section = await console_functions.takeUserInput('Please enter SECTION NAME : ');
+  console.log('Section name configured');
+  subject = await console_functions.takeUserInput('Please enter the SUBJECT NAME : ', true);
+  console.log("Subject name configured");
+
   app.listen(3000);
   let question_return_values = questionHandler.updateQuestions(
     COUNT,
