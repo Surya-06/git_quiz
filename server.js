@@ -252,7 +252,7 @@ app.use("/quiz", authenticationHandler.errorRedirect);
 app.get("/login", (req, res) => {
   if (req.session.loginComplete == false) {
     LOG("first time login");
-    res.render("login.ejs");
+    res.render("login.ejs",{name :quiz_name });
   } else {
     LOG("PREV LOGIN COMPLETE");
     res.redirect("/");
@@ -285,7 +285,7 @@ app.post("/login", (req, res) => {
     res.redirect("/admin_main");
     return;
   } else {
-    res.render("login.ejs");
+    res.render("login.ejs",{name : quiz_name});
     return;
   }
 });
