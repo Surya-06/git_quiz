@@ -42,6 +42,15 @@ function addQuestions(data) {
 
     var existing = fetchQuestions();
 
+    for(var i = 0 ;i <  existing.questions.length;i++){
+        // console.log(existing.questions[i].question + ' ' + data["question"]);
+        if(existing.questions[i].question == data["question"]){
+            return;
+        }
+    }
+
+    
+
     var len = existing.questions.length;
     ++len;
     data["id"] = len;
