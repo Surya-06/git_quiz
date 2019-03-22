@@ -4,8 +4,8 @@
         "password": "pass"
     },
     "sessionKeyValue": 689852918,
-    "questionCount": 10,
-    "duration": 7,
+    "questionCount": 60,
+    "duration": 75,
     "pointsPerQuestion": 1,
     "negativeMarking": false,
     "cppCompile": "g++",
