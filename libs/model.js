@@ -1,7 +1,9 @@
 class questionResponse {
-    constructor(question, answer, code = undefined) {
+    constructor(question, type, answer, solution,code = undefined) {
         this.question = question;
-        this.answer = answer;
+        this.type = type;
+        this.Studentanswer = answer;
+        this.solution = solution;
         this.code = code;
     }
     addCode(code) {
@@ -9,15 +11,33 @@ class questionResponse {
     }
 };
 class student {
-    constructor(username) {
+    constructor(username, name) {
+        this.flagValues = {
+            'no_attempt': 'NO ATTEMPT',
+            'reload': 'RELOAD',
+            'time_out': 'TIME OUT',
+            'cheat': 'CHEAT',
+            'normal': 'NORMAL'
+        };
         this.username = username;
-        this.name = undefined;
+        this.name = name;
         this.login = true;
+        this.testAttempted = false;
+        this.testDuration = undefined;
         this.testStartTime = undefined;
         this.testEndTime = undefined;
         this.score = undefined;
-        this.submitted = false;
         this.answers = [];
+        this.flag = undefined;
+    }
+    resetStats() {
+        this.testAttempted = false;
+        this.testDuration = undefined;
+        this.testStartTime = undefined;
+        this.testEndTime = undefined;
+        this.score = undefined;
+        this.answers = [];
+        this.flag = undefined;
     }
 };
 

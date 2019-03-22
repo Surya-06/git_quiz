@@ -5,7 +5,7 @@
 <head>
     <title> QUIZ PAGE </title>
     <style>
-        .sticky{
+        .sticky {
             position: -webkit-sticky;
             position: sticky;
             top: 0;
@@ -13,20 +13,40 @@
 
         }
     </style>
+
 </head>
 
 <body class="white">
     <%- include('partials/style.ejs') %>
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-    <div class="row sticky">
-         <div class="col s12 ">
-            <p class="flow-text left ">
-                Logged in as : <br>
-                <%=username%>
+
+    <div class="blue-grey darken-2">
+        <div class="row">
+            <p class="col flow-text white-text l4 m3 s6 center">
+                Subject :
+                <%= subject %>
             </p>
-            <p id='timer' class="flow-text right "> </p>
+            <p class="col flow-text white-text l4 m3 s0 center">
+                <span id='date_tag'></span>
+            </p>
+            <p class="col flow-text white-text l4 m3 s6 center">
+                Section :
+                <%= section %>
+            </p>
         </div>
+    </div>
+
+    <div class="blue-grey darken-4">
+        <div>
+            <p class="flow-text white-text">
+                <%=username%> -
+                <%=name%>
+            </p>
+        </div>
+    </div>
+    <div class="right sticky">
+        <p id='timer' class="flow-text right blue-grey lighten-4"> </p>
     </div>
 
     <div class="container ">
@@ -39,19 +59,15 @@
                     <%=username%>
                 </p>
             </div> -->
-
-
-            
-
             <div class="col s12">
 
                 <form id='question_list' name='question_list' action='quiz' method='POST'>
                     <div class="col s12">
                         <% for (var i=0 ; i<questions.length ; i++ ) { %>
-                       
+
 
                         <p class="flow-text col s1">
-                            <%= i+1 +")"%>
+                            <%= i+1 +"."%>
                         </p>
 
                         <% if( questions[i].type == 'multi' ) { %>
@@ -60,59 +76,82 @@
                                 <%- include('partials/mcq.ejs',{q:questions[i]}) %>
                             </div>
                         </div>
+
                         <% } %>
 
                         <% if( questions[i].type == 'fill' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
-                            
-                            <%- include('partials/fill.ejs',{q:questions[i]}) %>
 
-                            </div>                        </div>
+                                <%- include('partials/fill.ejs',{q:questions[i]}) %>
+
+                            </div>
+                        </div>
                         <% } %>
 
                         <% if( questions[i].type == 'match' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
                                 <%- include('partials/match.ejs',{q:questions[i]}) %>
-                            </div>                        </div>
+                            </div>
+                        </div>
                         <% } %>
 
                         <% if( questions[i].type == 'coding' ) { %>
                         <div class="col s11 card">
                             <div class="col s12 card-content">
                                 <%- include('partials/coding.ejs',{q:questions[i],username:username}) %>
-                            </div>                        </div>
+                            </div>
+                        </div>
                         <% } %>
-                        
+
                         <% } %>
                     </div>
-                    <div class="divider"></div>
+                    <input type="text" value="normal" name="flag" id="flag" style="visibility:hidden;"> </input>
+
                     <div class="col s12 center-align section">
-                        <button class="waves-effect center-align waves-light btn-large light-green" type="submit">Submit</button>
+                        <button class="center-align btn-large green" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <script src="js/Cookies.js" type="text/javascript"></script>
     <script>
         var endTime = <%= endTime %>;
-        var countDown = setInterval(() => {
-            let distance = endTime - (new Date().getTime());
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = "TIME : " + minutes + "m " + seconds + "s ";
+        console.log(typeof endTime);
+        console.log(endTime);
+        console.log(new Date(endTime));
 
-            // If the count down is finished, write some text 
+        const minute = 60 * 1000,
+            second = 1000;
+
+        document.getElementById('date_tag').innerHTML = new Date();
+
+        endTime = endTime * 60 * 1000;
+        let distance = endTime;
+        var countDown = setInterval(() => {
             if (distance < 0) {
                 clearInterval(countDown);
                 document.getElementById("timer").innerHTML = "EXPIRED";
                 alert('Time up');
+                document.getElementById('flag').value = 'time_out';
                 document.forms["question_list"].submit();
             }
+
+            let minutes = Math.floor(distance / minute),
+                seconds = Math.floor(distance % minute / second);
+            document.getElementById("timer").innerHTML = "Time : " + minutes + "m " + seconds + "s ";
+
+            distance = distance - 1000;
         }, 1000);
         window.onblur = () => {
+            document.getElementById('flag').value = 'cheat';
+            // document.getElementById('question_list').submit();
+        }
+
+        // SUBMIT ON RELOAD , NOT WORKING CURRENTLY
+        window.onbeforeunload = () => {
+            alert('Submitting data due to page reload');
             document.getElementById('question_list').submit();
         }
     </script>

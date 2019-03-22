@@ -11,6 +11,11 @@
                 font-family: Arial, monospace;
                 font-size: 16px;
             }
+            #quizImg{
+      max-width: 700;
+      max-height: 500;
+      margin: 5%;
+    }
         
         </style>
     <title>
@@ -19,183 +24,111 @@
 
 </head>
 
-<body class="white" text='black'>
+<body class="indigo lighten-3" text='black'>
 
     <%- include('partials/style.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
-
+    <h1 class="center">Questions Editor</h1>
     <div class="container grey lighten-5">
 
-        <!-- Nav and Editor -->
+        
         <div class="row">
-            <h1 class="center">Questions editor</h1>
-            <!-- Navigation Links -->
-            <div class="col s12" id="top">
-                <h4>Navigation</h4>
-                <ul>
-                    <li> <a href="#nav_mcq"> Add mcq question</a></li>
-                    <li><a href="#nav_fill">Add Fill in the blank question</a></li>
-                    <li><a href="#nav_match">Add Matching question</a></li>
-                    <li><a href="#nav_code">Add a Coding question</a></li>
-                    <li><a href="#nav_cfg">Edit config file</a></li>
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s1"><a href="#Edit" class="active">Edit</a></li>
+                    <li class="tab col s2"><a  href="#mcq">Add MCQ</a></li>
+                    <li class="tab col s2 "><a href="#fill">Add Fill</a></li>
+                    <li class="tab col s2"><a href="#match">Add Match</a></li>
+                    <li class="tab col s2"><a href="#coding">Add coding</a></li>
+                    <li class="tab col s1"><a href="#delete">Delete</a></li>
+                    <li class="tab col s2"><a href="#cfg">Edit CFG</a></li>
                 </ul>
             </div>
 
-            <div class="col s12 section">
+
+            <div id="Edit" class="col s12">
+                <div class="col s12">
+                    <!-- Heading-->
                     <div class="col s10">
-                            <h2>
-                                Delete Question.
-                            </h2>
-                        </div>
-                        <div class="col s2">
-                                <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#editModal"><i class="fas fa-info-circle"></i></a>
-                
-                                <div id="editModal" class="modal modal-fixed-footer">
-                                    <div class="modal-content">
-                                        <h4>Guidelines</h4>
-                                        <ul>
-                                            <li>This section is to delete an existing question</li>
-                                            <li>Enter the ID of the question to delete it</li>
-                                            <li>Check questions below to see the IDs</li>
-                                        </ul>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                                    </div>
-                                </div>
+                        <h2>
+                            Edit Current Questions.
+                        </h2>
+                    </div>
+
+                    <!-- Guidelines for Editor-->
+                    <div class="col s2">
+                        <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#editModal"><i
+                                class="fas fa-info-circle"></i></a>
+
+                        <div id="editModal" class="modal modal-fixed-footer">
+                            <div class="modal-content flow-text">
+                                <h4>Guidelines</h4>
+                                <ul>
+
+                                    <li>These are the questions currently existing in Quiz. </li>
+                                    <li>You can edit them and submit them to update. </li>
+                                    <li>Note : MAKE SURE THE ID OF EACH QUESTION IS UNIQUE.</li>
+                                </ul>
                             </div>
-                <form action="/deleteQuestion" method="POST">
-                    <div class=" input-field col s12">
-                        <p>Question ID</p>
-                        <input type="text" name="id" class="input-field" placeholder="Get ID from below editor">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col s12 ">
-                        <button class="waves-effect left waves-light btn-large light-green" type="submit">Delete</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Heading-->
-            <div class="col s10">
-                <h2>
-                    Edit Current Questions.
-                </h2>
-            </div>
 
-            <!-- Guidelines for Editor-->
-            <div class="col s2">
-                <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#editModal"><i class="fas fa-info-circle"></i></a>
-
-                <div id="editModal" class="modal modal-fixed-footer">
-                    <div class="modal-content">
-                        <h4>Guidelines</h4>
-                        <ul>
-
-                            <li>These are the questions currently existing in Quiz. </li>
-                            <li>You can edit them and submit them to update. </li>
-                            <li>Note : MAKE SURE THE ID OF EACH QUESTION IS UNIQUE.</li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Questions Editor form-->
-            <div class="col s12">
-
-                <form id='question_list' name='question_list' action='/updateQuestions' method='POST' enctype='application/json'>
-
-                    <% for (var i=0 ; i<questions.length ; i++ ) { %>
-
-                    <% if( questions[i].type == 'multi' ) { %>
-                    <div class="col s12 section  card">
-                        <%- include('partials/admin_partials/mcq.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-
-                    <% if( questions[i].type == 'fill' ) { %>
-                    <div class="col s12 section card ">
-                        <%- include('partials/admin_partials/fill.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-
-                    <% if( questions[i].type == 'match' ) { %>
-                    <div class="col s12 section card">
-                        <%- include('partials/admin_partials/match.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-
-                    <% if( questions[i].type == 'coding' ) { %>
-                    <div class="col s12 section card">
-                        <%- include('partials/admin_partials/coding.ejs',{q:questions[i]}) %>
-                    </div>
-                    <% } %>
-                    <div class="divider"></div>
-                    <% } %>
-
-                    <div class="col s12 center-align">
-                        <button class="waves-effect waves-light btn-large light-green" type="submit">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-
-
-        </div>
-
-        <!--Guides and headings -->
-        <div class="row">
-
-            <!-- Heading -->
-            <div class="col s10">
-                <h2>Add Questions</h2>
-            </div>
-
-            <!-- Add Question Guidelines -->
-            <div class="col s2">
-                <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#AddModal"><i class="fas fa-info-circle"></i></a>
-                <div id="AddModal" class="modal modal-fixed-footer">
-                    <div class="modal-content flow-text">
-                        <h4>Guidelines</h4>
-                        <ul>
-                            <li>You can add questions of 4 types.</li>
-                            <br>
-                            <li>Multiple choice question</li>
-                            <li>Fill in the blank</li>
-                            <li>Match the following</li>
-                            <li>Coding</li>
-                        </ul>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!--Adding single question and edit cfg -->
-        <div class="row">
-            <div class="col s12">
-                <div class="col s12 " id="nav_mcq">
+                    <!-- Questions Editor form-->
                     <div class="col s12">
-                        <a href="#top" class="green lighten-2 btn">Top <i class="fas fa-arrow-up  "></i></a>
+
+                        <form id='question_list' name='question_list' action='/updateQuestions' method='POST' enctype='application/json'>
+
+                            <% for (var i=0 ; i<questions.length ; i++ ) { %>
+
+                            <% if( questions[i].type == 'multi' ) { %>
+                            <div class="col s12 section  card">
+                                <%- include('partials/admin_partials/mcq.ejs',{q:questions[i]}) %>
+                            </div>
+                            <% } %>
+
+                            <% if( questions[i].type == 'fill' ) { %>
+                            <div class="col s12 section card ">
+                                <%- include('partials/admin_partials/fill.ejs',{q:questions[i]}) %>
+                            </div>
+                            <% } %>
+
+                            <% if( questions[i].type == 'match' ) { %>
+                            <div class="col s12 section card">
+                                <%- include('partials/admin_partials/match.ejs',{q:questions[i]}) %>
+                            </div>
+                            <% } %>
+
+                            <% if( questions[i].type == 'coding' ) { %>
+                            <div class="col s12 section card">
+                                <%- include('partials/admin_partials/coding.ejs',{q:questions[i]}) %>
+                            </div>
+                            <% } %>
+                            <div class="divider"></div>
+                            <% } %>
+
+
+                            <div class="col s12 center-align">
+                                <button class="waves-effect waves-light btn-large light-green darken-3 input-field" type="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
+                </div>
+            </div>
+
+            <div id="mcq" class="col s12">
+                <div class="col s12 ">
 
 
                     <!-- MCQ-->
-
-
-
                     <!-- Heading -->
                     <div class="col s10">
                         <h3>
                             Multiple choice question
                         </h3>
                     </div>
-
                     <!-- mcq Guidelines-->
                     <div class="col s2">
                         <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#mcqModal"><i
@@ -218,7 +151,8 @@
 
                     <!-- mcq Form -->
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="multi" name="type" hidden>
 
                         <div class="input-field col s12">
@@ -226,6 +160,17 @@
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <p>Option 1</p>
@@ -263,7 +208,7 @@
                         </div>
                         <div class="input-field col s10 ">
 
-                            <button class="waves-effect waves-light btn-large" onclick="M.toast({html: 'Question added'})"
+                            <button class="waves-effect waves-light btn-large green darken-2" onclick="M.toast({html: 'Question added'})"
                                 type="submit">Submit</button>
 
                         </div>
@@ -277,16 +222,11 @@
                     </form>
 
                 </div>
+            </div>
 
+            <div id="fill" class="col s12">
+                <div class="col s12 ">
 
-                <div class="divider"></div>
-
-
-                <!-- Fill-->
-                <div class="col s12 " id="nav_fill">
-                    <div class="col s12">
-                        <a href="#top" class="green lighten-2 btn">Top <i class="fas fa-arrow-up  "></i></a>
-                    </div>
 
 
 
@@ -303,7 +243,7 @@
                         <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#fillModal"><i
                                 class="fas fa-info-circle"></i></a>
                         <div id="fillModal" class="modal modal-fixed-footer">
-                            <div class="modal-content">
+                            <div class="modal-content flow-text">
                                 <h4>Guidelines</h4>
                                 <ul>
                                     <li>A question and one answer entered in text</li>
@@ -317,14 +257,25 @@
                     </div>
 
                     <!--Fill Form -->
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="fill" name="type" hidden>
 
                         <div class="input-field col s12">
-                            <p>Question 1</p>
+                            <p>Question</p>
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
                         <div class="input-field col s12">
 
                             <p>answer</p>
@@ -335,7 +286,7 @@
                             <textarea id="codeArea" name="code" class="materialize-textarea"></textarea>
                         </div>
                         <div class="input-field  col s10">
-                            <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
+                            <button class="waves-effect waves-light btn-large green darken-2" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
                         </div>
                         <div class=" input-field col s2">
                             <label>
@@ -346,14 +297,11 @@
 
                     </form>
                 </div>
+            </div>
 
-                <div class="divider"></div>
+            <div id="match" class="col s12">
+                <div class="col s12 ">
 
-                <!-- Match-->
-                <div class="col s12 " id="nav_match">
-                    <div class="col s12">
-                        <a href="#top" class="green lighten-2 btn">Top <i class="fas fa-arrow-up  "></i></a>
-                    </div>
 
 
 
@@ -370,7 +318,7 @@
                         <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#matchModal"><i
                                 class="fas fa-info-circle"></i></a>
                         <div id="matchModal" class="modal modal-fixed-footer">
-                            <div class="modal-content">
+                            <div class="modal-content flow-text">
                                 <h4>Guidelines</h4>
                                 <ul>
                                     <li>Match the following question.</li>
@@ -388,7 +336,7 @@
 
                     <!--Match Form -->
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="match" name="type" hidden>
 
 
@@ -397,7 +345,17 @@
                             <input type="text" name="question">
                         </div>
 
-
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <p>Left 1</p>
@@ -460,7 +418,7 @@
                         </div>
 
                         <div class="col s10 input-field">
-                            <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
+                            <button class="waves-effect waves-light btn-large green darken-2" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
                         </div>
 
                         <div class="col s2 input-field">
@@ -474,14 +432,11 @@
                     </form>
 
                 </div>
+            </div>
 
-                <div class="divider"></div>
+            <div id="coding" class="col s12">
+                <div class="col s12">
 
-                <!-- Coding-->
-                <div class="col s12" id="nav_code">
-                    <div class="col s12">
-                        <a href="#top" class="green lighten-2 btn">Top <i class="fas fa-arrow-up  "></i></a>
-                    </div>
 
 
                     <!--Heading -->
@@ -498,7 +453,7 @@
                         <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#codingModal"><i
                                 class="fas fa-info-circle"></i></a>
                         <div id="codingModal" class="modal modal-fixed-footer">
-                            <div class="modal-content">
+                            <div class="modal-content flow-text">
                                 <h4>Guidelines</h4>
                                 <ul>
                                     <li>Enter question and language.</li>
@@ -519,7 +474,7 @@
 
                     <!-- Coding form-->
 
-                    <form action="/admin_question_input" method="POST" id="question-form">
+                    <form action="/admin_question_input" method="POST" id="question-form" enctype="multipart/form-data">
                         <input type="text" value="coding" name="type" hidden>
 
 
@@ -528,6 +483,17 @@
                             <input type="text" name="question">
                         </div>
 
+                        <div class="col s12 input-field">
+                            <div class="file-field input-field">
+                                <div class="btn blue">
+                                  <span>Add image</span>
+                                  <input type="file" accept="image/*" name="img">
+                                </div>
+                                <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                                </div>
+                              </div>
+                        </div>
 
                         <div class="input-field col s12">
                             <select name="lang">
@@ -569,24 +535,21 @@
                             </div>
                         </div>
                         <div class="col s10 input-field">
-                            <button class="waves-effect waves-light btn-large" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
+                            <button class="waves-effect waves-light btn-large green darken-2" type="submit" onclick="M.toast({html: 'Question added'})">Submit</button>
                         </div>
                     </form>
 
                     <!-- Button to add test cases -->
                     <div class="col s2 input-field">
-                        <input type="button" value="Add Test case" class="waves-light btn-large" onclick="addNewIO()">
+                        <input type="button" value="Add Test case" class="waves-light btn-large indigo accent-2" onclick="addNewIO()">
                     </div>
 
                 </div>
+            </div>
+            
+            <div id="cfg" class="col s12">
+                <div class="col s12">
 
-                <div class="divider"></div>
-
-                <!--CFG -->
-                <div class="col s12" id="nav_cfg">
-                    <div class="col s12">
-                        <a href="#top" class="green lighten-2 btn">Top <i class="fas fa-arrow-up  "></i></a>
-                    </div>
 
                     <form action="/cfg" method="POST">
                         <div class="col s10">
@@ -601,7 +564,7 @@
                             <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#cfgModal"><i
                                     class="fas fa-info-circle"></i></a>
                             <div id="cfgModal" class="modal modal-fixed-footer">
-                                <div class="modal-content">
+                                <div class="modal-content flow-text">
                                     <h4>Guidelines</h4>
                                     <ul>
                                         <li>This is the config file editor.</li>
@@ -624,18 +587,60 @@
 
                             <div class="col s2 input-field">
 
-                                <input type="button" value="get CFG" class="waves-light btn-large" onclick="getCFG()">
+                                <input type="button" value="get CFG" class="waves-light btn-large grey darken-3" onclick="getCFG()">
                             </div>
 
                             <div class="col s2 input-field">
 
-                                <input type="submit" value="update_CFG" class="waves-light btn-large">
+                                <input type="submit" value="update_CFG" class="waves-light btn-large grey darken-3">
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+
+            <div id="delete" class="col s12">
+                <div class="col s12 section">
+                    <div class="col s10">
+                        <h2>
+                            Delete Question.
+                        </h2>
+                    </div>
+                    <div class="col s2">
+                        <a class="modal-trigger cyan accent-4 waves-effect waves-light btn right" href="#delModal"><i
+                                class="fas fa-info-circle"></i></a>
+
+                        <div id="delModal" class="modal modal-fixed-footer">
+                            <div class="modal-content flow-text">
+                                <h4>Guidelines</h4>
+                                <ul>
+                                    <li>This section is to delete an existing question</li>
+                                    <li>Enter the ID of the question to delete it</li>
+                                    <li>Check questions below to see the IDs</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="/deleteQuestion" method="POST">
+                        <div class=" input-field col s12">
+                            <p>Question ID</p>
+                            <input type="text" name="id" class="input-field" placeholder="Get ID editor">
+                        </div>
+                        <div class="col s12 input-field">
+                            <button class="waves-effect left waves-light btn-large red lighten-1" type="submit">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
+
+
+
+
 
         <script>
             //Editor for CFG editing

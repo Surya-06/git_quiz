@@ -11,6 +11,12 @@
     <input type="text" name="questions[<%= q.id %>][question]" value="<%= q.question %>">
 </div>
 
+<div class="col s12">
+    <label>Image : </label>
+    <input name="questions[<%= q.id %>][img]" value="<%= q.img %>" >
+        <img src="images/<%=q.img %>" alt="No image found" id="quizImg" >
+    </input>
+</div>
 
 <div class="input-field col s12">
     <p>Choose the language</p>
@@ -58,7 +64,7 @@
 </div>
 
 <div class="col s12 input-field">
-    <input type="button" value="Add test case" id="<%= q.id %>" class="waves-light btn-large" onclick="addNewTestCases(this.id)">
+    <input type="button" value="Add test case" id="<%= q.id %>" class="waves-light btn-large indigo lighten-1" onclick="addNewTestCases(this.id)">
 </div>
 
 <script>

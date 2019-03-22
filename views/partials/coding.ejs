@@ -1,19 +1,27 @@
-<p class="flow-text">
+<p class="flow-text question">
     <%= q.question %>
+    <p class="flow-text"> No.of Test cases : <%= q.input.length %> </p>
 </p>
+<br>
 
+
+<% if ( q.img != undefined && q.img.length > 0 ) { %>
+    <div class="col s12 center">
+        <img src="images/<%= q.img %>" alt="No image found" id="quizImg">
+    </div>
+    <% } %>
+<% if ( q.Studentanswer == undefined || q.Studentanswer.length == 0 ) { %>
 <div class="col s12">
     <div class="col s6 input-field">
-        <textarea id="textarea2" class="materialize-textarea" disabled>
-        <%= q.test_input%> </textarea>
+        <textarea id="textarea2" class="materialize-textarea" disabled><%=q.test_input%> </textarea>
         <label for="textarea2" class="active">Sample Input</label>
     </div>
     <div class="col s6 input-field">
-        <textarea id="textarea3" class="materialize-textarea" disabled>
-        <%= q.test_output%> </textarea>
+        <textarea id="textarea3" class="materialize-textarea" disabled><%=q.test_output%> </textarea>
         <label for="textarea3" class="active">Sample Output</label>
     </div>
 </div>
+
 
 
 <div class="input-field col s12">
@@ -30,16 +38,16 @@
 
 <div class="input-field col s12">
        
-        <textarea name="<%= q.id %>" id="code<%= q.id %>"></textarea>
+        <textarea name="<%= q.id %>" id="code<%= q.id %>">//The first input is no.of test cases. </textarea>
         
 </div>
 <div class="divider"></div>
 <script>
     var EditorMode<%= q.id %>='clike';
-    if ("<%= q.lang %>" == 'python') {
-        EditorMode<%= q.id %> = 'python';
-    } else {
+    if ("<%= q.lang %>" == 'clike') {
         EditorMode<%= q.id %> = 'clike';
+    } else {
+        EditorMode<%= q.id %> = 'python';
     }
     var editor<%= q.id %> = CodeMirror.fromTextArea(document.getElementById('code<%= q.id %>'), {
 
@@ -51,3 +59,20 @@
     });
     editor<%= q.id %>.setSize("800", "350");
 </script>
+<%}%>
+
+<% if ( q.Studentanswer != undefined && q.Studentanswer.length > 0 ) { %>
+    <div class="col s12">
+        <p> ANSWER IS
+            <%=q.Studentanswer%>
+        </p>
+    </div>
+    <%}%>
+    
+    <% if ( q.solution != undefined && q.solution.length > 0 ) { %>
+    <div class="col s12">
+        <p> CORRECT ANSWER :
+            <%=q.solution %>
+        </p>
+    </div>
+    <%}%>

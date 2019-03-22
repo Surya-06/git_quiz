@@ -19,6 +19,7 @@ function fetchQuestions() {
 }
 
 function saveQuestions(data) {
+    adjustIds(data);
     LOG('writing to file');
     fs.writeFileSync(path.resolve(__dirname + "/../data/quiz.json"), JSON.stringify(data));
 }
@@ -40,6 +41,15 @@ function saveCFG(data) {
 function addQuestions(data) {
 
     var existing = fetchQuestions();
+
+    for(var i = 0 ;i <  existing.questions.length;i++){
+        // console.log(existing.questions[i].question + ' ' + data["question"]);
+        if(existing.questions[i].question == data["question"]){
+            return;
+        }
+    }
+
+    
 
     var len = existing.questions.length;
     ++len;
@@ -64,6 +74,6 @@ module.exports = {
     fetchCFG,
     saveCFG,
     saveQuestions,
-    adjustIds
+   
 
 }

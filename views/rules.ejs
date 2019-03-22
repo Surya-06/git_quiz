@@ -1,0 +1,36 @@
+<meta charset="UTF-8" />
+<html>
+
+<head>
+    <%- include('partials/disable_back.ejs') %>
+</head>
+
+<body class="blue-grey lighten-5">
+    <%- include('partials/style.ejs') %> <%- include('partials/header.ejs') %>
+
+    <div class="container">
+        <h2> Rules & Guidelines : </h2>
+        <div class="row">
+            <ul>
+                <% for (let i=0 ; i<rules.length ; i++ ) { %>
+                <li class="flow-text"> <%= rules[i] %> </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        ul:not(.browser-default)>li {
+            list-style-type: disc !important
+        }
+    </style>
+
+    <script type="text/javascript">
+        let time = <%= rule_time %>;
+        setInterval(() => {
+            window.open('/quiz', "_self");
+        }, time * 60 * 1000);
+    </script>
+</body>
+
+</html>

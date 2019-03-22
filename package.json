@@ -25,7 +25,9 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "fs-extra": "^7.0.1",
+    "multer": "^1.4.1",
     "node-powershell": "^3.3.1",
+    "pdfmake": "^0.1.53",
     "xlsx": "^0.14.1"
   }
 }

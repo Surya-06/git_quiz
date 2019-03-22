@@ -4,13 +4,13 @@ const io = require("./QuizIO"),
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
 function getQuestions(count, questionBank) {
-    var questions = [],
-        dupQuestions = JSON.parse(JSON.stringify(questionBank));
-    for (var i = 0; i < count; i++) {
-        var randomIndex = Math.floor(Math.random() * dupQuestions.length);
-        questions.push(dupQuestions[randomIndex]);
-        dupQuestions.splice(randomIndex, 1);
-    }
+    let indices = new Set(),
+        questions = [];
+    while (indices.size !== count)
+        indices.add(Math.floor(Math.random() * questionBank.length))
+    let array_indices = Array.from(indices);
+    for (let i = 0; i < count; i++)
+        questions.push(questionBank[array_indices[i]]);
     return questions;
 }
 

@@ -15,16 +15,26 @@ function compareArray(a, b) {
 
 async function eval(answers, student, mappedQB) {
   student.score = 0;
+
   LOG("Evaluating answers");
   for (var i in answers) {
+    if (i == 'flag') {
+      student.flag = student.flagValues[answers[i]];
+      continue;
+    }
     let question = mappedQB.get(i);
-    let responseList = new model.questionResponse(question.question, answers[i]);
-    if (question.type == 'multi' || question.type == 'fill' || question.type == 'match')
+    let responseList = new model.questionResponse(question.question, question.type, answers[i], question.answer);
+    LOG('ans : ' + answers[i]);
+    if (question.type == 'multi' || question.type == 'fill' || question.type == 'match') {
       responseList.addCode(question.code);
+    }
     student.answers.push(responseList);
     let negative = false;
     if (question.type == "match") {
-      if (compareArray(question.answer, answers[i])) {
+      // if (compareArray(question.answer, answers[i])) {
+      LOG ( JSON.stringify(answers[i]));
+      LOG ( question.answer );      
+      if ( question.answer == answers[i].toString() ){
         student.score += config.pointsPerQuestion;
       } else if (config.negativeMarking) negative = true;
       LOG("Score after matching question : " + student.score);
