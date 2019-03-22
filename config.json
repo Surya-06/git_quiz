@@ -24,5 +24,7 @@
     },
     "password": "pass",
     "saveInterval": "1",
-    "_commentSaveInterval": "Save interval parameter should be given in Minutes"
+    "_commentSaveInterval": "Save interval parameter should be given in Minutes",
+    "rules": ["Add rules as points", "This is another point", "This is a final point"],
+    "rule_time": 0.1
 }

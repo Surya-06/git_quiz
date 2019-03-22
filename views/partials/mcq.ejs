@@ -2,6 +2,12 @@
     <%= q.question %>
 </p>
 
+<style>
+    input[type="radio"] {
+        opacity: 1 !important;
+    }
+</style>
+
 <% if ( q.img != undefined && q.img.length > 0 ) { %>
 <div class="col s12 center">
     <img src="images/<%= q.img %>" alt="No image found" id="quizImg">
@@ -16,43 +22,51 @@
 </code>
 </pre>
 <% } %>
-<% if ( q.options != undefined  ) { %>
+
+<% if ( q.options != undefined ) { %>
 <div class="col s12">
-
     <input name="<%= q.id %>" type="radio" value="" hidden checked />
-
 </div>
 
-
-
-<div class="col s12">
-    
-            <input name="<%= q.id %>" type="radio" value="<%= q.options[0] %>" id="<%= q.id%>1"  />
-            <label for="<%= q.id%>1">
-                <%= q.options[0] %></label >
-        
-        
-        </div>
-        <div class="col s12">
-                <label for="<%= q.id%>2">
-                        <%= q.options[1] %></label >
-            <input name="<%= q.id %>" type="radio" value="<%= q.options[1] %>" id="<%= q.id%>2" />
-            
-        
-        </div>
-        <div class="col s12">
-    
-            <input name="<%= q.id %>" type="radio" value="<%= q.options[2] %>" id="<%= q.id%>3" />
-            <label for="<%= q.id%>3">
-                <%= q.options[2] %></label >
-        
-        </div>
-        <div class="col s12">
-    
-            <input name="<%= q.id %>" type="radio" value="<%= q.options[3] %>"  id="<%= q.id%>4"/>
-            <label for="<%= q.id%>4">
-                <%= q.options[3] %></label >
-        
+<div class="row">
+    <div class="col l1">
+        <input name="<%= q.id %>" type="radio" value="<%= q.options[0] %>" id="<%= q.id%>1" />
+    </div>
+    <div class="col l11 flow-text">
+        <label for="<%= q.id%>1">
+            <%= q.options[0] %>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="col l1">
+        <input name="<%= q.id %>" type="radio" value="<%= q.options[1] %>" id="<%= q.id%>2" />
+    </div>
+    <div class="col l11 flow-text">
+        <label for="<%= q.id%>2">
+            <%= q.options[1] %>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="col l1">
+        <input name="<%= q.id %>" type="radio" value="<%= q.options[2] %>" id="<%= q.id%>3" />
+    </div>
+    <div class="col l11 flow-text">
+        <label for="<%= q.id%>3">
+            <%= q.options[2] %>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="col l1">
+        <input name="<%= q.id %>" type="radio" value="<%= q.options[3] %>" id="<%= q.id%>4" />
+    </div>
+    <div class="col l11 flow-text">
+        <label for="<%= q.id%>4">
+            <%= q.options[3] %>
+        </label>
+    </div>
 </div>
 <%}%>
 

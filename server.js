@@ -80,13 +80,32 @@ app.get("/", (req, res) => {
           new model.student(req.session.username, name)
         );
         // req.session.destroy() after logout
-        res.redirect("/quiz");
+        // The student receives the quiz for the first time from here 
+        res.redirect('/rules');
+        // res.redirect("/quiz");
       } else {
         res.redirect('/quiz');
       }
     }
   }
 });
+
+// GET THE RULES PAGE 
+app.get('/rules', authenticationHandler.checkAuthentication, (req, res) => {
+  res.render('rules.ejs', {
+    rules: config.rules,
+    rule_time: config.rule_time
+  });
+  return;
+});
+
+// POST FROM RULES PAGE
+app.post('/rules', authenticationHandler.checkAuthentication, (req, res) => {
+
+});
+
+// INVALID REQUESTS TO RULES PAGE
+app.use('/rules', authenticationHandler.errorRedirect);
 
 // POST FROM THE CODE PAGE
 app.post("/code", urlencodedParser, (req, res) => {
