@@ -9,6 +9,7 @@
     <%- include('partials/style.ejs') %> <%- include('partials/header.ejs') %>
 
     <div class="container">
+        <h2> Rules & Guidelines : </h2>
         <div class="row">
             <ul>
                 <% for (let i=0 ; i<rules.length ; i++ ) { %>
@@ -17,6 +18,12 @@
             </ul>
         </div>
     </div>
+
+    <style>
+        ul:not(.browser-default)>li {
+            list-style-type: disc !important
+        }
+    </style>
 
     <script type="text/javascript">
         let time = <%= rule_time %>;
