@@ -176,13 +176,23 @@ function generatePDF(studentData) {
   LOG('Content in PDF : ', docDefinition.content);
 
   var pdfDoc = printer.createPdfKitDocument(docDefinition);
-  pdfDoc.pipe(fs.createWriteStream(filePath));
+  try {
+    let pipe_path = fs.createWriteStream(filePath);
+    fs.createWriteStream(filePath).on('error', (err) => {
+      console.log("Error occured when opening pipe");
+      console.log(err);
+    });
+    pdfDoc.pipe(pipe_path);
+  } catch (error) {
+    console.log(error);
+  }
   pdfDoc.end();
 
   LOG('Completed writing to document');
 
   return "/" + filePath;
 }
+
 
 function takeUserInput(questionText, readlineClose = false) {
   return new Promise(resolve => rl.question(questionText, answer => {

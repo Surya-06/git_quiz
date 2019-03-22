@@ -5,7 +5,9 @@
     },
     "sessionKeyValue": 689852918,
     "questionCount": 60,
-    "duration": 75,
+
+    "duration": 4,
+
     "pointsPerQuestion": 1,
     "negativeMarking": false,
     "cppCompile": "g++",
@@ -21,6 +23,6 @@
         "upper": 100
     },
     "password": "pass",
-    "saveInterval": "3",
+    "saveInterval": "1",
     "_commentSaveInterval": "Save interval parameter should be given in Minutes"
 }
