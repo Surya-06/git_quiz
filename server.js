@@ -182,7 +182,7 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
   // Take inputs as long as the value is true
   if (MASTER_RESPONSE_CONTROL_TAKE_INPUTS) {
     LOG("Returning quiz page to : ", req.session.username);
-    var questions = questionHandler.getQuestions(COUNT, questionBank);
+    let questions = questionHandler.getQuestions(COUNT, questionBank);
     LOG("Starting quiz with questions : ", questions.length);
     let current_student = studentMap.get(req.session.username);
     LOG("Checks for reload , happen here ");
@@ -271,7 +271,9 @@ app.use("/quiz", authenticationHandler.errorRedirect);
 app.get("/login", (req, res) => {
   if (req.session.loginComplete == false) {
     LOG("first time login");
-    res.render("login.ejs",{name :quiz_name });
+    res.render("login.ejs", {
+      name: quiz_name
+    });
   } else {
     LOG("PREV LOGIN COMPLETE");
     res.redirect("/");
@@ -304,7 +306,9 @@ app.post("/login", (req, res) => {
     res.redirect("/admin_main");
     return;
   } else {
-    res.render("login.ejs",{name : quiz_name});
+    res.render("login.ejs", {
+      name: quiz_name
+    });
     return;
   }
 });
@@ -451,6 +455,7 @@ app.get('/results', authenticationHandler.checkAdminAuthentication, (req, res) =
 app.use('/results', authenticationHandler.errorRedirect);
 
 app.get('/downloadPdf', authenticationHandler.checkAuthentication, (req, res) => {
+  LOG("Received download request from the web");
   let userData = studentMap.get(req.session.username);
   if (userData) {
     let filePath = console_functions.generatePDF(userData);

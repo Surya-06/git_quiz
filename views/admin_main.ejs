@@ -33,7 +33,8 @@
             </button>
 
 
-            <button id="downloadScores" class="btn center  input-field green darken-4 col s12 right" id="link" onclick="downloadScores()">
+            <button id="downloadScores" class="btn center  input-field green darken-4 col s12 right" id="link"
+                onclick="downloadScores()">
                 Download Scores
                 <i class="fas fa-file-download"></i>
             </button>
@@ -66,34 +67,34 @@
 
                 <tbody>
                     <% for(var keys of studentDetails.keys()) { %>
-                        <% if ( studentDetails.get(keys).testAttempted) { %>
-                        <tr>
-                            <td>
-                                <%= studentDetails.get(keys).username %>
-                            </td>
-                            <td>
-                                <%= new Date(studentDetails.get(keys).testStartTime) %>
-                            </td>
-                            <td>
-                                <%= new Date(studentDetails.get(keys).testEndTime) %>
-                            </td>
-                            <td>
-                                <%= studentDetails.get(keys).score %>
-                            </td>
-                            <td>
-                                <%= studentDetails.get(keys).flag %>
-                            </td>
-                            <td>
-                                <button onclick="restartAttempt(this.value)" value="<%=studentDetails.get(keys).username %>"
-                                    class="btn red accent-2">
-                                    Restart </button>
-                            </td>
-                        </tr>
-                        <% } else  { %>
-                            <tr>
-                                <td> This is bull crap</td>
-                            </tr>
-                        <% } %>
+                    <% if ( studentDetails.get(keys).testAttempted) { %>
+                    <tr>
+                        <td>
+                            <%= studentDetails.get(keys).username %>
+                        </td>
+                        <td>
+                            <%= new Date(studentDetails.get(keys).testStartTime) %>
+                        </td>
+                        <td>
+                            <%= new Date(studentDetails.get(keys).testEndTime) %>
+                        </td>
+                        <td>
+                            <%= studentDetails.get(keys).score %>
+                        </td>
+                        <td>
+                            <%= studentDetails.get(keys).flag %>
+                        </td>
+                        <td>
+                            <button onclick="restartAttempt(this.value)" value="<%=studentDetails.get(keys).username %>"
+                                class="btn red accent-2">
+                                Restart </button>
+                        </td>
+                    </tr>
+                    <% } else  { %>
+                    <tr>
+                        <td> " " </td>
+                    </tr>
+                    <% } %>
                     <% } %>
                 </tbody>
             </table>
