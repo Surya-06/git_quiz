@@ -1,64 +1,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
+
 <head>
-        <!-- <style>
-                body{
-                    background-image: url("images/back.jpg");
-                }
-        </style> -->
+    <style>
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        #back {
+            background-image: url("images/back.png");
+
+            width: 100%;
+            height: 100%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+
+        }       
+
+        
+    </style>
 </head>
+
 <body>
-   
+
     <%- include('partials/style.ejs') %>
-    <%- include('partials/header.ejs') %>
+    <div class="row">
+        <%- include('partials/header.ejs') %>
 
+        <div class="col s12 red accent-2 center">
 
-    <!-- <div class="row section">
-        <div class="col s12">
-            <div class="col s12">
-                <img class="brand-logo" src="images/logo.png" alt="Gitam Logo" width="300" height="100">
-            </div>
+            <h3> <%=name%> </h3>
+
         </div>
-    </div> -->
 
-    <!-- <div class="divider"></div> -->
-    <div class="container">
-        <div class="row">
-            <form action="login" method="POST">
+        <div id="back" class="col s12">
+            <div class="container">
 
-                <div class="col s6  offset-s3 center">
-                    <div class="section">
-                        <h3> <%=name%> </h3>
+                <form action="login" method="POST">
+
+                    <div class="col s6  offset-s3 center">
+                        <div class="section">
+                            <h2> Login </h2>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col s6  offset-s3 center">
-                    <div class="section">
-                        <h2> User Login </h2>
+                    <div class="col s6  offset-s3 input-field">
+                        <div class="section input-field ">
+                            <h4 >Username : </h4>
+                            <input type="text" name="username" class="white-text"/>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col s6  offset-s3 ">
-                    <div class="section ">
-                        <p>Username : </p>
-                        <input type="text" name="username" />
+
+                    <div class="col s6 offset-s3 ">
+                        <div class="section input-field ">
+                            <h5 >Password : </h5 >
+                            <input type="password" name="password" />
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="col s6 offset-s3 ">
-                    <div class="section ">
-                        <p>Password : </p>
-                        <input type="password" name="password" />
+                    <div class="col s6 offset-s3 center-align">
+                        <div class="section">
+                            <button class="waves-effect waves-light btn-large red accent-3" onclick="validate()"
+                                type="submit">Submit</button>
+                        </div>
                     </div>
-                </div>
+                </form>
 
-                <div class="col s6 offset-s3 center-align">
-                    <div class="section">
-                        <button class="waves-effect waves-light btn-large grey darken-2" onclick="validate()" type="submit">Submit</button>
-                    </div>
-                </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </body>

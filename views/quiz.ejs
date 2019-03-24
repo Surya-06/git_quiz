@@ -21,7 +21,7 @@
     <%- include('partials/header.ejs') %>
     <%- include('partials/code_highlighter.ejs') %>
 
-    <div class="blue-grey darken-2">
+    <div class=" indigo darken-4">
         <div class="row">
             <p class="col flow-text white-text l4 m3 s6 center">
                 Subject :
@@ -34,17 +34,14 @@
                 Section :
                 <%= section %>
             </p>
-        </div>
-    </div>
-
-    <div class="blue-grey darken-4">
-        <div>
-            <p class="flow-text white-text">
+            <p class=" col s12 flow-text white-text center">
                 <%=username%> -
                 <%=name%>
             </p>
         </div>
     </div>
+
+
     <div class="right sticky">
         <p id='timer' class="flow-text right blue-grey lighten-4"> </p>
     </div>
@@ -125,7 +122,7 @@
         const minute = 60 * 1000,
             second = 1000;
 
-        document.getElementById('date_tag').innerHTML = new Date();
+        document.getElementById('date_tag').innerHTML = new Date().toLocaleTimeString('en-US');
 
         endTime = endTime * 60 * 1000;
         let distance = endTime;
@@ -144,15 +141,32 @@
 
             distance = distance - 1000;
         }, 1000);
+
+        // MORE AGGRESSIVE CHEAT PREVENTION
         window.onblur = () => {
             document.getElementById('flag').value = 'cheat';
-            // document.getElementById('question_list').submit();
+            document.getElementById('question_list').submit();
         }
+
+        // LESS AGGRESSIVE CHEAT PREVENTION
+        // window.addEventListener('visibilitychange',()=>{
+        //     document.getElementById('flag').value = 'cheat';
+        //     document.getElementById('question_list').submit();
+
+        // });
 
         // SUBMIT ON RELOAD , NOT WORKING CURRENTLY
         window.onbeforeunload = () => {
             alert('Submitting data due to page reload');
             document.getElementById('question_list').submit();
+        }
+
+        //Prevent exam submission by pressing enter accidentally.
+        document.getElementById("question_list").onkeypress = function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            if (key == 13) {
+                e.preventDefault();
+            }
         }
     </script>
 

@@ -3,17 +3,19 @@
 
 <head>
     <%- include('partials/disable_back.ejs') %>
+   
 </head>
 
-<body class="blue-grey lighten-5">
-    <%- include('partials/style.ejs') %> <%- include('partials/header.ejs') %>
-
+<body class="yellow lighten-4">
+    <div class="row">
+    <%- include('partials/style.ejs') %> 
+    
+    <%- include('partials/header.ejs') %>
     <div class="container">
-        <h2> Rules & Guidelines : </h2>
-        <div class="row">
+        <h2 class="center col s12"> Rules & Guidelines </h2>
             <ul>
                 <% for (let i=0 ; i<rules.length ; i++ ) { %>
-                <li class="flow-text"> <%= rules[i] %> </li>
+                <li class=" col s12 flow-text center"> <%= rules[i] %> </li>
                 <% } %>
             </ul>
         </div>
