@@ -190,13 +190,20 @@ function generatePDF(studentData) {
 
   LOG('Completed writing to document');
 
-  return "/" + filePath;
+  // return "/" + filePath;
+  return filePath;
 }
 
 
 function takeUserInput(questionText, readlineClose = false) {
   return new Promise(resolve => rl.question(questionText, answer => {
-    resolve(answer);
+    if (answer)
+      resolve(answer);
+    else {
+      readlineClose = false;
+      let response = takeUserInput(questionText, readlineClose);
+      resolve(response);
+    }
     if (readlineClose)
       rl.close();
     LOG("Resolved answer returning from method");
