@@ -5,9 +5,9 @@ const express = require("express"),
   app = express(),
   session = require("express-session"),
   model = require("./libs/model.js"),
-  config = require("./config.json"),
   io = require("./libs/QuizIO"),
   bodyParser = require("body-parser"),
+  fs = require('fs'),
   codeExec = require("./libs/codeIO"),
   console_functions = require("./libs/console_functions.js"),
   evaluate = require("./libs/evaluate.js"),
@@ -26,6 +26,8 @@ const express = require("express"),
     storage: storage
   });
 
+var config = require("./config.json");
+// var config = fs.readFileSync('./config.json', 'utf-8');
 var LOG = config.debug ? console.log.bind(console) : function () {};
 
 var MASTER_RESPONSE_CONTROL_TAKE_INPUTS = true;
@@ -132,6 +134,12 @@ app.post("/cfg", authenticationHandler.checkAuthentication, (req, res) => {
   var cfg = req.body.cfg;
   io.saveCFG(cfg);
   console.log(cfg);
+  if (studentMap.size == 0) {
+    console.log('Configuration updated safely');
+    config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+  } else
+    console.log('Configuration could not be updated due to ' + studentMap.size + ' students');
+  LOG('updated value of usernames : ' + config.username.lower + '  ' + config.username.upper);
   res.redirect("admin_question_input");
 });
 
@@ -197,9 +205,16 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         current_student.flag = current_student.flagValues["reload"];
         current_student.testEndTime = new Date();
       }
+
+      let msg_detail = '';
+      if (config.show_results_before_end)
+        msg_detail = "Your score = " + current_student.score;
+      else
+        msg_detail = "Your attempt has been saved successfully"
+
       res.render("error.ejs", {
         context: "Test completed earlier",
-        msg: "Your score = " + current_student.score
+        msg: msg_detail
       });
     } else if (current_student.testAttempted == false) {
       LOG("Setting quiz up for new attempt");
@@ -215,9 +230,15 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         subject: subject
       });
     } else {
+      let msg_detail = '';
+      if (config.show_results_before_end)
+        msg_detail = "Your score = " + current_student.score;
+      else
+        msg_detail = "Your attempt has been saved successfully"
+
       res.render("error.ejs", {
         context: "Test completed earlier",
-        msg: "Your score = " + current_student.score
+        msg: msg_detail
       });
     }
   } else {
@@ -249,7 +270,7 @@ app.post("/quiz", authenticationHandler.checkAuthentication, async (req, res) =>
   LOG("End Time : ", current_student.testEndTime);
   if (current_student.score != undefined) {
     res.render("error.ejs", {
-      context: "Error",
+      context: "Test completed successfully",
       msg: "Test completed earlier , answers cannot be saved. Score : " +
         current_student.score.toString()
     });
@@ -498,12 +519,15 @@ async function initServer() {
   (mappedQB = question_return_values.mappedQB),
   (COUNT = question_return_values.count);
   console_functions.activateConsoleFunctions(studentMap);
+  LOG('Current save interval is  : ' + config.saveInterval);
   // Activate periodic save to excel file
   setInterval(() => {
     console_functions.writeToExcel(studentMap, COUNT);
     for (let student of studentMap.keys())
       console_functions.generatePDF(studentMap.get(student));
   }, Number.parseInt(config.saveInterval) * 60000);
+
+  LOG('SERVER ACTIVELY LISTENETING FOR REQUESTS , INITIALIZATION COMPLETE');
 }
 
 initServer();

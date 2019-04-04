@@ -15,7 +15,6 @@ function compareArray(a, b) {
 
 async function eval(answers, student, mappedQB) {
   student.score = 0;
-
   LOG("Evaluating answers");
   for (var i in answers) {
     if (i == 'flag') {
@@ -25,6 +24,7 @@ async function eval(answers, student, mappedQB) {
     let question = mappedQB.get(i);
     let responseList = new model.questionResponse(question.question, question.type, answers[i], question.answer);
     LOG('ans : ' + answers[i]);
+    LOG('original ans : ' + question.answer)
     if (question.type == 'multi' || question.type == 'fill' || question.type == 'match') {
       responseList.addCode(question.code);
     }
@@ -32,9 +32,9 @@ async function eval(answers, student, mappedQB) {
     let negative = false;
     if (question.type == "match") {
       // if (compareArray(question.answer, answers[i])) {
-      LOG ( JSON.stringify(answers[i]));
-      LOG ( question.answer );      
-      if ( question.answer == answers[i].toString() ){
+      LOG(JSON.stringify(answers[i]));
+      LOG(question.answer);
+      if (question.answer == answers[i].toString()) {
         student.score += config.pointsPerQuestion;
       } else if (config.negativeMarking) negative = true;
       LOG("Score after matching question : " + student.score);
@@ -150,11 +150,12 @@ async function eval(answers, student, mappedQB) {
         );
       }
     } else {
-      if (answers[i] === mappedQB.get(i).answer)
+      if (answers[i].trim() == question.answer.trim()) {
         student.score += config.pointsPerQuestion;
-      else if (config.negativeMarking) negative = true;
+        LOG('correct answer , score updated to : ' + student.score);
+      } else if (config.negativeMarking) negative = true;
     }
-    if (negative) student.score -= config.pointsPerQuestion;
+    if (negative) student.score -= config.negativePoints;
   }
 }
 
