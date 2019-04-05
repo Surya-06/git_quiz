@@ -115,6 +115,7 @@
     </div>
     <script>
         var endTime = <%= endTime %>;
+        var blur_test_end = <%= blur_test_end %>;
         console.log(typeof endTime);
         console.log(endTime);
         console.log(new Date(endTime));
@@ -143,10 +144,12 @@
         }, 1000);
 
         // MORE AGGRESSIVE CHEAT PREVENTION
-        // window.onblur = () => {
-        //     document.getElementById('flag').value = 'cheat';
-        //     document.getElementById('question_list').submit();
-        // }
+        if (blur_test_end) {
+            window.onblur = () => {
+                document.getElementById('flag').value = 'cheat';
+                document.getElementById('question_list').submit();
+            }
+        }
 
         // LESS AGGRESSIVE CHEAT PREVENTION
         // window.addEventListener('visibilitychange',()=>{

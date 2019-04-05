@@ -227,7 +227,8 @@ app.get("/quiz", authenticationHandler.checkAuthentication, (req, res) => {
         username: current_student.username,
         name: current_student.name,
         section: section,
-        subject: subject
+        subject: subject,
+        blur_test_end: config.onblur_test_end
       });
     } else {
       let msg_detail = '';
