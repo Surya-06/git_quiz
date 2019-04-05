@@ -33,6 +33,6 @@
         "This is a final point"
     ],
     "rule_time": 0.1,
-    "onblur_test_end": true,
+    "onblur_test_end": false,
     "show_results_before_end": true
 }

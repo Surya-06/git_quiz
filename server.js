@@ -270,10 +270,16 @@ app.post("/quiz", authenticationHandler.checkAuthentication, async (req, res) =>
   LOG("Student : ", current_student.username);
   LOG("End Time : ", current_student.testEndTime);
   if (current_student.score != undefined) {
+
+    let msg_detail = '';
+    if (config.show_results_before_end)
+      msg_detail = "Test completed successfully. Score : " + current_student.score.toString()
+    else
+      msg_detail = "Test completed successfully."
+
     res.render("error.ejs", {
       context: "Test completed successfully",
-      msg: "Test completed earlier , answers cannot be saved. Score : " +
-        current_student.score.toString()
+      msg: msg_detail
     });
   } else {
     var answers = req.body;
