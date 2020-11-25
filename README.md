@@ -1,3 +1,5 @@
+# OLD CODE - UNMAINTAINED INITIAL VERSION
+
 # GIT Test Engine
 
 The first real time remote code testing platform for **GIT**.
